@@ -1,12 +1,7 @@
-export const revalidate = 0;
-import HowWorks from "@/components/Home/how-works";
-import BreadCrumb from "@/components/Tour/bread-crumb";
+import HowWorks from '@/components/Home/how-works'
+import BreadCrumb from '@/components/Tour/bread-crumb'
 
-export default function TourLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function TourLayout({ children }: { children: React.ReactNode }) {
   return (
     <section>
       <div>
@@ -19,5 +14,5 @@ export default function TourLayout({
         </div>
       </div>
     </section>
-  );
+  )
 }

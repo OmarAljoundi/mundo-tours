@@ -1,4 +1,3 @@
-export const dynamicParams = true
 import Tour from '@/components/Tour/tour'
 import { getTours } from '@/lib/operations'
 import { Metadata } from 'next'

@@ -1,28 +1,19 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 const BreadCrumb = () => {
-  const { tourName } = useParams();
+  const { tourName } = useParams()
 
-  const select = decodeURIComponent(tourName?.toString());
+  const select = decodeURIComponent(tourName?.toString())
 
   return (
     <nav aria-label="Breadcrumb" className="flex border-t">
       <ol className="flex overflow-hidden rounded-lg border border-gray-200 text-gray-600 mt-8 ">
         <li className="flex items-center">
-          <Link
-            href="/"
-            className="flex h-10 items-center gap-1.5 bg-gray-100 px-4 transition hover:text-gray-900"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+          <Link href="/" className="flex h-10 items-center gap-1.5 bg-gray-100 px-4 transition hover:text-gray-900" prefetch={false}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -31,35 +22,25 @@ const BreadCrumb = () => {
               />
             </svg>
 
-            <span className="ms-1.5 text-xs font-medium font-primary">
-              الرئيسية
-            </span>
+            <span className="ms-1.5 text-xs font-medium font-primary">الرئيسية</span>
           </Link>
         </li>
 
         <li className="flex items-center">
-          <Link
-            href="/tour-listing"
-            className="flex h-10 items-center gap-1.5 bg-gray-100 px-4 transition hover:text-gray-900"
-          >
-            <span className="ms-1.5 text-xs font-medium font-primary">
-              جميع الرحلات
-            </span>
+          <Link href="/tour-listing" prefetch={false} className="flex h-10 items-center gap-1.5 bg-gray-100 px-4 transition hover:text-gray-900">
+            <span className="ms-1.5 text-xs font-medium font-primary">جميع الرحلات</span>
           </Link>
         </li>
         <li className="relative flex items-center">
           <span className="absolute inset-y-0 -start-px h-10 w-4 bg-gray-100 [clip-path:_polygon(0_0,_0%_100%,_100%_50%)] rtl:rotate-180"></span>
 
-          <Link
-            href="#"
-            className="flex h-10 items-center bg-white pe-4 ps-8 text-xs font-medium transition hover:text-gray-900 font-primary"
-          >
-            {select.replaceAll("-", " ")}
+          <Link href="#" className="flex h-10 items-center bg-white pe-4 ps-8 text-xs font-medium transition hover:text-gray-900 font-primary">
+            {select.replaceAll('-', ' ')}
           </Link>
         </li>
       </ol>
     </nav>
-  );
-};
+  )
+}
 
-export default BreadCrumb;
+export default BreadCrumb
