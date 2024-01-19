@@ -18,7 +18,7 @@ import { Order, SearchQuery } from '@/types/search'
 import { v4 } from 'uuid'
 import { formatDistance, subDays } from 'date-fns'
 import { createClient } from '@supabase/supabase-js'
-import { Database } from '@/types/supabase'
+// import { Database } from '@/types/supabase'
 import { getEqOperator } from './helpers'
 import { revalidateTag, unstable_cache, unstable_noStore } from 'next/cache'
 import { cache } from 'react'
@@ -31,7 +31,7 @@ type OrQuriesProp = {
 const SearchData = async (tag: string, revalidate: number, requestData: SearchQuery) => {
   const unstable_cache_search_data = unstable_cache(
     async () => {
-      const supabase = createClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SERVICE_ROLE_KEY!, {
+      const supabase = createClient<any>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SERVICE_ROLE_KEY!, {
         auth: {
           autoRefreshToken: false,
           persistSession: false,
