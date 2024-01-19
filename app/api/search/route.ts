@@ -1,10 +1,10 @@
 import { getEqOperator } from '@/lib/helpers'
 import { Order, SearchQuery } from '@/types/search'
-// import { Database } from '@/types/supabase'
+import { Database } from '@/types/supabase'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 
-const supabase = createClient<any>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SERVICE_ROLE_KEY!, {
+const supabase = createClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SERVICE_ROLE_KEY!, {
   auth: {
     autoRefreshToken: false,
     persistSession: false,

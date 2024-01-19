@@ -1,7 +1,7 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-//import { Database } from './types/supabase'
+import { Database } from './types/supabase'
 
 export const config = {
   matcher: ['/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)'],
@@ -9,7 +9,7 @@ export const config = {
 
 export default async function middleware(req: NextRequest) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient<any>({ req, res })
+  const supabase = createMiddlewareClient<Database>({ req, res })
 
   const isDashboard = req.nextUrl.pathname.includes('dashboard')
 
