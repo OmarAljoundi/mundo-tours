@@ -158,7 +158,7 @@ export type Customer = {
   tour?: Tour | null
 }
 export type Response<T> = {
-  message: string
+  message?: string
   success: boolean
   result?: T
   results?: T[]

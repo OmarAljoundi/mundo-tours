@@ -4,17 +4,17 @@ import { getTours } from '@/lib/operations'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-// export async function generateStaticParams() {
-//   const response = await getTours()
-//   if (response && response.length > 0) {
-//     return response
-//       .filter((x) => x.is_active)
-//       .map((tour) => ({
-//         tourName: `${tour.slug}`,
-//       }))
-//   }
-//   return []
-// }
+export async function generateStaticParams() {
+  const response = await getTours()
+  if (response && response.length > 0) {
+    return response
+      .filter((x) => x.is_active)
+      .map((tour) => ({
+        tourName: `${tour.slug}`,
+      }))
+  }
+  return []
+}
 
 export async function generateMetadata({ params }: { params: { tourName: string } }): Promise<Metadata> {
   const slug = params.tourName
@@ -24,13 +24,6 @@ export async function generateMetadata({ params }: { params: { tourName: string 
     return {
       title: tour?.seo?.title,
       description: tour?.seo?.description,
-      openGraph: {
-        title: tour?.seo?.title || '',
-        description: tour?.seo?.description || '',
-        type: 'website',
-        images: tour.images ?? [],
-        siteName: 'Mundo Tours',
-      },
       keywords: tour.seo?.tags || '',
     }
   }

@@ -1,8 +1,11 @@
+'use server'
+
 import { Customer, Hotel, Location, LocationAttributes, Office, Response, Setting, Tour, TourType } from '@/types/custom'
 import { supabaseClient } from './supabaseClient'
 import { http } from '@/service/httpService'
 import {
   CONFIG_PATH,
+  REVALIDATE_CONTENT_DATA,
   REVALIDATE_CUSTOMER_LIST,
   REVALIDATE_HOTEL_LIST,
   REVALIDATE_LOCATION_LIST,
@@ -14,6 +17,117 @@ import {
 import { Order, SearchQuery } from '@/types/search'
 import { v4 } from 'uuid'
 import { formatDistance, subDays } from 'date-fns'
+import { createClient } from '@supabase/supabase-js'
+import { Database } from '@/types/supabase'
+import { getEqOperator } from './helpers'
+import { revalidateTag, unstable_cache, unstable_noStore } from 'next/cache'
+import { cache } from 'react'
+
+type OrQuriesProp = {
+  forigenTable: string | null
+  query: string
+}
+
+const SearchData = async (tag: string, revalidate: number, requestData: SearchQuery) => {
+  const unstable_cache_search_data = unstable_cache(
+    async () => {
+      const supabase = createClient<Database>(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SERVICE_ROLE_KEY!, {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+          detectSessionInUrl: false,
+        },
+      })
+
+      const getPagination = (page: number, size: number) => {
+        const limit = size ? +size : 3
+        let from = page ? page * limit : 0
+        let to = page ? from + size : size
+
+        if (from !== 0) {
+          ++from
+          ++to
+        }
+
+        return { from, to }
+      }
+
+      try {
+        var OrQuries: OrQuriesProp[] = []
+
+        var query = supabase.from(requestData.Table!).select(requestData.Select, { count: 'exact' })
+
+        requestData.FilterByOptions.map((i) => {
+          if (i.MemberName.includes('.')) {
+            let memberNames = i.MemberName?.split('.')
+            if (OrQuries.find((x) => x.forigenTable == memberNames[0])) {
+              OrQuries.map((o) => {
+                if (o.forigenTable == memberNames[0]) {
+                  o.query += `${memberNames[1]}.${getEqOperator(i.FilterOperator)}.${i.FilterFor},`
+                }
+              })
+            } else {
+              OrQuries.push({
+                forigenTable: memberNames[0],
+                query: `${memberNames[1]}.${getEqOperator(i.FilterOperator)}.${i.FilterFor},`,
+              })
+            }
+          } else {
+            OrQuries.push({
+              forigenTable: null,
+              query: `${i.MemberName}.${getEqOperator(i.FilterOperator)}.${i.FilterFor},`,
+            })
+          }
+        })
+
+        if (OrQuries.length > 0) {
+          OrQuries.map((o) => {
+            o.query = o.query.slice(0, -1)
+            if (o.forigenTable) {
+              query = query.or(o.query, { foreignTable: o.forigenTable })
+            } else {
+              query = query.or(o.query)
+            }
+          })
+        }
+
+        if (requestData.OrderByOptions.length > 0) {
+          query = query.order(requestData.OrderByOptions[0].MemberName, {
+            ascending: requestData.OrderByOptions[0].SortOrder == Order.ASC ? true : false,
+          })
+        }
+
+        const { from, to } = getPagination(requestData.PageIndex, requestData.PageSize)
+        query = query.range(from, to)
+
+        const { data: result, count, error } = await query
+
+        if (error) {
+          console.error(error)
+          throw new Error(error.details)
+        }
+        return {
+          success: true,
+          results: result as any[],
+          result: (result[0] as any) ?? null,
+          total: count,
+        }
+      } catch (ex) {
+        console.error('ex', ex)
+        return {
+          success: false,
+          message: ex as any,
+        }
+      }
+    },
+    [tag],
+    {
+      revalidate,
+      tags: [tag],
+    },
+  )
+  return await unstable_cache_search_data()
+}
 
 export async function updateTourStatus(status: boolean, id: number): Promise<Response<any>> {
   const { error } = await supabaseClient.from('tour').update({ is_active: status }).eq('id', id)
@@ -22,9 +136,7 @@ export async function updateTourStatus(status: boolean, id: number): Promise<Res
     throw new Error(`faild to update tour status, ${error.message}`)
   }
 
-  const x = await http<any>(`/api/revalidate?tag=${REVALIDATE_TOUR_LIST}`, {
-    revalidate: 0,
-  }).get()
+  revalidateTag(REVALIDATE_TOUR_LIST)
 
   return {
     message: 'Tour updated successfully..',
@@ -38,9 +150,7 @@ export async function updateOfficeStatus(status: boolean, id: number): Promise<R
     throw new Error(`faild to update office status, ${error.message}`)
   }
 
-  await http<any>(`/api/revalidate?tag=${REVALIDATE_OFFICE_LIST}`, {
-    revalidate: 0,
-  }).get()
+  revalidateTag(REVALIDATE_OFFICE_LIST)
 
   return {
     message: 'Office updated successfully..',
@@ -56,10 +166,8 @@ export async function getTourTypes(): Promise<Response<TourType>> {
     Select: '*',
     Table: 'tour_type',
   }
-  const response = await http<Response<TourType>>('/api/search', {
-    revalidate: 86400,
-    tags: [REVALIDATE_TOUR_TYPE],
-  }).post(_SQ)
+
+  const response = await SearchData(REVALIDATE_TOUR_TYPE, 86400, _SQ)
   return response
 }
 
@@ -72,12 +180,9 @@ export async function getDestination() {
     Select: '*,location_attributes(*,location_tours(*))',
     Table: 'location',
   }
-  const data = await http<Response<Location>>('/api/search', {
-    revalidate: 86400,
-    tags: [REVALIDATE_LOCATION_LIST],
-  }).post(_SQ)
 
-  return data
+  const response = await SearchData(REVALIDATE_LOCATION_LIST, 86400, _SQ)
+  return response
 }
 
 export async function createTour(tour: Tour) {
@@ -92,6 +197,7 @@ export async function createTour(tour: Tour) {
     console.log('Errors in creating tours.. ', error)
     throw new Error(error.message)
   }
+  revalidateTag(REVALIDATE_TOUR_LIST)
 
   return data
 }
@@ -109,6 +215,7 @@ export async function updateTour(tour: Tour) {
     console.log('Errors in updating tour.. ', error)
     throw new Error(error.message)
   }
+  revalidateTag(REVALIDATE_TOUR_LIST)
 
   return data
 }
@@ -125,6 +232,8 @@ export async function createTourType(type: TourType) {
     throw new Error(error.message)
   }
 
+  revalidateTag(REVALIDATE_TOUR_TYPE)
+
   return data
 }
 
@@ -140,6 +249,7 @@ export async function updateTourType(type: TourType) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+  revalidateTag(REVALIDATE_TOUR_TYPE)
 
   return data
 }
@@ -155,6 +265,7 @@ export async function createDestination(dest: Location) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+  revalidateTag(REVALIDATE_LOCATION_LIST)
 
   return data
 }
@@ -171,6 +282,7 @@ export async function updateDestination(dest: Location) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+  revalidateTag(REVALIDATE_LOCATION_LIST)
 
   return data
 }
@@ -186,6 +298,8 @@ export async function createOffice(office: Office) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+
+  revalidateTag(REVALIDATE_OFFICE_LIST)
 
   return data
 }
@@ -203,6 +317,8 @@ export async function updateOffice(office: Office) {
     throw new Error(error.message)
   }
 
+  revalidateTag(REVALIDATE_OFFICE_LIST)
+
   return data
 }
 export async function getTours() {
@@ -214,10 +330,8 @@ export async function getTours() {
     Select: '*,tour_type(*)',
     Table: 'tour',
   }
-  const response = await http<Response<Tour>>('/api/search', {
-    revalidate: 86400,
-    tags: [REVALIDATE_TOUR_LIST],
-  }).post(_SQ)
+
+  const response = await SearchData(REVALIDATE_TOUR_LIST, 86400, _SQ)
   return response.results
 }
 export async function getHotels() {
@@ -230,11 +344,9 @@ export async function getHotels() {
     Table: 'hotel',
   }
 
-  const data = await http<Response<Hotel>>('/api/search', {
-    revalidate: 86400,
-    tags: [REVALIDATE_HOTEL_LIST],
-  }).post(_SQ)
-  return data.results
+  const response = await SearchData(REVALIDATE_HOTEL_LIST, 86400, _SQ)
+
+  return response.results
 }
 export async function deleteLocationAttr(location_id: number) {
   const { data, error } = await supabaseClient.from('location_attributes').delete().eq('location_id', location_id)
@@ -242,6 +354,8 @@ export async function deleteLocationAttr(location_id: number) {
   if (error) {
     throw new Error(`An error occured in operation deleteLocationAttr ${error.message}`)
   }
+
+  revalidateTag(REVALIDATE_LOCATION_LIST)
 }
 export async function createDestinationAttr(destinationAttr: LocationAttributes) {
   let id: number = 0
@@ -278,6 +392,8 @@ export async function createDestinationAttr(destinationAttr: LocationAttributes)
       throw new Error('Error while creating location tours ' + locationToursResponse.error.message)
     }
   }
+
+  revalidateTag(REVALIDATE_LOCATION_LIST)
 }
 
 export async function createHotel(hotel: Hotel) {
@@ -291,6 +407,8 @@ export async function createHotel(hotel: Hotel) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+
+  revalidateTag(REVALIDATE_HOTEL_LIST)
 
   return data
 }
@@ -307,16 +425,19 @@ export async function updateHotel(hotel: Hotel) {
     throw new Error(error.message)
   }
 
+  revalidateTag(REVALIDATE_HOTEL_LIST)
+
   return data
 }
-export const getContentData = async () => {
+
+const getContent = async () => {
   const { data, error } = await supabaseClient.storage.from('mundo_tours').list(SETTING_PATH)
 
   let responseData: Setting | undefined
 
   if (data && data.length > 0 && data.find((x) => x.name === CONFIG_PATH)) {
     const response = await fetch(`${process.env.NEXT_PUBLIC_IMAGE_URL}/${SETTING_PATH}/${CONFIG_PATH}`, {
-      next: { revalidate: 0 },
+      next: { revalidate: 86400, tags: [REVALIDATE_CONTENT_DATA] },
     })
 
     if (!response.ok) {
@@ -329,7 +450,10 @@ export const getContentData = async () => {
   }
 }
 
+export const getContentData = cache(getContent)
+
 export async function submitForm(formData: Customer) {
+  unstable_noStore()
   const { data, error } = await supabaseClient.from('customer').insert(formData).select('*,tour(name)').single()
 
   if (error) {

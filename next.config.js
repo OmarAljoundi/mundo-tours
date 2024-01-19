@@ -3,10 +3,25 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
 
   swcMinify: true,
   images: {
-    domains: ['mundo-tours.s3.eu-central-1.amazonaws.com', 'flagcdn.com', 'cdlxkuzvjlyvwgzgcdro.supabase.co'],
+    remotePatterns: [
+      {
+        hostname: 'mundo-tours.s3.eu-central-1.amazonaws.com',
+      },
+      {
+        hostname: 'flagcdn.com',
+      },
+      {
+        hostname: 'cdlxkuzvjlyvwgzgcdro.supabase.co',
+      },
+    ],
   },
 
   staticPageGenerationTimeout: 120,

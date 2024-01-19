@@ -1,5 +1,4 @@
 'use client'
-import { useSetting } from '@/hooks/use-setting'
 import Filter from '../shared/filter'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
@@ -8,8 +7,11 @@ import { motion } from 'framer-motion'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import useContent from '@/hooks/react-query/use-content'
+import { Skeleton } from '../ui/skeleton'
 const Hero = () => {
-  const { data: setting } = useContent()
+  const { data: setting, isLoading } = useContent()
+
+  if (isLoading) return <Skeleton className="w-full h-[400px]" />
   return (
     <div className="relative">
       <Swiper
@@ -48,9 +50,10 @@ const Hero = () => {
                 <BlurImage
                   src={item.image}
                   alt="Hero Image"
-                  quality={50}
+                  quality={10}
                   fill
-                  fetchPriority={index == 0 ? 'high' : 'auto'}
+                  sizes="100vw"
+                  priority={index == 0}
                   loading={index == 0 ? 'eager' : 'lazy'}
                   className="bg-overlay mx-auto max-w-full object-cover object-right-top md:object-center"
                 />

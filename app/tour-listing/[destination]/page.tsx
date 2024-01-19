@@ -18,26 +18,21 @@ export async function generateMetadata({ params }: { params: { destination: stri
   return {
     title: title,
     description: description,
-    openGraph: {
-      title: title,
-      description: description,
-      type: 'website',
-      siteName: 'Mundo Tours',
-    },
     keywords: tags,
   }
 }
-// export async function generateStaticParams() {
-//   const response = await getDestination()
-//   if (response.success && response.results && response.results.length > 0) {
-//     return response.results
-//       .filter((x) => x.is_active)
-//       .map((dest) => ({
-//         destination: `${dest.slug}`,
-//       }))
-//   }
-//   return []
-// }
+
+export async function generateStaticParams() {
+  const response = await getDestination()
+  if (response.success && response.results && response.results.length > 0) {
+    return response.results
+      .filter((x) => x.is_active)
+      .map((dest) => ({
+        destination: `${dest.slug}`,
+      }))
+  }
+  return []
+}
 
 export default async function DestinationPage({ params }: { params: { destination: string } }) {
   let tours_ids: number[] = []
@@ -45,33 +40,9 @@ export default async function DestinationPage({ params }: { params: { destinatio
   const currentDest = destination.results?.find((x) => x.slug == decodeURIComponent(params.destination) && x.is_active)
 
   if (!currentDest) return notFound()
-  currentDest?.location_attributes?.map((x) => {
-    tours_ids = [...tours_ids, ...(x.location_tours?.map((g) => g.tour_id) ?? [])]
+  currentDest?.location_attributes?.map((x: any) => {
+    tours_ids = [...tours_ids, ...(x.location_tours?.map((g: any) => g.tour_id) ?? [])]
   })
 
-  const query = new QueryClient()
-  await Promise.allSettled([
-    query.prefetchQuery({
-      queryKey: [REVALIDATE_LOCATION_LIST],
-      queryFn: getDestination,
-    }),
-    query.prefetchQuery({
-      queryKey: [REVALIDATE_TOUR_LIST],
-      queryFn: getTours,
-    }),
-    query.prefetchQuery({
-      queryKey: [REVALIDATE_TOUR_TYPE],
-      queryFn: getTourTypes,
-    }),
-    query.prefetchQuery({
-      queryKey: [REVALIDATE_CONTENT_DATA],
-      queryFn: getContentData,
-    }),
-  ])
-
-  return (
-    <HydrationBoundary state={dehydrate(query)}>
-      <Tours tourIds={tours_ids} />
-    </HydrationBoundary>
-  )
+  return <Tours tourIds={tours_ids} />
 }

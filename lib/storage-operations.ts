@@ -3,7 +3,6 @@ import { ImageListType, ImageType } from 'react-images-uploading'
 import { supabaseClient } from './supabaseClient'
 import { ATTACHMENT_PATH, CONFIG_PATH, SETTING_PATH } from './keys'
 import { v4 } from 'uuid'
-import { Setting } from '@/types/custom'
 
 export const UploadProductImages = async (
   files: ImageListType,
@@ -110,7 +109,6 @@ export const PushAttachments = async (
     }),
   )
 }
-
 export const PushJsonFile = async (blob: Blob) => {
   const { data, error } = await supabaseClient.storage.from('mundo_tours').upload(`${SETTING_PATH}/${CONFIG_PATH}`, blob, {
     cacheControl: '0',
@@ -134,7 +132,6 @@ export const GetJsonFile = async (path: string) => {
 
   return data
 }
-
 function containsArabicText(word: string): string {
   const words = word.split('.')
   const arabicRegex = /[\u0600-\u06FF]/
