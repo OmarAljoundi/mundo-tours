@@ -137,6 +137,8 @@ export async function updateTourStatus(status: boolean, id: number): Promise<Res
   }
 
   revalidateTag(REVALIDATE_TOUR_LIST)
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_TOUR_LIST}`)
+  
 
   return {
     message: 'Tour updated successfully..',
@@ -151,6 +153,8 @@ export async function updateOfficeStatus(status: boolean, id: number): Promise<R
   }
 
   revalidateTag(REVALIDATE_OFFICE_LIST)
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_OFFICE_LIST}`)
+
 
   return {
     message: 'Office updated successfully..',
@@ -198,6 +202,8 @@ export async function createTour(tour: Tour) {
     throw new Error(error.message)
   }
   revalidateTag(REVALIDATE_TOUR_LIST)
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_TOUR_LIST}`)
+
 
   return data
 }
@@ -215,6 +221,7 @@ export async function updateTour(tour: Tour) {
     console.log('Errors in updating tour.. ', error)
     throw new Error(error.message)
   }
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_TOUR_LIST}`)
   revalidateTag(REVALIDATE_TOUR_LIST)
 
   return data
@@ -231,6 +238,8 @@ export async function createTourType(type: TourType) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_TOUR_TYPE}`)
 
   revalidateTag(REVALIDATE_TOUR_TYPE)
 
@@ -249,6 +258,8 @@ export async function updateTourType(type: TourType) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_TOUR_TYPE}`)
   revalidateTag(REVALIDATE_TOUR_TYPE)
 
   return data
@@ -265,6 +276,8 @@ export async function createDestination(dest: Location) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`)
   revalidateTag(REVALIDATE_LOCATION_LIST)
 
   return data
@@ -282,6 +295,9 @@ export async function updateDestination(dest: Location) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`)
+
   revalidateTag(REVALIDATE_LOCATION_LIST)
 
   return data
@@ -298,6 +314,8 @@ export async function createOffice(office: Office) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_OFFICE_LIST}`)
 
   revalidateTag(REVALIDATE_OFFICE_LIST)
 
@@ -316,6 +334,8 @@ export async function updateOffice(office: Office) {
     console.log('Errors.. ', error)
     throw new Error(error.message)
   }
+
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_OFFICE_LIST}`)
 
   revalidateTag(REVALIDATE_OFFICE_LIST)
 
@@ -356,6 +376,7 @@ export async function deleteLocationAttr(location_id: number) {
   }
 
   revalidateTag(REVALIDATE_LOCATION_LIST)
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`)
 }
 export async function createDestinationAttr(destinationAttr: LocationAttributes) {
   let id: number = 0
@@ -394,6 +415,8 @@ export async function createDestinationAttr(destinationAttr: LocationAttributes)
   }
 
   revalidateTag(REVALIDATE_LOCATION_LIST)
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`)
+
 }
 
 export async function createHotel(hotel: Hotel) {
@@ -409,6 +432,8 @@ export async function createHotel(hotel: Hotel) {
   }
 
   revalidateTag(REVALIDATE_HOTEL_LIST)
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_HOTEL_LIST}`)
+
 
   return data
 }
@@ -426,6 +451,8 @@ export async function updateHotel(hotel: Hotel) {
   }
 
   revalidateTag(REVALIDATE_HOTEL_LIST)
+  await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_HOTEL_LIST}`)
+
 
   return data
 }
