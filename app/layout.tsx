@@ -11,7 +11,7 @@ import { ModalProvider } from '@/provider/modal-provider'
 import { Toaster } from 'sonner'
 import Scroll from '@/provider/scroll-provider'
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl">
       <body className={cn(alfont.variable, englishFont.variable, shekari.variable)}>

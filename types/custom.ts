@@ -97,6 +97,7 @@ export type TourType = {
   id?: number
   image?: string
   name?: string
+  order: number
 }
 
 export type Location = {

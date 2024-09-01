@@ -6,12 +6,21 @@ import BlurImage from '../shared/blur-image'
 import { motion } from 'framer-motion'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import useContent from '@/hooks/react-query/use-content'
-import { Skeleton } from '../ui/skeleton'
-const Hero = () => {
-  const { data: setting, isLoading } = useContent()
+import { getContent, getTours } from '@/lib/operations'
+import { use, useMemo } from 'react'
 
-  if (isLoading) return <Skeleton className="w-full h-[400px]" />
+const Hero = ({ contentPromise, toursPromise }: { contentPromise: ReturnType<typeof getContent>; toursPromise: ReturnType<typeof getTours> }) => {
+  const setting = use(contentPromise)
+  const tours = use(toursPromise)
+
+  const { max, min } = useMemo(() => {
+    const prices = tours?.map((item) => item.price_double)
+    if (prices) {
+      return { min: Math.min(...prices), max: Math.max(...prices) }
+    }
+    return { min: 0, max: 1800 }
+  }, [])
+
   return (
     <div className="relative">
       <Swiper
@@ -76,7 +85,7 @@ const Hero = () => {
       </Swiper>
 
       <section className="mt-8 absolute bottom-10 z-10 w-full max-w-7xl mx-auto right-0 left-0">
-        <Filter onChange={false} />
+        <Filter onChange={false} max={max} min={min} />
       </section>
     </div>
   )

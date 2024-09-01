@@ -7,13 +7,15 @@ import { Button } from '../ui/button'
 import qs from 'query-string'
 import useDebounce from '@/hooks/useDebounce'
 import { usePathname, useRouter } from 'next/navigation'
-import { QueryString } from '@/lib/utils'
+import { cn, QueryString } from '@/lib/utils'
 
 const PriceDropdown: FC<{
   onChange: boolean
   setSearch: (QueryString: QueryString) => void
   search: QueryString
-}> = ({ onChange, search, setSearch }) => {
+  min: number
+  max: number
+}> = ({ onChange, search, setSearch, max, min }) => {
   const pathname = usePathname()
   const [value, setValue] = useState<number>(900)
   const debouncedValue = useDebounce<number>(value, onChange ? 250 : 0)
@@ -72,15 +74,32 @@ const PriceDropdown: FC<{
             السعر
           </span>
           <span className="absolute top-[-14px] bg-white rounded-2xl py-1 px-5 right-4 shadow text-primary text-xs">ر.ع {value}</span>
-          <Slider
+          {/* <Slider
             handleStyle={{
               backgroundColor: 'var(--primary)',
               borderColor: 'var(--primary)',
             }}
-            max={1800}
+            min={min}
+            max={max}
             trackStyle={{ backgroundColor: 'var(--primary)' }}
             value={value}
             onChange={(value) => setValue(value as number)}
+          /> */}
+
+          <Slider
+            min={min}
+            max={max}
+            step={1}
+            value={value}
+            onChange={(value) => setValue(value as number)}
+            className={''}
+            handleStyle={{
+              backgroundColor: 'black',
+              borderColor: 'white',
+              height: '18px',
+              width: '18px',
+            }}
+            trackStyle={{ backgroundColor: 'black', height: '8px' }}
           />
         </div>
       </div>

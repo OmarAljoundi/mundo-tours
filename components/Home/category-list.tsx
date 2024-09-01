@@ -2,9 +2,10 @@
 import Image from 'next/image'
 import { Button } from '../ui/button'
 import Link from 'next/link'
-import useTourTypes from '@/hooks/react-query/use-tour-types'
-const CategoryList = () => {
-  const { data: response } = useTourTypes()
+import { getTourTypes } from '@/lib/operations'
+import { use } from 'react'
+const CategoryList = ({ categoryPromise }: { categoryPromise: ReturnType<typeof getTourTypes> }) => {
+  const response = use(categoryPromise)
 
   return (
     <div className="container">

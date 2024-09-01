@@ -1,9 +1,9 @@
 import Tours from '@/components/TourListing/tours'
 import Filter from '@/components/shared/filter'
-import { getContentData } from '@/lib/operations'
+import { getContent } from '@/lib/operations'
 
 export async function generateMetadata() {
-  const data = await getContentData()
+  const data = await getContent()
   return {
     title: data?.best_tours?.seo?.title,
     description: data?.best_tours?.seo?.description,

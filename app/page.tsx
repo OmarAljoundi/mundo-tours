@@ -2,15 +2,18 @@ import SectionProvider from '@/components/shared/section-provider'
 import Hero from '@/components/Home/hero'
 import HowWorks from '@/components/Home/how-works'
 import Intro from '@/components/Home/intro'
-import { getContentData, getTours } from '@/lib/operations'
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
-import { REVALIDATE_CONTENT_DATA } from '@/lib/keys'
+import { getContent, getDestination, getTours, getTourTypes } from '@/lib/operations'
 import DestinationList from '@/components/Home/destination-list'
 import BestToursList from '@/components/Home/best-tours.list'
 import CategoryList from '@/components/Home/category-list'
+import { cache, Suspense } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
+import BestToursListLoading from '@/components/Loading/best-tours-list-loading'
+import DestinationHomeLoading from '@/components/Loading/destination-home-loading'
+import InstagramSection from '@/components/Home/instagram-section'
 
 export async function generateMetadata() {
-  const data = await getContentData()
+  const data = await getContent()
   return {
     title: data?.home?.seo?.title,
     description: data?.home?.seo?.description,
@@ -18,21 +21,30 @@ export async function generateMetadata() {
   }
 }
 
-export default async function Home() {
-  const query = new QueryClient()
-  await query.prefetchQuery({
-    queryKey: [REVALIDATE_CONTENT_DATA],
-    queryFn: getContentData,
+export default function Home() {
+  const getContentDataCached = cache(() => {
+    return getContent()
+  })
+
+  const getToursCached = cache(() => {
+    return getTours()
   })
 
   return (
     <div>
-      <HydrationBoundary state={dehydrate(query)}>
-        <Hero />
-      </HydrationBoundary>
-
+      <Suspense fallback={<Skeleton className="w-full h-[400px]" />}>
+        <Hero contentPromise={getContentDataCached()} toursPromise={getToursCached()} />
+      </Suspense>
       <SectionProvider title="إنت اختار" sub="وجهتك السياحية">
-        <DestinationList />
+        <Suspense
+          fallback={
+            <div className="container">
+              <DestinationHomeLoading />
+            </div>
+          }
+        >
+          <DestinationList destinationPromise={getDestination()} />
+        </Suspense>
       </SectionProvider>
 
       <SectionProvider>
@@ -40,16 +52,28 @@ export default async function Home() {
       </SectionProvider>
 
       <SectionProvider title="البرامج الاكثر مبيعاً">
-        <BestToursList />
+        <Suspense
+          fallback={
+            <div className="container">
+              <BestToursListLoading />
+            </div>
+          }
+        >
+          <BestToursList contactPromise={getContentDataCached()} toursPromise={getToursCached()} />
+        </Suspense>
       </SectionProvider>
 
       <SectionProvider title="انواع البرامج">
-        <CategoryList />
+        <Suspense fallback={<></>}>
+          <CategoryList categoryPromise={getTourTypes()} />
+        </Suspense>
       </SectionProvider>
 
       <SectionProvider title="أسهل مما تتخيل">
         <HowWorks />
       </SectionProvider>
+
+      <InstagramSection />
     </div>
   )
 }

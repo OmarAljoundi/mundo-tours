@@ -23,9 +23,11 @@ import useLocations from '@/hooks/react-query/use-locations'
 type FilterOptions = {
   onChange: boolean
   enableTabs?: boolean
+  min: number
+  max: number
 }
 
-const Filter: FC<FilterOptions> = ({ onChange, enableTabs = false }) => {
+const Filter: FC<FilterOptions> = ({ onChange, min, max, enableTabs = false }) => {
   const [search, setSearch] = useState<QueryString>({
     country: [],
     days: [],
@@ -172,7 +174,7 @@ const Filter: FC<FilterOptions> = ({ onChange, enableTabs = false }) => {
           <DurationDropdown onChange={onChange} search={search} setSearch={setSearch} />
         </motion.div>
         <motion.div variants={{ ...ITEMS_VAR }}>
-          <PriceDropdown onChange={onChange} search={search} setSearch={setSearch} />
+          <PriceDropdown onChange={onChange} search={search} setSearch={setSearch} min={min} max={max} />
         </motion.div>
         {enableTabs && (
           <motion.div variants={{ ...ITEMS_VAR }}>

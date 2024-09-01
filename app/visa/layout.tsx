@@ -1,8 +1,8 @@
 import BreadCrumb from '@/components/Visa/bread-crumb'
-import { getContentData } from '@/lib/operations'
+import { getContent } from '@/lib/operations'
 
 export async function generateMetadata() {
-  const data = await getContentData()
+  const data = await getContent()
   return {
     title: data?.visa?.seo?.title,
     description: data?.visa?.seo?.description,

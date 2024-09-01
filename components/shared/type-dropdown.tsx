@@ -1,15 +1,14 @@
 'use client'
 import { useEffect, useState, FC } from 'react'
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList, CommandSeparator } from '../ui/command'
-
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Check, Plus, X } from 'lucide-react'
-import { QueryString, cn, daysFilter, europeanCountries } from '@/lib/utils'
+import { QueryString, cn } from '@/lib/utils'
 import { Separator } from '../ui/separator'
 import qs from 'query-string'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { TourType } from '@/types/custom'
 
 const TypeDropdown: FC<{
@@ -47,7 +46,7 @@ const TypeDropdown: FC<{
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="text-left w-full  cursor-pointer">
           <Plus className="ml-2 h-4 w-4" />
-          نوع الرحلة
+          طريقة الرحلة
           {selected.length > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
@@ -63,6 +62,7 @@ const TypeDropdown: FC<{
                   </Badge>
                 ) : (
                   types
+                    .sort((a, b) => b.order - a.order)
                     ?.filter((option) => selected.includes(option))
                     .map((option) => (
                       <Badge

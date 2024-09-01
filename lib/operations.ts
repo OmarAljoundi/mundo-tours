@@ -138,13 +138,13 @@ export async function updateTourStatus(status: boolean, id: number): Promise<Res
 
   revalidateTag(REVALIDATE_TOUR_LIST)
   await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_TOUR_LIST}`)
-  
 
   return {
     message: 'Tour updated successfully..',
     success: true,
   }
 }
+
 export async function updateOfficeStatus(status: boolean, id: number): Promise<Response<any>> {
   const { error } = await supabaseClient.from('office').update({ status: status }).eq('id', id)
 
@@ -154,7 +154,6 @@ export async function updateOfficeStatus(status: boolean, id: number): Promise<R
 
   revalidateTag(REVALIDATE_OFFICE_LIST)
   await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_OFFICE_LIST}`)
-
 
   return {
     message: 'Office updated successfully..',
@@ -203,7 +202,6 @@ export async function createTour(tour: Tour) {
   }
   revalidateTag(REVALIDATE_TOUR_LIST)
   await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_TOUR_LIST}`)
-
 
   return data
 }
@@ -416,7 +414,6 @@ export async function createDestinationAttr(destinationAttr: LocationAttributes)
 
   revalidateTag(REVALIDATE_LOCATION_LIST)
   await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`)
-
 }
 
 export async function createHotel(hotel: Hotel) {
@@ -433,7 +430,6 @@ export async function createHotel(hotel: Hotel) {
 
   revalidateTag(REVALIDATE_HOTEL_LIST)
   await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_HOTEL_LIST}`)
-
 
   return data
 }
@@ -453,11 +449,10 @@ export async function updateHotel(hotel: Hotel) {
   revalidateTag(REVALIDATE_HOTEL_LIST)
   await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_HOTEL_LIST}`)
 
-
   return data
 }
 
-const getContent = async () => {
+export const getContent = async () => {
   const { data, error } = await supabaseClient.storage.from('mundo_tours').list(SETTING_PATH)
 
   let responseData: Setting | undefined
@@ -476,8 +471,6 @@ const getContent = async () => {
     return responseData
   }
 }
-
-export const getContentData = cache(getContent)
 
 export async function submitForm(formData: Customer) {
   unstable_noStore()

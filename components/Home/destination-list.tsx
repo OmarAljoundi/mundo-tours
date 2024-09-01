@@ -5,23 +5,23 @@ import Link from 'next/link'
 import { getTotalTours } from '@/lib/helpers'
 import { motion } from 'framer-motion'
 import { CONTAINER_DEST_VAR, ITEMS_VAR } from '@/lib/animations'
-import useLocations from '@/hooks/react-query/use-locations'
-import DestinationHomeLoading from '../Loading/destination-home-loading'
-const DestinationList = () => {
-  const { data: response, isLoading } = useLocations()
-  const getData = () => response?.results?.filter((x) => x.is_office == false).sort((a, b) => (a.image?.order ?? 100) - (b.image?.order ?? 200)) || []
+import { getDestination } from '@/lib/operations'
+import { use, useMemo } from 'react'
+const DestinationList = ({ destinationPromise }: { destinationPromise: ReturnType<typeof getDestination> }) => {
+  const response = use(destinationPromise)
 
-  if (isLoading)
+  const filtredData = useMemo(() => {
     return (
-      <div className="container">
-        <DestinationHomeLoading />
-      </div>
+      response?.results
+        ?.filter((x) => x.is_office == false && x.is_active == true)
+        .sort((a, b) => (a.image?.order ?? 100) - (b.image?.order ?? 200)) || []
     )
+  }, [])
 
   return (
     <div className="container">
       <div className="grid grid-cols-12 gap-4 mt-8">
-        {getData().map((location, index) => (
+        {filtredData.map((location) => (
           <Link
             href={`/tour-listing/${location.slug}`}
             key={location.id}

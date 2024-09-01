@@ -5,25 +5,22 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import { Navigation } from 'swiper/modules'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import useContent from '@/hooks/react-query/use-content'
-import useTours from '@/hooks/react-query/use-tours'
-import BestToursListLoading from '../Loading/best-tours-list-loading'
-const BestToursList = () => {
-  const { data: content, isLoading } = useContent()
-  const { data, isLoading: isLoadingTour } = useTours()
+import { getContent, getTours } from '@/lib/operations'
+import { use, useMemo } from 'react'
+const BestToursList = ({
+  contactPromise,
+  toursPromise,
+}: {
+  contactPromise: ReturnType<typeof getContent>
+  toursPromise: ReturnType<typeof getTours>
+}) => {
+  const content = use(contactPromise)
+  const data = use(toursPromise)
 
-  const getData = () => {
+  const filteredData = useMemo(() => {
     if (content?.best_tours?.tours && content?.best_tours?.tours?.length > 0) return data?.filter((x) => content.best_tours?.tours?.includes(x.id!))
     return []
-  }
-
-  if (isLoading || isLoadingTour) {
-    return (
-      <div className="container">
-        <BestToursListLoading />
-      </div>
-    )
-  }
+  }, [])
 
   return (
     <div className="container">
@@ -48,7 +45,7 @@ const BestToursList = () => {
             modules={[Navigation]}
             className="swiper choice-slider"
           >
-            {getData()?.map((item, index) => (
+            {filteredData?.map((item, index) => (
               <SwiperSlide className="px-3 my-5" key={index}>
                 <article className="col-span-12 sm:col-span-6 xl:col-span-4 px-3 xl:px-0">
                   <TourCard tour={item} key={index} />
