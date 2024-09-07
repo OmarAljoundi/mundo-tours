@@ -453,23 +453,21 @@ export async function updateHotel(hotel: Hotel) {
 }
 
 export const getContent = async () => {
-  const { data, error } = await supabaseClient.storage.from('mundo_tours').list(SETTING_PATH)
+  //const { data, error } = await supabaseClient.storage.from('mundo_tours').list(SETTING_PATH)
 
   let responseData: Setting | undefined
 
-  if (data && data.length > 0 && data.find((x) => x.name === CONFIG_PATH)) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_IMAGE_URL}/${SETTING_PATH}/${CONFIG_PATH}`, {
-      next: { revalidate: 86400, tags: [REVALIDATE_CONTENT_DATA] },
-    })
+  const response = await fetch(`${process.env.NEXT_PUBLIC_IMAGE_URL}/${SETTING_PATH}/${CONFIG_PATH}`, {
+    next: { revalidate: 86400, tags: [REVALIDATE_CONTENT_DATA] },
+  })
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status: ${response.status}`)
-    }
-
-    responseData = (await response.json()) as Setting
-
-    return responseData
+  if (!response.ok) {
+    throw new Error(`Request failed with status: ${response.status}`)
   }
+
+  responseData = (await response.json()) as Setting
+
+  return responseData
 }
 
 export async function submitForm(formData: Customer) {
