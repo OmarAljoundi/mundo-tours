@@ -20,7 +20,7 @@ const DestinationList = ({ destinationPromise }: { destinationPromise: ReturnTyp
 
   return (
     <div className="container">
-      <div className="grid grid-cols-12 gap-1 lg:gap-4 mt-8">
+      <div className="grid grid-cols-12 gap-4 px-4 lg:gap-4 mt-8">
         {filtredData.map((location) => (
           <Link
             href={`/tour-listing/${location.slug}`}
@@ -60,20 +60,20 @@ const DestinationList = ({ destinationPromise }: { destinationPromise: ReturnTyp
               viewport={{ once: true }}
               className="relative md:rounded-2xl group transition-all duration-500"
             >
-              <div className="listing-card__img">
+              <div className="listing-card__img ">
                 <Image
                   src={location.image?.url || ''}
                   alt="image"
-                  className=" w-full rounded-sm md:rounded-2xl"
-                  width={746}
-                  height={362}
+                  className=" w-full rounded-2xl md:rounded-2xl aspect-square md:aspect-auto object-cover"
+                  width={1600}
+                  height={1000}
                   quality={80}
                 />
               </div>
               <div
                 className="absolute top-0 left-0 flex flex-col justify-between h-full w-full before:w-full 
                 before:absolute before:h-full before:bottom-0 before:left-0 before:bg-gradient-to-t 
-                 before:from-black/10 before:rounded-2xl  group-hover:before:transition-all group-hover:before:duration-500 group-hover:before:blur-2xl
+                 before:from-black/10 before:rounded-2xl before:md:rounded-2xl  group-hover:before:transition-all group-hover:before:duration-500 group-hover:before:blur-2xl
                   before:to-black/10 group-hover:after:w-full group-hover:after:absolute 
                  "
               >
