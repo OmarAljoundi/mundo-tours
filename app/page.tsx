@@ -32,10 +32,10 @@ export default function Home() {
 
   return (
     <div>
-      <Suspense fallback={<Skeleton className="w-full h-[400px]" />}>
+      <Suspense fallback={<Skeleton className="w-full h-[200px] lg:h-[400px]" />}>
         <Hero contentPromise={getContentDataCached()} toursPromise={getToursCached()} />
       </Suspense>
-      <SectionProvider title="إنت اختار" sub="وجهتك السياحية">
+      <SectionProvider title="الباقات السياحية">
         <Suspense
           fallback={
             <div className="container">
@@ -47,9 +47,9 @@ export default function Home() {
         </Suspense>
       </SectionProvider>
 
-      <SectionProvider>
+      {/* <SectionProvider>
         <Intro />
-      </SectionProvider>
+      </SectionProvider> */}
 
       <SectionProvider title="البرامج الاكثر مبيعاً">
         <Suspense
@@ -68,10 +68,10 @@ export default function Home() {
           <CategoryList categoryPromise={getTourTypes()} />
         </Suspense>
       </SectionProvider>
-
+      {/* 
       <SectionProvider title="أسهل مما تتخيل">
         <HowWorks />
-      </SectionProvider>
+      </SectionProvider> */}
 
       <InstagramSection />
     </div>

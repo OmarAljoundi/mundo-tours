@@ -64,7 +64,7 @@ const DestinationList = ({ destinationPromise }: { destinationPromise: ReturnTyp
                 <Image
                   src={location.image?.url || ''}
                   alt="image"
-                  className=" w-full rounded-2xl md:rounded-2xl aspect-square md:aspect-auto object-cover"
+                  className=" w-full rounded-2xl md:rounded-2xl aspect-[1/1.2] md:aspect-auto object-cover"
                   width={1600}
                   height={1000}
                   quality={80}
@@ -86,10 +86,10 @@ const DestinationList = ({ destinationPromise }: { destinationPromise: ReturnTyp
                         duration: 0.5,
                       }}
                       className="absolute px-2 py-1 lg:px-2 lg:py-2 bottom-2 right-2  w-fit  left-0   flex   justify-between  border border-white
-                      bg-white/75 rounded-xl shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm"
+                      bg-secondary   rounded-xl shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm"
                     >
                       <div>
-                        <h1 className="text-[9px]  md:text-sm xl:text-base text-secondary font-primary text-ellipsis line-clamp-1 overflow-hidden">
+                        <h1 className="text-[11px]  md:text-sm xl:text-base  text-white font-primary text-ellipsis line-clamp-1 overflow-hidden">
                           {location.name}
                         </h1>
                       </div>
@@ -103,10 +103,10 @@ const DestinationList = ({ destinationPromise }: { destinationPromise: ReturnTyp
                         duration: 0.5,
                       }}
                       className="absolute px-2 py-1 lg:px-2 lg:py-2 top-2 right-2 lg:bottom-2 lg:left-2 lg:top-[unset] lg:right-[unset] max-w-[170px]   flex   justify-between  border border-white
-                      bg-white/75 rounded-xl shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm"
+                      bg-secondary  rounded-xl shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm"
                     >
                       <div>
-                        <h1 className="text-[9px]  md:text-sm xl:text-base text-secondary font-primary text-ellipsis line-clamp-1 overflow-hidden">
+                        <h1 className="text-[11px]  md:text-sm xl:text-base text-white font-primary text-ellipsis line-clamp-1 overflow-hidden">
                           {getTotalTours(location)}
                         </h1>
                       </div>
