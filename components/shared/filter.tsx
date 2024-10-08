@@ -158,7 +158,7 @@ const Filter: FC<FilterOptions> = ({ onChange, min, max, enableTabs = false }) =
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className={cn('p-3 sm:p-4 lg:py-6 lg:px-8 bg-white  shadow-lg  grid gap-2  grid-cols-2', onChange ? 'lg:grid-cols-3' : 'lg:grid-cols-5')}
+        className={cn('p-3 sm:p-4 lg:py-6 lg:px-8 bg-white  shadow-lg  grid gap-2  grid-cols-2 lg:grid-cols-3')}
       >
         {enableTabs && (
           <DestinationDropdown locations={locations?.results?.filter((x) => x.is_office == false) ?? []} setSearch={setSearch} search={search} />
@@ -170,7 +170,7 @@ const Filter: FC<FilterOptions> = ({ onChange, min, max, enableTabs = false }) =
         <motion.div variants={{ ...ITEMS_VAR }}>
           <TypeDropdown types={types?.results ?? []} setSearch={setSearch} search={search} onChange={onChange} />
         </motion.div>
-        <motion.div variants={{ ...ITEMS_VAR }}>
+        {/* <motion.div variants={{ ...ITEMS_VAR }}>
           <DurationDropdown onChange={onChange} search={search} setSearch={setSearch} />
         </motion.div>
         <motion.div variants={{ ...ITEMS_VAR }}>
@@ -180,7 +180,7 @@ const Filter: FC<FilterOptions> = ({ onChange, min, max, enableTabs = false }) =
           <motion.div variants={{ ...ITEMS_VAR }}>
             <SortDropdown onChange={onChange} search={search} setSearch={setSearch} />{' '}
           </motion.div>
-        )}
+        )} */}
 
         {!onChange && (
           <motion.section variants={{ ...ITEMS_VAR }} className={cn(onChange ? 'col-span-1' : 'col-span-2 lg:col-span-1')}>

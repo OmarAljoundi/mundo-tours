@@ -32,7 +32,7 @@ const DestinationDropdown: FC<{
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="text-left w-full  cursor-pointer">
+        <Button variant="outline" size="sm" className="text-left w-full  cursor-pointer col-span-2 lg:col-span-1">
           <Plus className="ml-2 h-4 w-4" />
           الوجهات
           {destination && (
