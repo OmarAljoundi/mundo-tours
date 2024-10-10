@@ -71,7 +71,7 @@ export function getTotalTours(location: Location) {
 function getWordTotal(total: number) {
   switch (total) {
     case 0:
-      return 'لاتوجد رحلات'
+      return '0 رحلة'
     case 1:
       return 'رحلة واحدة'
     case 2:

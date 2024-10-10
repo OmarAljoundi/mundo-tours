@@ -3,85 +3,70 @@ import Image from 'next/image'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { getTourTypes } from '@/lib/operations'
-import { use, useState } from 'react'
-import { Compass, MapPin, Plane, Ship, Train } from 'lucide-react'
-import { motion } from 'framer-motion'
-const iconMap = {
-  Plane: Plane,
-  Ship: Ship,
-  Train: Train,
-  Compass: Compass,
-  MapPin: MapPin,
+import React, { use, useEffect, useRef, useState } from 'react'
+import { ChevronLeft, ChevronRight, Compass, MapPin, Plane, Ship, Train } from 'lucide-react'
+import { motion, useAnimation, useInView } from 'framer-motion'
+import { ArrowTopLeftIcon } from '@radix-ui/react-icons'
+
+const generateGradient = () => {
+  const hue1 = Math.floor(Math.random() * 360)
+  const hue2 = (hue1 + 180) % 360
+  return `linear-gradient(135deg, hsl(${hue1}, 70%, 80%), hsl(${hue2}, 70%, 80%))`
 }
 
-const CategoryList = ({ categoryPromise }: { categoryPromise: ReturnType<typeof getTourTypes> }) => {
-  const response = use(categoryPromise)
-  const [hoveredId, setHoveredId] = useState<number | undefined>(undefined)
-  return (
-    // <div className="container">
-    //   <div className="grid grid-cols-2 lg:grid-cols-5 mt-8 gap-4">
-    //     {response?.results?.map((i) => (
-    //       <div key={i.id} className="w-full">
-    //         <div className="grid justify-items-center p-4 border-2 border-dashed border-primary rounded-2xl gap-4 shadow-xl">
-    //           <Image src={i.image ?? ''} width={50} height={50} alt={i.name ?? ''} />
-    //           <h4 className="font-primary text-xl">{i.name}</h4>
-    //           <Link href={`/tour-listing?type=${i.name}`}>
-    //             <Button>المزيد</Button>
-    //           </Link>
-    //         </div>
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
+export default function CategoryList({ categoryPromise }: { categoryPromise: ReturnType<typeof getTourTypes> }) {
+  const { results } = React.use(categoryPromise)
+  const controls = useAnimation()
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, amount: 0.1 })
 
-    <div className="container mx-auto px-4 py-8">
+  useEffect(() => {
+    if (inView) {
+      controls.start('visible')
+    }
+  }, [controls, inView])
+
+  return (
+    <div ref={ref} className="container mx-auto px-4 py-8 overflow-hidden">
       <motion.div
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        initial="hidden"
+        animate={controls}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1,
+            },
+          },
+        }}
+        className="flex flex-col space-y-4"
       >
-        {response?.results?.map((item) => {
-          return (
+        {results?.map((item) => (
+          <Link href={`/tour-listing?type=${item.name}`} key={item.id}>
             <motion.div
-              key={item.id}
-              className="w-full"
-              whileHover={{ scale: 1.05 }}
-              onHoverStart={() => setHoveredId(item.id)}
-              onHoverEnd={() => setHoveredId(undefined)}
+              variants={{
+                hidden: { x: 50, opacity: 0 },
+                visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } },
+              }}
+              className="w-full border rounded-md"
             >
-              <motion.div
-                className="h-full flex flex-col items-center justify-center p-1 bg-gradient-to-br from-secondary/10 to-secondary/30 rounded-2xl shadow-lg transition-shadow
-                 duration-300 ease-in-out"
-                animate={{
-                  boxShadow:
-                    hoveredId === item.id
-                      ? '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
-                      : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                }}
-              >
-                {/* <motion.div
-            className="mb-4 text-primary"
-            initial={{ scale: 1 }}
-            animate={{ scale: hoveredId === item.id ? 1.2 : 1 }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            <Icon size={40} />
-          </motion.div> */}
-                <Image src={item.image ?? ''} width={50} height={50} alt={item.name ?? ''} className="rounded-full mb-4" />
-                <h4 className="font-primary text-xl mb-4 text-center">{item.name}</h4>
+              <div className="flex items-center justify-between flex-row-reverse p-2 rounded-lg shadow-md">
                 <Link href={`/tour-listing?type=${item.name}`}>
-                  <Button variant="outline" className="transition-colors duration-300 ease-in-out hover:bg-primary hover:text-primary-foreground">
-                    المزيد
+                  <Button variant="ghost" className="transition-all duration-300">
+                    <span className="sr-only">الذهاب إلى {item.name}</span>
+                    <ArrowTopLeftIcon className="h-5 w-5 text-primary" />
                   </Button>
                 </Link>
-              </motion.div>
+                <div className="flex items-center  flex-row-reverse gap-x-2 ">
+                  <h4 className="font-primary text-lg text-primary">{item.name}</h4>
+                  <Image src={item.image ?? ''} width={40} height={40} alt={item.name ?? ''} className="rounded-full" />
+                </div>
+              </div>
             </motion.div>
-          )
-        })}
+          </Link>
+        ))}
       </motion.div>
     </div>
   )
 }
-
-export default CategoryList

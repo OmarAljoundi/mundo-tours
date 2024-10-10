@@ -1,6 +1,7 @@
 import Tours from '@/components/TourListing/tours'
 import Filter from '@/components/shared/filter'
-import { getContent } from '@/lib/operations'
+import { getContent, getDestination, getTourTypes } from '@/lib/operations'
+import { Suspense } from 'react'
 
 export async function generateMetadata() {
   const data = await getContent()
@@ -12,10 +13,10 @@ export async function generateMetadata() {
 }
 const Destination = async () => {
   return (
-    <>
-      <Filter onChange={true} enableTabs={true} />
+    <Suspense>
+      <Filter onChange={true} enableTabs={true} destinationPromise={getDestination()} tourTypesPromise={getTourTypes()} />
       <Tours />
-    </>
+    </Suspense>
   )
 }
 

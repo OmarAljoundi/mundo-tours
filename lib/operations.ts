@@ -21,7 +21,6 @@ import { createClient } from '@supabase/supabase-js'
 import { Database } from '@/types/supabase'
 import { getEqOperator } from './helpers'
 import { revalidateTag, unstable_cache, unstable_noStore } from 'next/cache'
-import { cache } from 'react'
 
 type OrQuriesProp = {
   forigenTable: string | null
@@ -171,6 +170,7 @@ export async function getTourTypes(): Promise<Response<TourType>> {
   }
 
   const response = await SearchData(REVALIDATE_TOUR_TYPE, 86400, _SQ)
+
   return response
 }
 

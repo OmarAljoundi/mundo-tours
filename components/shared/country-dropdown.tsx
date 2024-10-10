@@ -1,6 +1,6 @@
 'use client'
-import { Fragment, useState, useEffect, FC } from 'react'
-import { QueryString, cn, europeanCountries, queryString } from '@/lib/utils'
+import { useState, useEffect } from 'react'
+import { cn, europeanCountries } from '@/lib/utils'
 import { Plus, Check, X } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
@@ -8,34 +8,25 @@ import { Badge } from '../ui/badge'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '../ui/command'
 import { Separator } from '../ui/separator'
 import Image from 'next/image'
-import qs from 'query-string'
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 
-const CountryDropdown: FC<{
-  setSearch: (search: QueryString) => void
-  search: QueryString
-  onChange: boolean
-}> = ({ onChange, search, setSearch }) => {
+const CountryDropdown = () => {
   const [selected, setSelected] = useState<{ countryCode: string; label: string }[]>([])
+  const [country, setCountry] = useQueryState(
+    'country',
+    parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true, scroll: false, throttleMs: 1000 }),
+  )
 
   useEffect(() => {
-    const query = qs.parseUrl(window.location.href, {
-      arrayFormat: 'comma',
-      decode: true,
-    }).query
-
-    if (typeof query.country == 'string') query.country = [query.country]
-    if (query.country && query.country.length > 0) {
-      const labelSet = new Set(query.country)
+    if (country && country.length > 0) {
+      const labelSet = new Set(country)
       const filteredObjects = europeanCountries.filter((obj) => labelSet.has(obj.label))
       setSelected(filteredObjects)
     }
   }, [])
 
   useEffect(() => {
-    setSearch({
-      ...search,
-      country: selected.map((x) => x.label),
-    })
+    setCountry(selected.map((x) => x.label))
   }, [selected])
 
   return (

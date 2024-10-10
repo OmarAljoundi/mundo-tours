@@ -197,3 +197,7 @@ export function filterTours(prop: TourSearch, tours: Tour[]) {
 
   return filteredTours
 }
+
+export function toSar(value: number) {
+  return value * 9.75
+}

@@ -1,5 +1,5 @@
 'use client'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import { Banknote } from 'lucide-react'
@@ -8,6 +8,7 @@ import qs from 'query-string'
 import useDebounce from '@/hooks/useDebounce'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn, QueryString } from '@/lib/utils'
+import { useCookies } from 'next-client-cookies'
 
 const PriceDropdown: FC<{
   onChange: boolean
@@ -65,6 +66,10 @@ const PriceDropdown: FC<{
     }
   }, [debouncedValue, router])
 
+  const cookies = useCookies()
+
+  const isOman = useMemo(() => cookies.get('currency') == 'OMR', [cookies.get('currency')])
+
   return (
     <Button variant="outline" size="sm" className="text-left w-full cursor-pointer relative block">
       <div className="sm:px-6 focus:shadow-xl  gap-3 items-center sm:text-sm ">
@@ -73,7 +78,7 @@ const PriceDropdown: FC<{
             <Banknote />
             السعر
           </span>
-          <span className="absolute top-[-14px] bg-white rounded-2xl py-1 px-5 right-4 shadow text-primary text-xs">ر.ع {value}</span>
+          <span className="absolute top-[-14px] bg-white rounded-2xl py-1 px-5 right-4 shadow text-primary text-xs">{isOman ? 'ر.ع' : 'ر.س'}</span>
           {/* <Slider
             handleStyle={{
               backgroundColor: 'var(--primary)',

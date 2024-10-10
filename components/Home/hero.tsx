@@ -6,20 +6,19 @@ import BlurImage from '../shared/blur-image'
 import { motion } from 'framer-motion'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import { getContent, getTours } from '@/lib/operations'
+import { getContent, getDestination, getTours, getTourTypes } from '@/lib/operations'
 import { use, useMemo } from 'react'
 
-const Hero = ({ contentPromise, toursPromise }: { contentPromise: ReturnType<typeof getContent>; toursPromise: ReturnType<typeof getTours> }) => {
+const Hero = ({
+  contentPromise,
+  destinationPromise,
+  tourTypesPromise,
+}: {
+  contentPromise: ReturnType<typeof getContent>
+  tourTypesPromise: ReturnType<typeof getTourTypes>
+  destinationPromise: ReturnType<typeof getDestination>
+}) => {
   const setting = use(contentPromise)
-  const tours = use(toursPromise)
-
-  const { max, min } = useMemo(() => {
-    const prices = tours?.map((item) => item.price_double)
-    if (prices) {
-      return { min: Math.min(...prices), max: Math.max(...prices) }
-    }
-    return { min: 0, max: 1800 }
-  }, [])
 
   return (
     <div className="relative">
@@ -87,7 +86,7 @@ const Hero = ({ contentPromise, toursPromise }: { contentPromise: ReturnType<typ
       </div>
 
       <section className=" bg-gray-900 border-t-1 lg:border-t-0 lg:absolute lg:mt-8 bottom-10 z-10 w-full max-w-7xl mx-auto right-0 left-0">
-        <Filter onChange={false} max={max} min={min} />
+        <Filter onChange={false} destinationPromise={destinationPromise} tourTypesPromise={tourTypesPromise} />
       </section>
     </div>
   )

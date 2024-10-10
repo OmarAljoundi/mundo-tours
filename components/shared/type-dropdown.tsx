@@ -5,41 +5,32 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Check, Plus, X } from 'lucide-react'
-import { QueryString, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { Separator } from '../ui/separator'
-import qs from 'query-string'
 import { usePathname } from 'next/navigation'
 import { TourType } from '@/types/custom'
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 
-const TypeDropdown: FC<{
-  setSearch: (search: QueryString) => void
-  search: QueryString
-  types: TourType[]
-  onChange: boolean
-}> = ({ onChange, search, setSearch, types }) => {
+const TypeDropdown = ({ types }: { types: TourType[] }) => {
   const pathname = usePathname()
+  const [tourType, setTourType] = useQueryState(
+    'type',
+    parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true, scroll: false, throttleMs: 1000 }),
+  )
+
   const [selected, setSelected] = useState<TourType[]>([])
 
   useEffect(() => {
-    const query = qs.parseUrl(window.location.href, {
-      arrayFormat: 'comma',
-      decode: true,
-    }).query
-
-    if (typeof query.type == 'string') query.type = [query.type]
-    if (query.type && query.type.length > 0) {
-      const labelSet = new Set(query.type)
-      const filteredObjects = types.filter((obj) => labelSet.has(obj.name!))
+    if (tourType && tourType.length > 0) {
+      const labelSet = new Set(tourType)
+      const filteredObjects = types?.filter((obj) => labelSet.has(obj.name!)) ?? []
       setSelected(filteredObjects)
     }
   }, [])
 
   useEffect(() => {
-    setSearch({
-      ...search,
-      type: selected.map((x) => x.name!),
-    })
-  }, [selected, pathname])
+    setTourType(selected.map((x) => x.name!))
+  }, [selected])
 
   return (
     <Popover>
@@ -62,7 +53,7 @@ const TypeDropdown: FC<{
                   </Badge>
                 ) : (
                   types
-                    .sort((a, b) => b.order - a.order)
+                    ?.sort((a, b) => b.order - a.order)
                     ?.filter((option) => selected.includes(option))
                     .map((option) => (
                       <Badge
@@ -86,29 +77,31 @@ const TypeDropdown: FC<{
           <CommandList>
             <CommandEmpty>لاتوجد نتائج</CommandEmpty>
             <CommandGroup>
-              {types?.map((option) => {
-                return (
-                  <CommandItem
-                    key={option.name}
-                    onSelect={() => {
-                      if (selected.includes(option)) {
-                        setSelected(selected.filter((x) => x != option))
-                      } else {
-                        setSelected([...selected, option])
-                      }
-                    }}
-                  >
-                    <Check
-                      className={cn(
-                        'ml-2 text-green-600 flex h-4 w-4 items-center justify-center opacity-0 transition-all duration-500',
-                        selected.includes(option) ? 'opacity-100' : 'opacity-0',
-                      )}
-                    />
+              {types
+                ?.sort((a, b) => b.order - a.order)
+                ?.map((option) => {
+                  return (
+                    <CommandItem
+                      key={option.name}
+                      onSelect={() => {
+                        if (selected.includes(option)) {
+                          setSelected(selected.filter((x) => x != option))
+                        } else {
+                          setSelected([...selected, option])
+                        }
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          'ml-2 text-green-600 flex h-4 w-4 items-center justify-center opacity-0 transition-all duration-500',
+                          selected.includes(option) ? 'opacity-100' : 'opacity-0',
+                        )}
+                      />
 
-                    <span className="font-naskh">{option.name}</span>
-                  </CommandItem>
-                )
-              })}
+                      <span className="font-naskh">{option.name}</span>
+                    </CommandItem>
+                  )
+                })}
             </CommandGroup>
             {selected.length > 0 && (
               <>

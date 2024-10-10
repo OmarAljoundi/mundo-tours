@@ -91,17 +91,20 @@ const DestinationCard = (location: Location) => {
           quality={80}
         />
 
-        {/* Top gradient */}
         <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-black/60 to-transparent" />
 
-        {/* Bottom gradient */}
         <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-black/60 to-transparent" />
 
-        <div className="absolute top-4 right-4 px-3 py-2 bg-white/80 rounded-full text-sm font-semibold text-gray-800 font-primary">
+        <div
+          className="absolute top-2 right-2
+          py-0.5 bg-white/80 rounded-full
+          text-[8px] px-2 font-semibold
+           text-gray-800 font-primary"
+        >
           {getTotalTours(location)}
         </div>
 
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="absolute bottom-2 left-2 right-4">
           <h2 className="text-white text-lg lg:text-xl font-bold truncate">{location.name}</h2>
         </div>
       </motion.div>

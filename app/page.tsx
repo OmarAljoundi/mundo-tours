@@ -1,7 +1,5 @@
 import SectionProvider from '@/components/shared/section-provider'
 import Hero from '@/components/Home/hero'
-import HowWorks from '@/components/Home/how-works'
-import Intro from '@/components/Home/intro'
 import { getContent, getDestination, getTours, getTourTypes } from '@/lib/operations'
 import DestinationList from '@/components/Home/destination-list'
 import BestToursList from '@/components/Home/best-tours.list'
@@ -33,7 +31,7 @@ export default function Home() {
   return (
     <div>
       <Suspense fallback={<Skeleton className="w-full h-[200px] lg:h-[400px]" />}>
-        <Hero contentPromise={getContentDataCached()} toursPromise={getToursCached()} />
+        <Hero contentPromise={getContentDataCached()} destinationPromise={getDestination()} tourTypesPromise={getTourTypes()} />
       </Suspense>
       <SectionProvider title="الباقات السياحية">
         <Suspense

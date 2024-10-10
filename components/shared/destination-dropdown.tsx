@@ -1,32 +1,25 @@
 'use client'
-import { useState, useEffect, FC, useRef } from 'react'
+import { useEffect } from 'react'
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '../ui/command'
-
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Check, Plus, X } from 'lucide-react'
-import { QueryString, cn, daysFilter, europeanCountries } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { Separator } from '../ui/separator'
-import { useParams, usePathname, useRouter } from 'next/navigation'
-import { Location } from '@/types/custom'
+import { useParams, useRouter } from 'next/navigation'
+import { useQueryState } from 'nuqs'
 
-const DestinationDropdown: FC<{
-  locations: Location[]
-  search: QueryString
-  setSearch: (search: QueryString) => void
-}> = ({ locations, setSearch, search }) => {
+const DestinationDropdown = ({ destinations }: { destinations: any[] }) => {
   const router = useRouter()
+  const [tab, setTab] = useQueryState('tab', { clearOnDefault: true, scroll: false, shallow: false, throttleMs: 30 })
 
   const { destination } = useParams()
 
   const select = decodeURIComponent(destination?.toString())
 
   useEffect(() => {
-    setSearch({
-      ...search,
-      tab: '1',
-    })
+    if (destination) setTab('1')
   }, [destination])
 
   return (
@@ -51,7 +44,7 @@ const DestinationDropdown: FC<{
           <CommandList>
             <CommandEmpty>لاتوجد نتائج</CommandEmpty>
             <CommandGroup>
-              {locations?.map((option) => {
+              {destinations?.map((option) => {
                 return (
                   <CommandItem
                     key={option.id}
