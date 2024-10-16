@@ -25,14 +25,10 @@ const ClientProvider: FC<{ children: React.ReactNode; content?: Setting }> = ({ 
       {!path.includes('admin') && (
         <>
           <ToolBar />
-          <Header />
-        </>
-      )}
-
-      {children}
-      {!path.includes('admin') && (
-        <>
-          <Footer />
+          <Header>
+            {children}
+            <Footer />
+          </Header>
         </>
       )}
     </>

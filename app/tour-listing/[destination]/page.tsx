@@ -1,8 +1,6 @@
 export const dynamicParams = true
 import Tours from '@/components/TourListing/tours'
-import { REVALIDATE_CONTENT_DATA, REVALIDATE_LOCATION_LIST, REVALIDATE_TOUR_LIST, REVALIDATE_TOUR_TYPE } from '@/lib/keys'
-import { getContentData, getDestination, getTourTypes, getTours } from '@/lib/operations'
-import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
+import { getDestination } from '@/lib/operations'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 

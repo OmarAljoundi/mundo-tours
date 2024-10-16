@@ -45,10 +45,6 @@ export default function Home() {
         </Suspense>
       </SectionProvider>
 
-      {/* <SectionProvider>
-        <Intro />
-      </SectionProvider> */}
-
       <SectionProvider title="البرامج الاكثر مبيعاً">
         <Suspense
           fallback={
@@ -66,10 +62,6 @@ export default function Home() {
           <CategoryList categoryPromise={getTourTypes()} />
         </Suspense>
       </SectionProvider>
-      {/* 
-      <SectionProvider title="أسهل مما تتخيل">
-        <HowWorks />
-      </SectionProvider> */}
 
       <InstagramSection />
     </div>

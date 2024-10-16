@@ -1,61 +1,75 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { AiOutlineWhatsApp } from 'react-icons/ai'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet'
+import { Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react'
+import Link from 'next/link'
+import { MessageCircle, Phone } from 'lucide-react'
 
-export function CallToAction() {
-  const [isOpen, setIsOpen] = useState(false)
+const offices = [
+  { title: 'سلطنة عمان', link: 'https://api.whatsapp.com/send/?phone=%2B96895929251&text&type=phone_number&app_absent=0', phoneNumber: '79667679' },
+  { title: 'السعودية', link: 'https://api.whatsapp.com/send/?phone=%2B966507158137&text&type=phone_number&app_absent=0', phoneNumber: '920031910' },
+]
+
+export function WhatsappAction() {
+  const ref = useRef(null)
 
   return (
-    <div dir="rtl" className="p-4">
-      <Button
-        variant="outline"
-        size="icon"
-        className="rounded-full bg-green-500 hover:bg-green-600 transition-colors duration-300"
-        onClick={() => setIsOpen(true)}
-      >
-        <AiOutlineWhatsApp className="text-white text-xl" />
-        <span className="sr-only">افتح قائمة الاتصال بواتساب</span>
-      </Button>
+    <Popover placement="bottom" showArrow>
+      <PopoverTrigger>
+        <Button
+          size={'icon'}
+          variant={'outline'}
+          ref={ref}
+          className="w-9 h-9 bg-green-500 hover:bg-green-500/50 hover:text-white text-white  p-1.5 shadow-md"
+          tabIndex={0}
+          role="link"
+          aria-label={`Visit Whatsapp page`}
+        >
+          <MessageCircle className="w-7 h-7" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="px-1 py-2 grid divide-y-1 divide-border">
+          {offices.map(({ link, title }) => (
+            <Link href={link} target="_blank" className="text-xs font-bold py-2 first:pt-0 last:pb-0 flex gap-x-2 " key={title}>
+              <h1 className="font-primary">{title}</h1>
+            </Link>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
 
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent side={'top'}>
-          <SheetHeader>
-            <SheetTitle className="text-center text-2xl font-bold">اختر مكتب الاتصال</SheetTitle>
-          </SheetHeader>
-          <div className="grid grid-cols-2 gap-4 pt-4">
-            <Button
-              variant="outline"
-              className="flex items-center justify-center font-primary gap-x-2"
-              onClick={() => {
-                window.open('https://api.whatsapp.com/send/?phone=%2B96895929251&text&type=phone_number&app_absent=0', '_blank')
-              }}
-            >
-              <span className="rounded-full bg-green-500 hover:bg-green-600 transition-colors duration-300">
-                <AiOutlineWhatsApp className="text-white text-xl" />
-                <span className="sr-only">افتح قائمة الاتصال بواتساب</span>
-              </span>
-              <span className="text-xs"> فرع سلطنة عمان </span>
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center justify-center font-primary gap-x-2"
-              onClick={() => {
-                window.open('https://api.whatsapp.com/send/?phone=%2B966507158137&text&type=phone_number&app_absent=0', '_blank')
-              }}
-            >
-              <span className="rounded-full bg-green-500 hover:bg-green-600 transition-colors duration-300">
-                <AiOutlineWhatsApp className="text-white text-xl" />
-                <span className="sr-only">افتح قائمة الاتصال بواتساب</span>
-              </span>
-              <span className="text-xs"> فرع السعودية </span>
-            </Button>
-          </div>
-        </SheetContent>
-      </Sheet>
-    </div>
+export function PhoneAction() {
+  const ref = useRef(null)
+
+  return (
+    <Popover placement="bottom" showArrow>
+      <PopoverTrigger>
+        <Button
+          size={'icon'}
+          variant={'outline'}
+          ref={ref}
+          className="w-9 h-9 bg-primary hover:bg-primary/50 hover:text-white text-white   p-1.5 shadow-md"
+          tabIndex={0}
+          role="link"
+          aria-label={`Visit Whatsapp page`}
+        >
+          <Phone className="w-5 h-5" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="px-1 py-2 grid divide-y-1 divide-border">
+          {offices.map(({ link, title, phoneNumber }) => (
+            <Link href={link} target="_blank" className="text-xs font-bold py-2 first:pt-0 last:pb-0 flex gap-x-2 " key={title}>
+              <h1 className="font-primary">{title}</h1>
+              <span>{phoneNumber}</span>
+            </Link>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }

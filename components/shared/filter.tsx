@@ -11,6 +11,7 @@ import { motion } from 'framer-motion'
 import { CONTAINER_VAR, ITEMS_VAR } from '@/lib/animations'
 import { getDestination, getTourTypes } from '@/lib/operations'
 import { useSearchParams } from 'next/navigation'
+import { Separator } from '../ui/separator'
 
 type FilterOptions = {
   onChange: boolean
@@ -30,36 +31,51 @@ const Filter: FC<FilterOptions> = ({ onChange, destinationPromise, tourTypesProm
   }, [searchParams])
 
   return (
-    <div>
+    <div className="px-2">
       <motion.div
         variants={CONTAINER_VAR}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className={cn('p-3 sm:p-4 lg:py-6 lg:px-8 bg-white  shadow-lg  grid gap-2  grid-cols-2 lg:grid-cols-3')}
+        className={cn(
+          `p-3 sm:p-4 lg:py-6 lg:px-8 bg-white border-border border-1 mt-4 lg:mt-0
+           shadow-lg  grid  grid-cols-2 lg:grid-cols-3 rounded-xl lg:rounded-full gap-y-4 lg:divide-x-reverse lg:divide-x-2 divide-border`,
+        )}
       >
-        {enableTabs && <DestinationDropdown destinations={destinations || []} />}
-        <motion.div variants={{ ...ITEMS_VAR }}>
+        {enableTabs && (
+          <>
+            <motion.div variants={{ ...ITEMS_VAR }} className="lg:px-4 first:lg:pr-0 last:lg:pl-0 col-span-full lg:col-span-1">
+              <DestinationDropdown destinations={destinations || []} />
+            </motion.div>
+            <Separator className="lg:hidden col-span-full " />
+          </>
+        )}
+        <motion.div variants={{ ...ITEMS_VAR }} className="lg:px-4 first:lg:pr-0 last:lg:pl-0">
           <CountryDropdown />
         </motion.div>
 
-        <motion.div variants={{ ...ITEMS_VAR }}>
+        <motion.div variants={{ ...ITEMS_VAR }} className="lg:px-4 first:lg:pr-0 last:lg:pl-0">
           <TypeDropdown types={types || []} />
         </motion.div>
 
+        {!onChange && <Separator className="lg:hidden col-span-full " />}
+
         {!onChange && (
-          <motion.section variants={{ ...ITEMS_VAR }} className={cn(onChange ? 'col-span-1' : 'col-span-2 lg:col-span-1')}>
+          <motion.div
+            variants={{ ...ITEMS_VAR }}
+            className={cn('lg:px-4 first:lg:pr-0 last:lg:pl-0', onChange ? 'col-span-1' : 'col-span-2 lg:col-span-1')}
+          >
             <Link href={url}>
-              <Button className="w-full" size={'sm'}>
+              <Button className="w-full rounded-full" size={'sm'}>
                 <SearchIcon className="text-white" />
                 <span className="mr-2 text-white text-lg">أبحث</span>
               </Button>
             </Link>
-          </motion.section>
+          </motion.div>
         )}
       </motion.div>
     </div>
   )
 }
 
-export default Filter
+export default React.memo(Filter)

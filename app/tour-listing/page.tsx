@@ -14,7 +14,9 @@ export async function generateMetadata() {
 const Destination = async () => {
   return (
     <Suspense>
-      <Filter onChange={true} enableTabs={true} destinationPromise={getDestination()} tourTypesPromise={getTourTypes()} />
+      <div className="mt-8">
+        <Filter onChange={true} enableTabs={true} destinationPromise={getDestination()} tourTypesPromise={getTourTypes()} />
+      </div>
       <Tours />
     </Suspense>
   )

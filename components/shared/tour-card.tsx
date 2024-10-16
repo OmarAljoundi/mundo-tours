@@ -4,7 +4,6 @@ import BlurImage from './blur-image'
 import { Tour } from '@/types/custom'
 import { useCookies } from 'next-client-cookies'
 import { useMemo } from 'react'
-import { toSar } from '@/lib/utils'
 
 const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
   const cookies = useCookies()
@@ -53,7 +52,7 @@ const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
       <div className="px-2 sm:px-5 pb-5 pt-3">
         <div className="flex flex-wrap justify-between items-center gap-5">
           <span className="text-primary text-xl font-medium">
-            {isOman ? tour?.price_double : toSar(tour?.price_double ?? 0)} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
+            {isOman ? tour?.price_double : tour?.price_double_sa} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
             <span className="text-base text-neutral-700 font-primary"> / للشخص في الغرفة المزدوجة </span>
           </span>
 

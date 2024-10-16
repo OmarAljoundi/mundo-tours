@@ -8,6 +8,7 @@ import { useMemo } from 'react'
 const Tabs = () => {
   const route = useRouter()
   const { destination, tab } = useParams()
+  console.log('tab', tab)
   const { data: destinations, isLoading } = useLocations()
 
   const tabList = useMemo(() => {
@@ -21,14 +22,14 @@ const Tabs = () => {
         <h1 className="text-center text-7xl font-secondary text-secondary mb-5">أختار نوع البرناج</h1>
 
         <TabUi
-          defaultValue={(tab as string)?.replaceAll('-', ' ')}
+          defaultValue={decodeURIComponent(tab as string)?.replaceAll('-', ' ')}
           className="w-full mb-8 "
           onValueChange={(e) => route.push(`/tour-listing/${decodeURIComponent(destination as string)}/${e.replaceAll(' ', '-')}`)}
         >
           <TabsList className="w-full shadow-xl bg-white gap-4 grid grid-cols-2 lg:grid-cols-4 h-full">
             {tabList
-              ?.sort((a, b) => (a.order || 0) - (b.order || 0))
-              .map((item) => (
+              ?.sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
+              .map((item: any) => (
                 <TabsTrigger
                   value={item.title!.toString()}
                   key={item.id}

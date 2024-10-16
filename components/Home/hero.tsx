@@ -8,6 +8,7 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import { getContent, getDestination, getTours, getTourTypes } from '@/lib/operations'
 import { use, useMemo } from 'react'
+import React from 'react'
 
 const Hero = ({
   contentPromise,
@@ -85,7 +86,7 @@ const Hero = ({
         </Swiper>
       </div>
 
-      <section className=" bg-gray-900 border-t-1 lg:border-t-0 lg:absolute lg:mt-8 bottom-10 z-10 w-full max-w-7xl mx-auto right-0 left-0">
+      <section className=" bg-transparent border-t-1 lg:border-t-0 lg:absolute lg:mt-8 bottom-10 z-10 w-full max-w-7xl mx-auto right-0 left-0">
         <Filter onChange={false} destinationPromise={destinationPromise} tourTypesPromise={tourTypesPromise} />
       </section>
     </div>

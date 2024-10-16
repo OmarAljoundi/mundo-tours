@@ -91,14 +91,12 @@ const DestinationCard = (location: Location) => {
           quality={80}
         />
 
-        <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-black/60 to-transparent" />
-
         <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-black/60 to-transparent" />
 
         <div
           className="absolute top-2 right-2
-          py-0.5 bg-white/80 rounded-full
-          text-[8px] px-2 font-semibold
+          py-0.5 bg-white rounded-full
+          text-xs border-primary border-2 px-2 font-semibold
            text-gray-800 font-primary"
         >
           {getTotalTours(location)}

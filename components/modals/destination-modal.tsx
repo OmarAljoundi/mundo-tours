@@ -21,7 +21,7 @@ const DestinationModal = () => {
   const { onClose, data } = modal
   const handleSubmitForm = async (formData: Location) => {
     if (!formData.slug) {
-      formData.slug = formData.name?.replaceAll(' ', '-')
+      formData.slug = formData.name?.trim().replaceAll(' ', '-')
     }
 
     if (data && data.id) {
@@ -183,7 +183,7 @@ const DestinationModal = () => {
                 label="Destination Slug"
                 labelPlacement="outside"
                 placeholder="Enter slug name"
-                onChange={handleChange}
+                onChange={(e) => handleChange(e.target.value.trim())}
                 onBlur={handleBlur}
                 onClear={() => setFieldValue('slug', '')}
                 value={values.slug || ''}

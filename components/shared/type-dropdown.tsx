@@ -1,24 +1,22 @@
 'use client'
-import { useEffect, useState, FC } from 'react'
+import { useEffect, useState } from 'react'
 import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList, CommandSeparator } from '../ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
-import { Check, Plus, X } from 'lucide-react'
+import { Check, ChevronDown, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Separator } from '../ui/separator'
-import { usePathname } from 'next/navigation'
 import { TourType } from '@/types/custom'
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 
 const TypeDropdown = ({ types }: { types: TourType[] }) => {
-  const pathname = usePathname()
+  const [selected, setSelected] = useState<TourType[]>([])
   const [tourType, setTourType] = useQueryState(
     'type',
-    parseAsArrayOf(parseAsString).withDefault([]).withOptions({ clearOnDefault: true, scroll: false, throttleMs: 1000 }),
+    parseAsArrayOf(parseAsString)
+      .withDefault(selected.map((x) => x.name ?? '') ?? [])
+      .withOptions({ clearOnDefault: true, scroll: false, throttleMs: 1000, history: 'push' }),
   )
-
-  const [selected, setSelected] = useState<TourType[]>([])
 
   useEffect(() => {
     if (tourType && tourType.length > 0) {
@@ -28,27 +26,39 @@ const TypeDropdown = ({ types }: { types: TourType[] }) => {
     }
   }, [])
 
-  useEffect(() => {
-    setTourType(selected.map((x) => x.name!))
-  }, [selected])
-
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="text-left w-full  cursor-pointer">
-          <Plus className="ml-2 h-4 w-4" />
-          طريقة الرحلة
-          {selected.length > 0 && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-left w-full font-primary  cursor-pointer rounded-full flex justify-between flex-row-reverse  border-0"
+        >
+          <ChevronDown className="ml-2 h-4 w-4" />
+          {selected.length > 0 ? (
             <>
-              <Separator orientation="vertical" className="mx-2 h-4" />
-              <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden" onClick={() => setSelected([])}>
-                {selected.length}
+              <Badge
+                variant="secondary"
+                className="rounded-sm px-1 font-normal lg:hidden"
+                onClick={() => {
+                  setSelected([])
+                  setTourType([])
+                }}
+              >
+                {selected.length} مختارة
                 <X className="border  rounded-lg w-4 h-4 mr-2 text-white bg-red-500/70" />
               </Badge>
-              <div className="hidden space-x-1 lg:flex">
-                {selected.length > 1 ? (
-                  <Badge variant="secondary" className="rounded-sm px-1 font-normal" onClick={() => setSelected([])}>
-                    {selected.length}
+              <div className="hidden lg:flex gap-2">
+                {selected.length > 3 ? (
+                  <Badge
+                    variant="secondary"
+                    className="rounded-sm px-1 font-normal"
+                    onClick={() => {
+                      setSelected([])
+                      setTourType([])
+                    }}
+                  >
+                    {selected.length} مختارة
                     <X className="border  rounded-lg w-4 h-4 mr-2 text-white bg-red-500/70" />
                   </Badge>
                 ) : (
@@ -60,7 +70,11 @@ const TypeDropdown = ({ types }: { types: TourType[] }) => {
                         variant="secondary"
                         key={option.name}
                         className="rounded-sm px-1 font-normal"
-                        onClick={() => setSelected([...selected.filter((x) => x != option)])}
+                        onClick={() => {
+                          var newData = [...selected.filter((x) => x != option)]
+                          setSelected(newData)
+                          setTourType(newData.map((x) => x.name!))
+                        }}
                       >
                         {option.name}
                         <X className="border  rounded-lg w-4 h-4 mr-2 text-white bg-red-500/70" />
@@ -69,6 +83,8 @@ const TypeDropdown = ({ types }: { types: TourType[] }) => {
                 )}
               </div>
             </>
+          ) : (
+            <span> طريقة الرحلة</span>
           )}
         </Button>
       </PopoverTrigger>
@@ -85,9 +101,13 @@ const TypeDropdown = ({ types }: { types: TourType[] }) => {
                       key={option.name}
                       onSelect={() => {
                         if (selected.includes(option)) {
-                          setSelected(selected.filter((x) => x != option))
+                          var newData = selected.filter((x) => x != option)
+                          setSelected(newData)
+                          setTourType(newData.map((x) => x.name!))
                         } else {
-                          setSelected([...selected, option])
+                          var newData = [...selected, option]
+                          setSelected(newData)
+                          setTourType(newData.map((x) => x.name!))
                         }
                       }}
                     >
@@ -107,7 +127,13 @@ const TypeDropdown = ({ types }: { types: TourType[] }) => {
               <>
                 <CommandSeparator />
                 <CommandGroup>
-                  <CommandItem className="justify-center text-center" onSelect={() => setSelected([])}>
+                  <CommandItem
+                    className="justify-center text-center"
+                    onSelect={() => {
+                      setSelected([])
+                      setTourType([])
+                    }}
+                  >
                     Clear filters
                   </CommandItem>
                 </CommandGroup>

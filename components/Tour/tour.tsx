@@ -6,11 +6,10 @@ import { BedDouble, BedSingle, CalendarDays, Clock7, MapPin, Type } from 'lucide
 import BlurImage from '../shared/blur-image'
 import Share from './share'
 import TourLinks from './tour-links'
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 import TourPricingList from './tour-pricing-list'
 import { type Tour } from '@/types/custom'
 import { useCookies } from 'next-client-cookies'
-import { toSar } from '@/lib/utils'
 
 const Tour: FC<{ tour: Tour }> = ({ tour }) => {
   const cookies = useCookies()
@@ -39,7 +38,7 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                       </div>
                       <h4 className="mt-2  text-base sm:text-sm md:text-sm font-primary">الشخض في الغرفة المزدوجة</h4>
                       <h2 className="text-xl font-bold">
-                        {isOman ? tour?.price_double : toSar(tour?.price_double ?? 0)} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
+                        {isOman ? tour?.price_double : tour?.price_double_sa} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
                       </h2>
                     </div>
                   </div>
@@ -50,7 +49,7 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                       </div>
                       <h4 className="mt-2 text-base sm:text-sm md:text-sm font-primary">الشخض في الغرفة المفردة</h4>
                       <h2 className="text-xl font-bold">
-                        {isOman ? tour?.price_single : toSar(tour?.price_single ?? 0)} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
+                        {isOman ? tour?.price_single : tour?.price_single_sa} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
                       </h2>
                     </div>
                   </div>
