@@ -3,32 +3,70 @@ import Link from 'next/link'
 import MobileMenu from './mobile-menu'
 import CurrencySwitcher from './currency-switcher'
 import { PhoneAction, WhatsappAction } from './call-to-actions'
-import { ReactNode } from 'react'
+import { ReactNode, useMemo } from 'react'
+import useLocations from '@/hooks/react-query/use-locations'
+import { Location } from '@/types/custom'
+import MegaMenu from './mega-menu'
 
 export const MenuItems = [
   {
     title: 'الرئيسية',
     link: '/',
+    subMenus: [],
+    allowMobile: true,
   },
   {
-    title: 'جميع الرحلات',
+    title: 'الوجهات السياحية',
     link: '/tour-listing',
+    allowMobile: false,
+    subMenus: [],
   },
+
   {
-    title: 'التأشيرات',
-    link: '/visa',
-  },
-  {
-    title: 'آراء العملاء',
-    link: 'https://www.instagram.com/p/B2Gr4omDs0y/',
+    title: 'خدماتنا السياحية',
+    link: '/',
+    allowMobile: true,
+    subMenus: [
+      { name: 'اسنخراج التأشيرات', url: '/visa' },
+      { name: 'الرخصة الدولية', url: '/' },
+      { name: 'إيجار سيارات في أوروبا', url: '/' },
+    ],
   },
   {
     title: 'عن موندو',
     link: '/about-us',
+    allowMobile: true,
+    subMenus: [
+      { name: 'من نحن', url: '/about-us' },
+      { name: 'آراء العملاء', url: 'https://www.instagram.com/p/B2Gr4omDs0y/' },
+    ],
   },
 ]
 
+const getDestinationSubMenus = (data: Location[]) => {
+  return data.map((z) => {
+    return {
+      name: z.name!,
+      url: `/tour-listing/${z.slug}`,
+    }
+  })
+}
+
 const Header = ({ children }: { children: ReactNode }) => {
+  const { data } = useLocations()
+
+  const laptopMenu = useMemo(() => {
+    return MenuItems.map((o) => {
+      if (o.title == 'الوجهات السياحية') {
+        return {
+          ...o,
+          subMenus: getDestinationSubMenus(data?.results ?? []),
+        }
+      }
+      return o
+    })
+  }, [data])
+
   return (
     <div className="flex flex-col">
       <nav
@@ -37,21 +75,25 @@ const Header = ({ children }: { children: ReactNode }) => {
       >
         <header className="bg-white ">
           <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-1 lg:gap-8 px-4 sm:px-6 lg:px-8">
-            <Link className="block text-teal-600" href="/">
+            <Link className="block text-teal-600 w-[80px] lg:w-[100px]" href="/">
               <span className="sr-only">Home</span>
-              <Image src={'/imgs/mundo-logo.png'} width={80} height={0} alt="موندو تورز" />
+              <Image src={'/imgs/mundo-logo.png'} width={100} height={0} alt="موندو تورز" />
             </Link>
 
             <div className="flex flex-1 items-center justify-end md:justify-between">
               <nav aria-label="Global" className="hidden md:block">
                 <ul className="flex items-center gap-6 text-sm">
-                  {MenuItems.map((item) => (
-                    <li key={item.title}>
-                      <Link className="text-secondary transition hover:text-gray-500/75 font-primary font-semibold" href={item.link}>
-                        {item.title}
-                      </Link>
-                    </li>
-                  ))}
+                  {laptopMenu.map((item, key) => {
+                    if (item.subMenus.length > 0) return <MegaMenu key={key} group={item.title} items={item.subMenus} />
+
+                    return (
+                      <li key={item.title}>
+                        <Link className="text-secondary transition hover:text-gray-500/75 font-primary font-semibold" href={item.link}>
+                          {item.title}
+                        </Link>
+                      </li>
+                    )
+                  })}
                 </ul>
               </nav>
 

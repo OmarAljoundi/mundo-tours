@@ -26,13 +26,12 @@ const BestToursForm: FunctionComponent<BestToursFormProps> = () => {
   const config = useSetting()
   const [loading, setLoading] = useState(false)
   const [groupSelected, setGroupSelected] = useState<string[]>([])
-  const getNoneSelectedTours = () => tours?.filter((x) => !groupSelected.includes(String(x.id!)) && x.name?.includes(query ?? ''))
+  const getNoneSelectedTours = () => (tours as any)?.filter((x: any) => !groupSelected.includes(String(x.id!)) && x.name?.includes(query ?? ''))
 
   const handleDeleteTour = (id: number) => {
     setGroupSelected([...groupSelected.filter((x) => x !== String(id))])
   }
 
-  console.log('config.setting?', config.setting)
   useEffect(() => {
     setGroupSelected(config.setting?.best_tours?.tours?.map((x) => x.toString()) ?? [])
   }, [config.setting?.best_tours])
@@ -73,7 +72,11 @@ const BestToursForm: FunctionComponent<BestToursFormProps> = () => {
     validateOnChange: true,
   })
 
-  const { data: tours } = useQuery([REVALIDATE_TOUR_LIST], async () => await getTours(), { cacheTime: 10000, refetchInterval: false })
+  const { data: tours } = useQuery({
+    queryKey: [REVALIDATE_TOUR_LIST],
+    queryFn: async () => await getTours(),
+    refetchInterval: false,
+  })
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -103,7 +106,7 @@ const BestToursForm: FunctionComponent<BestToursFormProps> = () => {
                     base: 'w-full',
                   }}
                 >
-                  {getNoneSelectedTours()?.map((tour) => (
+                  {getNoneSelectedTours()?.map((tour: any) => (
                     <Checkbox
                       key={tour.id!}
                       classNames={{

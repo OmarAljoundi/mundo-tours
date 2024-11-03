@@ -10,8 +10,6 @@ import { Location } from '@/types/custom'
 const DestinationDropdown = ({ destinations }: { destinations: any[] }) => {
   const router = useRouter()
 
-  console.log('destinations', destinations)
-
   const getNextRoute = useCallback(
     (destination: Location) => {
       var baseUrl = `/tour-listing/${destination.slug}`

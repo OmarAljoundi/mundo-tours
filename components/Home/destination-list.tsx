@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getTotalTours } from '@/lib/helpers'
+import { getTotalTours, getTotalToursSeprate } from '@/lib/helpers'
 import { motion, useAnimation } from 'framer-motion'
 import { getDestination } from '@/lib/operations'
 import { use, useEffect, useMemo } from 'react'
@@ -23,7 +23,7 @@ const DestinationList = ({ destinationPromise }: { destinationPromise: ReturnTyp
     <div className="container">
       <div className="grid grid-cols-12 gap-4 px-4 lg:gap-4 mt-8">
         {filtredData.map((location) => (
-          <DestinationCard {...location} />
+          <DestinationCard key={location.id} {...location} />
         ))}
       </div>
     </div>
@@ -95,11 +95,20 @@ const DestinationCard = (location: Location) => {
 
         <div
           className="absolute top-2 right-2
-          py-0.5 bg-white rounded-full
-          text-xs border-primary border-2 px-2 font-semibold
-           text-gray-800 font-primary"
+           bg-white
+           inline-block 
+           bg-opacity-70 
+          backdrop-filter backdrop-blur-sm 
+          text-gray-800 
+          rounded-lg 
+          px-4 py-2 
+           font-semibold
+          shadow-md
+          text-xs 
+            font-primary"
         >
-          {getTotalTours(location)}
+          <span className="font-english ml-1">{getTotalToursSeprate(location)?.count}</span>
+          <span>{getTotalToursSeprate(location).word}</span>
         </div>
 
         <div className="absolute bottom-2 left-2 right-4">

@@ -14,14 +14,14 @@ export default function InstagramSection() {
         لرحلات التي تشمل الطيران ، زورو صفحتنا على الانستجرام
       </motion.h2>
       <div className="flex flex-col md:flex-row justify-center items-stretch gap-6 mx-auto max-w-5xl w-full">
-        <InstagramBlock title="سلطة عمان" link="https://www.instagram.com/mundo.oman/" index={1} />
-        <InstagramBlock title="السعودية" link="https://www.instagram.com/mundo.saudi/" index={2} />
+        <InstagramBlock title="سلطة عمان" country={'OMAN'} link="https://www.instagram.com/mundo.oman/" index={1} />
+        <InstagramBlock title="السعودية" country={'KSA'} link="https://www.instagram.com/mundo.saudi/" index={2} />
       </div>
     </div>
   )
 }
 
-function InstagramBlock({ title, link, index }: { title: string; link: string; index: number }) {
+function InstagramBlock({ title, link, index, country }: { title: string; link: string; index: number; country: string }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
 
@@ -105,7 +105,10 @@ function InstagramBlock({ title, link, index }: { title: string; link: string; i
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: index * 0.2 + 1 }}
           >
-            <span className="text-black text-2xl font-bold font-primary">{title}</span>
+            <span className="text-black text-xl font-bold font-primary">
+              {title}
+              {'  '} {country}
+            </span>
           </motion.div>
         </motion.div>
       </div>

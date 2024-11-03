@@ -111,7 +111,6 @@ export const orderFilter = [
 ]
 
 export const getGridClass = (size: number) => {
-  console.log('size', size)
   switch (size) {
     case 1:
       return 'sm:col-span-1'

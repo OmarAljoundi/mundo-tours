@@ -8,7 +8,6 @@ import { useMemo } from 'react'
 const Tabs = () => {
   const route = useRouter()
   const { destination, tab } = useParams()
-  console.log('tab', tab)
   const { data: destinations, isLoading } = useLocations()
 
   const tabList = useMemo(() => {
