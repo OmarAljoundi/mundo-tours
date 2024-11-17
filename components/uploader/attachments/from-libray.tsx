@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Skeleton } from '../../ui/skeleton'
 import { formatBytes } from '@/lib/helpers'
-import { Check, FileText, MousePointerSquare } from 'lucide-react'
+import { Check, FileText, MousePointerSquareDashed } from 'lucide-react'
 import { ScrollArea } from '../../ui/scroll-area'
 import { FormikProps } from 'formik'
 import { cn } from '@/lib/utils'
@@ -20,16 +20,14 @@ const FromLibrary: FC<{
   setselectedAttachments: (select: ExternalFile[]) => void
   loadingDelete: boolean
 }> = ({ selectedAttachments, setselectedAttachments, loadingDelete }) => {
-  const { data, isLoading } = useQuery(
-    ['attachmnets'],
-    async () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['attachmnets'],
+    queryFn: async () => {
       const res = await ListAllAttachmentsInBucket(100, 0)
       return res
     },
-    {
-      refetchInterval: false,
-    },
-  )
+    refetchInterval: false,
+  })
 
   useEffect(() => {
     return () => {
@@ -55,7 +53,7 @@ const FromLibrary: FC<{
               <div className="absolute right-0 top-0 z-50">
                 <Tooltip content="Preview file!">
                   <Button variant="flat" target="_blank" color="warning" size="sm" isIconOnly as={'a'} href={`${ATTACHMENT_PATH}/${file.name}`}>
-                    <MousePointerSquare className="w-4 h-4" />
+                    <MousePointerSquareDashed className="w-4 h-4" />
                   </Button>
                 </Tooltip>
               </div>

@@ -11,11 +11,12 @@ import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
 
 const CountryDropdown = () => {
   const [selected, setSelected] = useState<{ countryCode: string; label: string }[]>([])
+
   const [country, setCountry] = useQueryState(
     'country',
     parseAsArrayOf(parseAsString)
       .withDefault(selected.map((x) => x.label) ?? [])
-      .withOptions({ clearOnDefault: true, scroll: false, throttleMs: 1000, shallow: false }),
+      .withOptions({ clearOnDefault: true, scroll: false, throttleMs: 1000, history: 'push' }),
   )
 
   useEffect(() => {

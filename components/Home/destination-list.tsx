@@ -7,6 +7,7 @@ import { motion, useAnimation } from 'framer-motion'
 import { getDestination } from '@/lib/operations'
 import { use, useEffect, useMemo } from 'react'
 import { Location } from '@/types/custom'
+import BlurImage from '../shared/blur-image'
 
 const DestinationList = ({ destinationPromise }: { destinationPromise: ReturnType<typeof getDestination> }) => {
   const response = use(destinationPromise)
@@ -82,13 +83,16 @@ const DestinationCard = (location: Location) => {
       )}
     >
       <motion.div className="relative w-full h-full overflow-hidden rounded-2xl" initial="hidden" animate={controls} variants={variants}>
-        <Image
+        <BlurImage
+          priority={false}
+          loading="lazy"
           src={location.image?.url || ''}
           alt={location.name ?? ''}
           className="w-full h-full object-cover"
-          width={1600}
-          height={1000}
-          quality={80}
+          width={1000}
+          height={1200}
+          quality={100}
+          sizes="(max-width: 768px) 33vw, (max-width: 1200px) 50vw, 33vw"
         />
 
         <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-black/60 to-transparent" />
@@ -112,7 +116,7 @@ const DestinationCard = (location: Location) => {
         </div>
 
         <div className="absolute bottom-2 left-2 right-4">
-          <h2 className="text-white text-lg lg:text-xl font-bold truncate">{location.name}</h2>
+          <h2 className="text-white text-lg lg:text-2xl font-bold truncate">{location.name}</h2>
         </div>
       </motion.div>
     </Link>

@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const BreadCrumb = () => {
   return (
-    <nav aria-label="Breadcrumb" className="flex border-t">
+    <nav aria-label="Breadcrumb" className="flex ">
       <ol className="flex overflow-hidden rounded-lg border border-gray-200 text-gray-600 mt-8 ">
         <li className="flex items-center">
           <Link href="/" className="flex h-10 items-center gap-1.5 bg-gray-100 px-4 transition hover:text-gray-900">

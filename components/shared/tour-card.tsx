@@ -16,12 +16,15 @@ const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
         <div className="property-card__img relative">
           <Link href={`/tour/${tour.slug}`}>
             <BlurImage
+              priority={false}
+              loading="lazy"
               width={1000}
               height={400}
-              quality={60}
+              quality={70}
               src={tour.images && tour.images.length > 0 ? tour.images[0] : ''}
               alt="image"
               className="rounded-2xl w-full h-[200px] lg:h-[260px]"
+              sizes="(max-width: 768px) 100vw, 640px"
             />
           </Link>
           <div className="absolute top-2 right-2 bg-white w-auto px-4 h-11 sm:h-6 lg:h-11 rounded-full shadow-xl border-primary border-2">

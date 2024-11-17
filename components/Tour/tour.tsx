@@ -2,20 +2,22 @@
 import TourStory from './tour-story'
 import TourBenfits from './tour-benfits'
 import TourHotels from './tour-hotels'
-import { BedDouble, BedSingle, CalendarDays, Clock7, MapPin, Type } from 'lucide-react'
+import { BedDouble, BedSingle, CalendarDays, Clock7, MapPin, Type, Barcode } from 'lucide-react'
 import BlurImage from '../shared/blur-image'
-import Share from './share'
+import { TourInformation } from './tour-information'
 import TourLinks from './tour-links'
-import { FC } from 'react'
-import TourPricingList from './tour-pricing-list'
+import React, { FC, useMemo } from 'react'
 import { type Tour } from '@/types/custom'
 import { useCookies } from 'next-client-cookies'
+import { TourPricingV2 } from './tour-pricing-v2'
 
 const Tour: FC<{ tour: Tour }> = ({ tour }) => {
   const cookies = useCookies()
-  const { id, tour_hotels, images, name, number_of_days, seo, start_day, tour_countries, tour_type, price_double, price_single } = tour
+  const { id, tour_hotels, images, name, number_of_days, additional_Info, start_day, tour_countries, tour_type, tour_prices, code } = tour
 
   const isOman = cookies.get('currency') == 'OMR'
+
+  const prices = useMemo(() => tour_prices?.filter((x) => x.one_price) ?? [], [tour_prices])
 
   return (
     <div>
@@ -26,9 +28,9 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
               <div className="border-t border-dashed lg:border-none">
                 <div className="flex justify-between items-center  pt-4 lg:pt-0">
                   <h1 className="text-3xl text-center font-primary">الأسعار</h1>
-                  {tour.tour_prices && tour.tour_prices.filter((x) => x.one_price).length > 0 && (
+                  {/* {tour.tour_prices && tour.tour_prices.filter((x) => x.one_price).length > 0 && (
                     <TourPricingList tourPricing={tour.tour_prices.filter((x) => x.one_price)} />
-                  )}
+                  )} */}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-between mt-5">
                   <div className="shadow-lg p-5 border rounded-lg">
@@ -59,6 +61,17 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                 <div className="py-2 col-span-2">
                   <div className="flex items-center gap-4 ">
                     <div className="bg-primary p-2 rounded-full">
+                      <Barcode className=" text-white " />
+                    </div>
+                    <div className="grid items-center ">
+                      <span>رمز الرحلة</span>
+                      <span className="text-primary font-english">{code}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="py-2 col-span-2">
+                  <div className="flex items-center gap-4 ">
+                    <div className="bg-primary p-2 rounded-full">
                       <MapPin className=" text-white " />
                     </div>
                     <div className="grid items-center ">
@@ -81,25 +94,7 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                     </div>
                   </div>
                 </div>
-                <div className="py-2 col-span-2">
-                  <div className="flex justify-between items-end">
-                    <div className="flex items-center gap-4 ">
-                      <div className="bg-primary p-2 rounded-full">
-                        <CalendarDays className=" text-white " />
-                      </div>
-                      <div className="grid items-center ">
-                        <span>تاريخ الرحلة</span>
-                        <div
-                          className="flex justify-between
-                     items-center gap-4"
-                        >
-                          <span className="text-primary">أيام {start_day} أسبوعياً</span>
-                        </div>
-                      </div>
-                    </div>
-                    {/* <DatesData tour={tour} /> */}
-                  </div>
-                </div>
+
                 <div className="py-2 col-span-2">
                   <div className="flex items-center gap-4 ">
                     <div className="bg-primary p-2 rounded-full">
@@ -113,12 +108,34 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                     </div>
                   </div>
                 </div>
+                <div className="py-2 col-span-2">
+                  <div className="flex justify-between items-end">
+                    <div className="flex items-center gap-4 ">
+                      <div className="bg-primary p-2 rounded-full">
+                        <CalendarDays className=" text-white " />
+                      </div>
+                      <div className="grid items-center ">
+                        {prices.length > 0 ? (
+                          <TourPricingV2 numberOfDays={number_of_days ?? 0} tourPrices={prices} />
+                        ) : (
+                          <React.Fragment>
+                            <span>تاريخ الرحلة</span>
+
+                            <div className="flex justify-between items-center gap-4">
+                              <span className="text-primary">أيام {start_day} أسبوعياً</span>
+                            </div>
+                          </React.Fragment>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="px-3 sm:px-4 lg:px-6 py-6 bg-white rounded-2xl border border-neutral-40 mb-6 shadow-card">
+            <div className="px-3 sm:px-4 lg:px-6 py-6 bg-white rounded-2xl border border-neutral-40 mb-6 shadow-card grid justify-items-center">
               <h1 className="text-3xl text-center font-primary mb-5 ">{name}</h1>
               <BlurImage className="rounded-md" src={images && images.length > 0 ? images[0] : ''} alt={''} quality={100} width={640} height={427} />
-              <Share />
+              <TourInformation info={additional_Info} />
             </div>
           </div>
         </div>
@@ -126,7 +143,6 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
       <div className="container mt-12">
         <TourStory tour={tour} />
         <TourLinks tour={tour} />
-
         <TourBenfits tour={tour} />
         {tour_hotels && <TourHotels tour={tour} />}
       </div>

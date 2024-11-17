@@ -16,7 +16,7 @@ const cairo = Cairo({
   display: 'swap',
   preload: true,
   style: 'normal',
-  weight: ['1000', '200', '300', '400', '500', '600', '700', '800', '900'],
+  weight: ['200', '300', '400', '500', '600', '700', '800', '900', '1000'],
 })
 
 export const metadata: Metadata = {

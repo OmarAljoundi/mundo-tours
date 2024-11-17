@@ -207,7 +207,7 @@ export async function createTour(tour: Tour) {
 }
 
 export async function updateTour(tour: Tour) {
-  tour.additional_Info = v4()
+  //tour.additional_Info = v4()
   const { data, error } = await supabaseClient
     .from('tour')
     .update(tour as any)
