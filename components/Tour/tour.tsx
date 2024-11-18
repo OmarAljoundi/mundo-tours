@@ -10,6 +10,7 @@ import React, { FC, useMemo } from 'react'
 import { type Tour } from '@/types/custom'
 import { useCookies } from 'next-client-cookies'
 import { TourPricingV2 } from './tour-pricing-v2'
+import { TourStoryV2 } from './tour-story-v2'
 
 const Tour: FC<{ tour: Tour }> = ({ tour }) => {
   const cookies = useCookies()
@@ -116,7 +117,7 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                       </div>
                       <div className="grid items-center ">
                         {prices.length > 0 ? (
-                          <TourPricingV2 numberOfDays={number_of_days ?? 0} tourPrices={prices} />
+                          <TourPricingV2 start_day={start_day ?? []} numberOfDays={number_of_days ?? 0} tourPrices={prices} />
                         ) : (
                           <React.Fragment>
                             <span>تاريخ الرحلة</span>
@@ -141,7 +142,7 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
         </div>
       </div>
       <div className="container mt-12">
-        <TourStory tour={tour} />
+        <TourStoryV2 tour={tour} />
         <TourLinks tour={tour} />
         <TourBenfits tour={tour} />
         {tour_hotels && <TourHotels tour={tour} />}

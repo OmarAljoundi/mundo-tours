@@ -13,18 +13,17 @@ import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { FC, useState } from 'react'
 import { eCustomerStatus } from '@/interface/Customer'
-import { useNotification } from '../ui/notification'
 import { submitEventForm } from '@/lib/gtm'
 import { usePathname } from 'next/navigation'
 import { toast } from 'sonner'
 import { Customer } from '@/types/custom'
 import { submitForm } from '@/lib/operations'
+
 const ContactForm: FC<{ tourId: number }> = ({ tourId }) => {
   const [date, setDate] = useState<Date>()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [isSubmitting, setSubmitting] = useState(false)
-  const { error, success } = useNotification()
 
   const handleSubmitForm = async (data: Customer) => {
     setSubmitting(true)

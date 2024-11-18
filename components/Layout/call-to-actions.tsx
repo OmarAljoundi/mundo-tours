@@ -8,8 +8,8 @@ import ImWhatsapp from '../svg/ImWhatsapp'
 import { cn } from '@/lib/utils'
 
 const offices = [
-  { title: 'سلطنة عمان', link: 'https://api.whatsapp.com/send/?phone=%2B96895929251&text&type=phone_number&app_absent=0', phoneNumber: '79667679' },
   { title: 'السعودية', link: 'https://api.whatsapp.com/send/?phone=%2B966507158137&text&type=phone_number&app_absent=0', phoneNumber: '920031910' },
+  { title: 'سلطنة عمان', link: 'https://api.whatsapp.com/send/?phone=%2B96895929251&text&type=phone_number&app_absent=0', phoneNumber: '79667679' },
 ]
 
 export function WhatsappAction() {
