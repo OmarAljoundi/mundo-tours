@@ -3,6 +3,47 @@ import { Badge } from '@/components/ui/badge'
 import { DAYS } from '@/lib/constants'
 import { Tour, TourSection } from '@/types/custom'
 
+function getArabicDayLabel(dayNumber: number): string {
+  if (dayNumber < 1 || dayNumber > 30) {
+    throw new Error('The number must be between 1 and 30')
+  }
+
+  const arabicNumbers = [
+    'الأول',
+    'الثاني',
+    'الثالث',
+    'الرابع',
+    'الخامس',
+    'السادس',
+    'السابع',
+    'الثامن',
+    'التاسع',
+    'العاشر',
+    'الحادي عشر',
+    'الثاني عشر',
+    'الثالث عشر',
+    'الرابع عشر',
+    'الخامس عشر',
+    'السادس عشر',
+    'السابع عشر',
+    'الثامن عشر',
+    'التاسع عشر',
+    'العشرون',
+    'الحادي والعشرون',
+    'الثاني والعشرون',
+    'الثالث والعشرون',
+    'الرابع والعشرون',
+    'الخامس والعشرون',
+    'السادس والعشرون',
+    'السابع والعشرون',
+    'الثامن والعشرون',
+    'التاسع والعشرون',
+    'الثلاثون',
+  ]
+
+  return `اليوم ${arabicNumbers[dayNumber - 1]}`
+}
+
 function TourStoryV2Item({ tourSection, day_text }: { tourSection: TourSection; day_text: string | React.ReactNode }) {
   return (
     <AccordionItem
@@ -34,17 +75,12 @@ export function TourStoryV2({ tour }: { tour: Tour }) {
     if (currentDay == 'كل يوم') {
       return (
         <div className="text-center flex gap-x-2 items-center">
-          <p className="text-sm mb-0"> اليوم </p>
-          <h2 className="-mb-[5px] text-white font-english">
-            {' '}
-            {index + 1 < 10 ? '0' : ''}
-            {index + 1}{' '}
-          </h2>
+          <p className="text-sm mb-0"> {getArabicDayLabel(index + 1)} </p>
         </div>
       )
     } else {
       const startIndex = DAYS.indexOf(currentDay)
-      return `يوم ${DAYS[(startIndex + index) % 7]}`
+      return ` ${getArabicDayLabel(index + 1)}: يوم ${DAYS[(startIndex + index) % 7]}`
     }
   }
   return (

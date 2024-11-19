@@ -86,7 +86,7 @@ const Hero = ({
                         <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full overflow-hidden bg-fixed bg-black/20 ">
                           <div className="container grid items-center h-full">
                             <div className="text-center relative z-30">
-                              <h1 className="text-6xl lg:text-7xl  font-secondary text-primary">{item.title}</h1>
+                              <h1 className="text-6xl lg:text-7xl  font-secondary text-white">{item.title}</h1>
                               <p className=" mx-auto max-w-[600px] font-primary text-4xl lg:text-7xl text-white mt-4 md:mt-7 mb-6 ">
                                 {item.sub_title}
                               </p>
