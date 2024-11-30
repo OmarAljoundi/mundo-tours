@@ -39,7 +39,7 @@ const Filter: FC<FilterOptions> = ({ onChange, destinationPromise, tourTypesProm
         viewport={{ once: true }}
         className={cn(
           `p-3 sm:p-4 lg:py-6 lg:px-8 bg-white border-border border-1 mt-4 lg:mt-0
-           shadow-lg  grid  grid-cols-2 lg:grid-cols-3 rounded-xl lg:rounded-full gap-y-4 lg:divide-x-reverse lg:divide-x-2 divide-border`,
+           shadow-lg  grid  grid-cols-2 lg:grid-cols-3 rounded-xl lg:rounded-full gap-y-2 lg:divide-x-reverse lg:divide-x-2 divide-border`,
         )}
       >
         {enableTabs && (

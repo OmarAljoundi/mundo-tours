@@ -16,7 +16,7 @@ export const MenuItems = [
     allowMobile: true,
   },
   {
-    title: 'الوجهات السياحية',
+    title: 'سافر أوروبا',
     link: '/tour-listing',
     allowMobile: false,
     subMenus: [],
@@ -26,11 +26,7 @@ export const MenuItems = [
     title: 'خدماتنا السياحية',
     link: '/',
     allowMobile: true,
-    subMenus: [
-      { name: 'اسنخراج التأشيرات', url: '/visa' },
-      { name: 'الرخصة الدولية', url: '/' },
-      { name: 'إيجار سيارات في أوروبا', url: '/' },
-    ],
+    subMenus: [{ name: 'إستخـراج تـأشيرات', url: '/visa' }],
   },
   {
     title: 'عن موندو',
@@ -44,12 +40,25 @@ export const MenuItems = [
 ]
 
 const getDestinationSubMenus = (data: Location[]) => {
-  return data.map((z) => {
-    return {
-      name: z.name!,
-      url: `/tour-listing/${z.slug}`,
-    }
-  })
+  return data
+    .filter((x) => x.show_on_europe)
+    .map((z) => {
+      return {
+        name: z.name!,
+        url: `/tour-listing/${z.slug}`,
+      }
+    })
+}
+
+const getDestinationSubMenusForTourism = (data: Location[]) => {
+  return data
+    .filter((x) => x.show_on_service)
+    .map((z) => {
+      return {
+        name: z.name!,
+        url: `/tour-listing/${z.slug}`,
+      }
+    })
 }
 
 const Header = ({ children }: { children: ReactNode }) => {
@@ -57,10 +66,17 @@ const Header = ({ children }: { children: ReactNode }) => {
 
   const laptopMenu = useMemo(() => {
     return MenuItems.map((o) => {
-      if (o.title == 'الوجهات السياحية') {
+      if (o.title == 'سافر أوروبا') {
         return {
           ...o,
           subMenus: getDestinationSubMenus(data?.results ?? []),
+        }
+      }
+
+      if (o.title == 'خدماتنا السياحية') {
+        return {
+          ...o,
+          subMenus: [...o.subMenus, ...getDestinationSubMenusForTourism(data?.results ?? [])],
         }
       }
       return o

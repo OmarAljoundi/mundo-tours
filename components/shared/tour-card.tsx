@@ -3,7 +3,8 @@ import { Button } from '../ui/button'
 import BlurImage from './blur-image'
 import { Tour } from '@/types/custom'
 import { useCookies } from 'next-client-cookies'
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
+import { cn } from '@/lib/utils'
 
 const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
   const cookies = useCookies()
@@ -27,12 +28,9 @@ const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
               sizes="(max-width: 768px) 100vw, 640px"
             />
           </Link>
-          <div className="absolute top-2 right-2 bg-white w-auto px-4 h-11 sm:h-6 lg:h-11 rounded-full shadow-xl border-primary border-2">
-            <div className="flex justify-center items-center h-full text-base sm:text-sm  lg:text-base font-primary">{tour.number_of_days} يوم</div>
-          </div>
-          <div className="absolute top-2 left-2 bg-white w-auto px-4 h-11 sm:h-6 lg:h-11 rounded-full shadow-xl border-primary border-2">
-            <div className="flex justify-center items-center h-full text-base sm:text-sm lg:text-base font-primary">{tour.tour_type?.name}</div>
-          </div>
+
+          <BadgeDetail className="top-2 right-2">{tour.number_of_days} يوم</BadgeDetail>
+          <BadgeDetail className="top-2 left-2">{tour.tour_type?.name}</BadgeDetail>
         </div>
       </div>
       <div className="p-2 sm:p-4 lg:p-5">
@@ -60,7 +58,9 @@ const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
           </span>
 
           <Link href={`/tour/${tour.slug}`}>
-            <Button>عرض التفاصيل</Button>
+            <Button variant={'default'} size={'sm'}>
+              عرض التفاصيل
+            </Button>
           </Link>
         </div>
       </div>
@@ -69,3 +69,28 @@ const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
 }
 
 export default TourCard
+
+function BadgeDetail({ children, className }: { children: ReactNode; className: string }) {
+  return (
+    <div
+      className={cn(
+        className,
+        `absolute bg-white
+        inline-block 
+        bg-opacity-70 
+        backdrop-filter backdrop-blur-sm 
+        text-gray-800 
+        rounded-lg 
+        px-3 py-1
+        lg:px-4 lg:py-2 
+        font-semibold
+        shadow-md
+        text-xs 
+        border-secondary border-2
+          font-primary`,
+      )}
+    >
+      <span>{children}</span>
+    </div>
+  )
+}

@@ -109,6 +109,8 @@ export type Location = {
   seo?: Seo | null
   slug?: string | null
   is_office?: boolean | null
+  show_on_europe: boolean
+  show_on_service: boolean
   location_attributes?: LocationAttributes[]
 }
 

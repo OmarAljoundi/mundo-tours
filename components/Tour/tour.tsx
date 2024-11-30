@@ -88,9 +88,11 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                       <Clock7 className=" text-white " />
                     </div>
                     <div className="grid items-center w-fit">
-                      <span>المدة</span>
+                      <span>مدة الرحلة</span>
                       <span>
-                        <span className="text-primary">{number_of_days} أيام</span>
+                        <span className="text-primary">
+                          {number_of_days} أيام - {(number_of_days ?? 1) - 1} ليالي
+                        </span>
                       </span>
                     </div>
                   </div>
@@ -123,7 +125,7 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                             <span>تاريخ الرحلة</span>
 
                             <div className="flex justify-between items-center gap-4">
-                              <span className="text-primary">أيام {start_day} أسبوعياً</span>
+                              <span className="text-primary">طوال أيام الأسبوع</span>
                             </div>
                           </React.Fragment>
                         )}

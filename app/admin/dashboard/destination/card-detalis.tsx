@@ -1,26 +1,15 @@
-"use client";
-import { useModal } from "@/hooks/use-modal";
-import { REVALIDATE_LOCATION_LIST } from "@/lib/keys";
-import { supabaseClient } from "@/lib/supabaseClient";
-import { http } from "@/service/httpService";
-import { Location } from "@/types/custom";
-import {
-  Avatar,
-  Badge,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Chip,
-  Switch,
-  Tooltip,
-} from "@nextui-org/react";
-import { AlertCircle, CheckCircle, Edit, Plane, Trash } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { FunctionComponent } from "react";
-import { toast } from "sonner";
+'use client'
+import { useModal } from '@/hooks/use-modal'
+import { REVALIDATE_LOCATION_LIST } from '@/lib/keys'
+import { supabaseClient } from '@/lib/supabaseClient'
+import { http } from '@/service/httpService'
+import { Location } from '@/types/custom'
+import { Avatar, Badge, Button, Card, CardBody, CardFooter, CardHeader, Chip, Switch, Tooltip } from '@nextui-org/react'
+import { AlertCircle, CheckCircle, Edit, Plane, Trash } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { FunctionComponent } from 'react'
+import { toast } from 'sonner'
 
 const CardDetails: FunctionComponent<Location> = ({
   name,
@@ -29,91 +18,113 @@ const CardDetails: FunctionComponent<Location> = ({
   id,
   image,
   is_active,
+  show_on_europe,
+  show_on_service,
   seo,
   location_attributes,
 }) => {
-  const modal = useModal();
-  const route = useRouter();
+  const modal = useModal()
+  const route = useRouter()
 
   const deleteDestination = async () => {
-    const { data, error } = await supabaseClient
-      .from("location")
-      .delete()
-      .eq("id", id!);
+    const { data, error } = await supabaseClient.from('location').delete().eq('id', id!)
     if (error) {
-      throw new Error("Error while deleting destination.. " + error.message);
+      throw new Error('Error while deleting destination.. ' + error.message)
     }
-    return;
-  };
+    return
+  }
 
   const updateDestinationStatus = async (status: boolean) => {
-    const { data, error } = await supabaseClient
-      .from("location")
-      .update({ is_active: status })
-      .eq("id", id!);
+    const { data, error } = await supabaseClient.from('location').update({ is_active: status }).eq('id', id!)
     if (error) {
-      throw new Error("Error while updating destination.. " + error.message);
+      throw new Error('Error while updating destination.. ' + error.message)
     }
-    return;
-  };
+    return
+  }
+
+  const updateShowOnServiceStatus = async (status: boolean) => {
+    const { data, error } = await supabaseClient.from('location').update({ show_on_service: status }).eq('id', id!)
+    if (error) {
+      throw new Error('Error while updating destination.. ' + error.message)
+    }
+    return
+  }
+  const handleUpdateShowOnServiceStatus = (status: boolean) => {
+    toast.promise(updateShowOnServiceStatus(status), {
+      loading: `Loading, updating destination ..`,
+      error(error) {
+        return error
+      },
+      async success(data) {
+        await http(`/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`).get()
+        route.refresh()
+        return `Destination ${name} has been updated`
+      },
+    })
+  }
+
+  const updateShowOnEuropeStatus = async (status: boolean) => {
+    const { data, error } = await supabaseClient.from('location').update({ show_on_europe: status }).eq('id', id!)
+    if (error) {
+      throw new Error('Error while updating destination.. ' + error.message)
+    }
+    return
+  }
+  const handleUpdateShowOnEuropeStatus = (status: boolean) => {
+    toast.promise(updateShowOnEuropeStatus(status), {
+      loading: `Loading, updating destination ..`,
+      error(error) {
+        return error
+      },
+      async success(data) {
+        await http(`/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`).get()
+        route.refresh()
+        return `Destination ${name} has been updated`
+      },
+    })
+  }
 
   const handleUpdateStatus = (status: boolean) => {
     toast.promise(updateDestinationStatus(status), {
       loading: `Loading, updating destination ..`,
       error(error) {
-        return error;
+        return error
       },
       async success(data) {
-        await http(`/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`).get();
-        route.refresh();
-        return `Destination ${name} has been updated`;
+        await http(`/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`).get()
+        route.refresh()
+        return `Destination ${name} has been updated`
       },
-    });
-  };
+    })
+  }
 
   const handleDelete = () => {
     toast.promise(deleteDestination, {
       loading: `Loading, deleting destination ..`,
       error(error) {
-        return error;
+        return error
       },
       async success(data) {
-        await http(`/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`).get();
-        route.refresh();
-        return `Destination ${name} has been deleted`;
+        await http(`/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`).get()
+        route.refresh()
+        return `Destination ${name} has been deleted`
       },
-    });
-  };
+    })
+  }
 
   const CardElemnt = () => {
     return (
       <Card className="pt-4">
         <CardHeader className="pt-2 px-4 flex items-center justify-between pb-2">
-          <Switch
-            isSelected={is_active ?? false}
-            onValueChange={(e) => handleUpdateStatus(e)}
-            size="sm"
-          />
+          <Switch isSelected={is_active ?? false} onValueChange={(e) => handleUpdateStatus(e)} size="sm" />
 
           <h4 className="font-bold text-large text-right">{name}</h4>
         </CardHeader>
         <CardBody className="overflow-visible py-2 border-t pb-4">
-          <Image
-            alt="Card background"
-            className="object-cover rounded-xl max-h-28"
-            src={image?.url ?? ""}
-            width={1000}
-            height={500}
-          />
+          <Image alt="Card background" className="object-cover rounded-xl max-h-28" src={image?.url ?? ''} width={1000} height={500} />
           <div className="flex justify-end flex-wrap mt-4 gap-x-2 gap-y-4">
             {location_attributes?.map((x) => (
-              <Chip
-                color="primary"
-                key={x.id!}
-                avatar={
-                  <Avatar name={(x.location_tours?.length ?? 0).toString()} />
-                }
-              >
+              <Chip color="primary" key={x.id!} avatar={<Avatar name={(x.location_tours?.length ?? 0).toString()} />}>
                 {x.title}
               </Chip>
             ))}
@@ -129,6 +140,17 @@ const CardDetails: FunctionComponent<Location> = ({
                 {image?.order}
               </Chip>
             </Tooltip>
+          </div>
+          <div className="flex justify-between mt-4">
+            <div className="flex justify-end gap-x-2">
+              <h1>خدمات سياحية</h1>
+              <Switch isSelected={show_on_service ?? false} onValueChange={(e) => handleUpdateShowOnServiceStatus(e)} size="sm" />
+            </div>
+
+            <div className="flex justify-end gap-x-2">
+              <h1>رحلات أوروبا</h1>
+              <Switch isSelected={show_on_europe ?? false} onValueChange={(e) => handleUpdateShowOnEuropeStatus(e)} size="sm" />
+            </div>
           </div>
         </CardBody>
         <CardFooter className="pt-2 p-0 border-t">
@@ -187,8 +209,8 @@ const CardDetails: FunctionComponent<Location> = ({
           </div>
         </CardFooter>
       </Card>
-    );
-  };
+    )
+  }
 
   if (seo) {
     return (
@@ -202,11 +224,11 @@ const CardDetails: FunctionComponent<Location> = ({
           </div>
         }
         placement="top-left"
-        classNames={{ badge: "translate-x-0 -translate-y-7 ", base: "h-full" }}
+        classNames={{ badge: 'translate-x-0 -translate-y-7 ', base: 'h-full' }}
       >
         <CardElemnt />
       </Badge>
-    );
+    )
   }
 
   return (
@@ -220,11 +242,11 @@ const CardDetails: FunctionComponent<Location> = ({
         </div>
       }
       placement="top-left"
-      classNames={{ badge: "translate-x-0 -translate-y-7", base: "h-full" }}
+      classNames={{ badge: 'translate-x-0 -translate-y-7', base: 'h-full' }}
     >
       <CardElemnt />
     </Badge>
-  );
-};
+  )
+}
 
-export default CardDetails;
+export default CardDetails

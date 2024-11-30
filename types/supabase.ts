@@ -12,6 +12,7 @@ export interface Database {
           notes: string | null
           phone_number: string
           status: number
+
           tour_id: number | null
         }
         Insert: {
@@ -22,6 +23,7 @@ export interface Database {
           notes?: string | null
           phone_number: string
           status: number
+
           tour_id?: number | null
         }
         Update: {
@@ -31,6 +33,7 @@ export interface Database {
           name?: string
           notes?: string | null
           phone_number?: string
+
           status?: number
           tour_id?: number | null
         }
@@ -53,6 +56,8 @@ export interface Database {
           name: string
           seo: Json | null
           slug: string | null
+          show_on_service: boolean
+          show_on_europe: boolean
         }
         Insert: {
           created_at?: string
@@ -61,6 +66,8 @@ export interface Database {
           is_active?: boolean | null
           is_office?: boolean | null
           name: string
+          show_on_service?: boolean
+          show_on_europe?: boolean
           seo?: Json | null
           slug?: string | null
         }
@@ -70,6 +77,8 @@ export interface Database {
           image?: Json | null
           is_active?: boolean | null
           is_office?: boolean | null
+          show_on_service?: boolean
+          show_on_europe?: boolean
           name?: string
           seo?: Json | null
           slug?: string | null

@@ -6,6 +6,7 @@ import { ar } from 'date-fns/locale'
 import { Calendar } from 'lucide-react'
 import { Button } from '../ui/button'
 import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 interface TourPricingV2Props {
   tourPrices: TourPrice[]
@@ -22,15 +23,26 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
     const endDate = new Date(startDate)
     endDate.setDate(endDate.getDate() + numberOfDays)
 
-    return `${format(startDate, 'd MMMM', { locale: ar })} - ${format(endDate, 'd MMMM', { locale: ar })}`
+    return (
+      <div className="flex flex-col gap-1">
+        <h1>
+          من {'  '}
+          {format(startDate, 'd MMMM yyyy', { locale: ar })}
+        </h1>
+        <h1>
+          الى {'  '}
+          {format(endDate, 'd MMMM yyyy', { locale: ar })}
+        </h1>
+      </div>
+    )
   }
 
   return (
     <div className="flex flex-col gap-2">
-      <Button onClick={onOpen} className="max-w-fit">
+      <Button onClick={onOpen} className="max-w-fit" size={'sm'}>
         اضغط لعرض التواريخ
       </Button>
-      <Modal isOpen={isOpen} placement={'auto'} size="5xl" onOpenChange={onOpenChange} backdrop="blur">
+      <Modal isOpen={isOpen} placement={'auto'} size="4xl" onOpenChange={onOpenChange} backdrop="blur">
         <ModalContent>
           {() => (
             <>
@@ -64,7 +76,7 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
                               exit={{ opacity: 0, scale: 0.9 }}
                               transition={{ duration: 0.5, delay: index * 0.1 }}
                               whileHover={{ scale: 1.05 }}
-                              className="bg-gradient-to-r from-[#ff2b00] to-[#ff6b00] rounded-lg shadow-lg overflow-hidden"
+                              className={cn('rounded-lg shadow-lg overflow-hidden', index % 2 != 0 ? 'bg-primary' : 'bg-secondary')}
                             >
                               <motion.div
                                 className="py-4 px-2 lg:p-4 h-full flex flex-col justify-between"
@@ -73,8 +85,7 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
                                 transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
                               >
                                 <div className="flex flex-col items-end space-y-2 rtl">
-                                  <span className="font-bold text-xs sm:text-sm text-right text-white w-full">{price.price} ريال</span>
-                                  <span className="text-white text-right font-primary  text-[13px] lg:text-lg w-full">
+                                  <span className="text-white text-right font-primary  text-[13px] lg:text-base w-full">
                                     {formatDateRange(new Date(price.date!))}
                                   </span>
                                 </div>

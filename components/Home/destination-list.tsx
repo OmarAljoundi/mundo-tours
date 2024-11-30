@@ -99,16 +99,18 @@ const DestinationCard = (location: Location) => {
 
         <div
           className="absolute top-2 right-2
-           bg-white
-           inline-block 
-           bg-opacity-70 
+          bg-white
+          inline-block 
+          bg-opacity-70 
           backdrop-filter backdrop-blur-sm 
           text-gray-800 
           rounded-lg 
-          px-4 py-2 
-           font-semibold
+          px-3 py-1
+          lg:px-4 lg:py-2 
+          font-semibold
           shadow-md
           text-xs 
+          border-secondary border-2
             font-primary"
         >
           <span className="font-english ml-1">{getTotalToursSeprate(location)?.count}</span>

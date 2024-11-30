@@ -4,7 +4,7 @@ const SectionProvider: React.FC<{
   sub?: string
 }> = ({ children, title, sub }) => {
   return (
-    <section className="my-8 lg:my-10 xl:my-14">
+    <section className="my-2 lg:my-10 xl:my-14">
       {title && (
         <div className="grid items-center justify-items-center">
           <h1 className="text-7xl font-secondary ">{title}</h1>
