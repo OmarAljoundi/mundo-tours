@@ -7,6 +7,7 @@ import { Calendar } from 'lucide-react'
 import { Button } from '../ui/button'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { Separator } from '../ui/separator'
 
 interface TourPricingV2Props {
   tourPrices: TourPrice[]
@@ -24,15 +25,17 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
     endDate.setDate(endDate.getDate() + numberOfDays)
 
     return (
-      <div className="flex flex-col gap-1">
-        <h1>
-          من {'  '}
-          {format(startDate, 'd MMMM yyyy', { locale: ar })}
-        </h1>
-        <h1>
-          الى {'  '}
-          {format(endDate, 'd MMMM yyyy', { locale: ar })}
-        </h1>
+      <div className="flex flex-col gap-1 px-2 py-3 items-center">
+        <div className="flex gap-x-1 font-bold">
+          <span className="font-english">{format(startDate, 'd', { locale: ar })}</span>
+          <span className="font-primary">{format(startDate, 'MMMM', { locale: ar })}</span>
+          <span className="font-english">{format(startDate, 'yyyy', { locale: ar })}</span>
+        </div>
+        <div className="flex gap-x-1 font-bold">
+          <span className="font-english">{format(endDate, 'd', { locale: ar })}</span>
+          <span className="font-primary">{format(endDate, 'MMMM', { locale: ar })}</span>
+          <span className="font-english">{format(endDate, 'yyyy', { locale: ar })}</span>
+        </div>
       </div>
     )
   }
@@ -47,7 +50,7 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
           {() => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-center font-secondary text-5xl">اختار تاريخ رحلتك</ModalHeader>
-              <ModalBody>
+              <ModalBody className="px-2">
                 <AnimatePresence mode="wait">
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
@@ -59,7 +62,9 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
                     }}
                     className="overflow-hidden"
                   >
-                    <h1 className="text-2xl my-4 font-primary ">أيام {start_day} أسبوعياً</h1>
+                    <h1 className="text-2xl my-2 font-primary ">أيام {start_day} أسبوعياً</h1>
+                    <Separator className="mb-3 " />
+
                     {sortedPrices.length > 0 ? (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -67,7 +72,7 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3, delay: 0.1 }}
                       >
-                        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2">
                           {sortedPrices.map((price, index) => (
                             <motion.div
                               key={price.uuid}
@@ -75,11 +80,10 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.9 }}
                               transition={{ duration: 0.5, delay: index * 0.1 }}
-                              whileHover={{ scale: 1.05 }}
-                              className={cn('rounded-lg shadow-lg overflow-hidden', index % 2 != 0 ? 'bg-primary' : 'bg-secondary')}
+                              className={cn('rounded-lg shadow-lg overflow-hidden', index % 2 != 0 ? 'bg-primary' : 'bg-light-blue')}
                             >
                               <motion.div
-                                className="py-4 px-2 lg:p-4 h-full flex flex-col justify-between"
+                                className="  h-full flex flex-col justify-between"
                                 initial={{ y: 20 }}
                                 animate={{ y: 0 }}
                                 transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}

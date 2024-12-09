@@ -30,7 +30,7 @@ const TourPricingList: FunctionComponent<TourPricingListProps> = ({ tourPricing 
               <div key={price.uuid} className="flex justify-between p-2 items-center">
                 <h1 className="font-primary text-small">{formattedDate(price.date)}</h1>
                 <Chip color="secondary" className="text-white">
-                  {isOman ? price.price : toSar(price.price ?? 0)} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
+                  {isOman ? price.price : toSar(price.price ?? 0)} {'  '} {isOman ? 'ريال عماني' : 'ريال سعودي'}
                 </Chip>
               </div>
             ))}

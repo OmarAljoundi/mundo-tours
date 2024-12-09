@@ -3,7 +3,7 @@ import TourCard from '../shared/tour-card'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import { Navigation } from 'swiper/modules'
+import { Autoplay, Navigation } from 'swiper/modules'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { getContent, getTours } from '@/lib/operations'
 import { use, useMemo } from 'react'
@@ -42,7 +42,11 @@ const BestToursList = ({
                 slidesPerView: 3,
               },
             }}
-            modules={[Navigation]}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: true,
+            }}
+            modules={[Navigation, Autoplay]}
             className="swiper choice-slider"
           >
             {filteredData?.map((item, index) => (

@@ -52,10 +52,10 @@ const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
       </div>
       <div className="px-2 sm:px-5 pb-5 pt-3">
         <div className="flex flex-wrap justify-between items-center gap-5">
-          <span className="text-primary text-xl font-medium">
-            {isOman ? tour?.price_double : tour?.price_double_sa} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
-            <span className="text-base text-neutral-700 font-primary"> / للشخص في الغرفة المزدوجة </span>
-          </span>
+          <div className=" text-primary">
+            <span className="font-bold font-english text-3xl"> {isOman ? tour?.price_double : tour?.price_double_sa}</span>{' '}
+            <span className="font-primary text-black text-xs">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
+          </div>
 
           <Link href={`/tour/${tour.slug}`}>
             <Button variant={'default'} size={'sm'}>
@@ -72,25 +72,8 @@ export default TourCard
 
 function BadgeDetail({ children, className }: { children: ReactNode; className: string }) {
   return (
-    <div
-      className={cn(
-        className,
-        `absolute bg-white
-        inline-block 
-        bg-opacity-70 
-        backdrop-filter backdrop-blur-sm 
-        text-gray-800 
-        rounded-lg 
-        px-3 py-1
-        lg:px-4 lg:py-2 
-        font-semibold
-        shadow-md
-        text-xs 
-        border-secondary border-2
-          font-primary`,
-      )}
-    >
-      <span>{children}</span>
+    <div className={cn(className, `absolute  bg-white w-auto px-4 h-11 sm:h-6 lg:h-11 rounded-full shadow-xl border-primary border-2`)}>
+      <div className="flex justify-center items-center h-full text-base sm:text-sm  lg:text-base font-primary">{children}</div>
     </div>
   )
 }

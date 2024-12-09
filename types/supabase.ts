@@ -331,18 +331,21 @@ export interface Database {
           id: number
           image: string
           name: string | null
+          show_on_service: boolean
         }
         Insert: {
           created_at?: string
           id?: number
           image: string
           name?: string | null
+          show_on_service?: boolean | null
         }
         Update: {
           created_at?: string
           id?: number
           image?: string
           name?: string | null
+          show_on_service?: boolean | null
         }
         Relationships: []
       }

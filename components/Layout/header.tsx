@@ -5,8 +5,9 @@ import CurrencySwitcher from './currency-switcher'
 import { PhoneAction, WhatsappAction } from './call-to-actions'
 import { ReactNode, useMemo } from 'react'
 import useLocations from '@/hooks/react-query/use-locations'
-import { Location } from '@/types/custom'
+import { Location, TourType } from '@/types/custom'
 import MegaMenu from './mega-menu'
+import useTourTypes from '@/hooks/react-query/use-tour-types'
 
 export const MenuItems = [
   {
@@ -49,6 +50,16 @@ const getDestinationSubMenus = (data: Location[]) => {
       }
     })
 }
+const getTypesSubMenus = (data: TourType[]) => {
+  return data
+    .filter((x) => x.show_on_europe)
+    .map((z) => {
+      return {
+        name: z.name!,
+        url: `/tour-listing?type=${z.name}`,
+      }
+    })
+}
 
 const getDestinationSubMenusForTourism = (data: Location[]) => {
   return data
@@ -63,13 +74,14 @@ const getDestinationSubMenusForTourism = (data: Location[]) => {
 
 const Header = ({ children }: { children: ReactNode }) => {
   const { data } = useLocations()
+  const { data: dataTypes } = useTourTypes()
 
   const laptopMenu = useMemo(() => {
     return MenuItems.map((o) => {
       if (o.title == 'سافر أوروبا') {
         return {
           ...o,
-          subMenus: getDestinationSubMenus(data?.results ?? []),
+          subMenus: [...getDestinationSubMenus(data?.results ?? []), ...getTypesSubMenus(dataTypes?.results ?? [])],
         }
       }
 
@@ -81,7 +93,7 @@ const Header = ({ children }: { children: ReactNode }) => {
       }
       return o
     })
-  }, [data])
+  }, [data, dataTypes])
 
   return (
     <div className="flex flex-col ">

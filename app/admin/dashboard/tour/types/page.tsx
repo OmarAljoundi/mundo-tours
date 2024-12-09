@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react'
 import { columns, filterOptions } from './columns'
 import { http } from '@/service/httpService'
 import { Response, TourType } from '@/types/custom'
-import { SearchQuery } from '@/types/search'
+import { Order, SearchQuery } from '@/types/search'
 import { REVALIDATE_TOUR_TYPE } from '@/lib/keys'
 
 interface TourTypePageProps {}
@@ -11,7 +11,7 @@ interface TourTypePageProps {}
 const TourTypePage: FunctionComponent<TourTypePageProps> = async () => {
   var _SQ: SearchQuery = {
     FilterByOptions: [],
-    OrderByOptions: [],
+    OrderByOptions: [{ MemberName: 'created_at', SortOrder: Order.DESC }],
     PageIndex: 0,
     PageSize: 1000,
     Select: '*',
@@ -27,7 +27,7 @@ const TourTypePage: FunctionComponent<TourTypePageProps> = async () => {
             <p className="text-muted-foreground">Here&apos;s a list of your tour types!</p>
           </div>
         </div>
-        <DataTable data={data.results ?? []} columns={columns} filters={filterOptions} trigger="onOpenTourType" />
+        <DataTable selects={[]} data={data.results ?? []} columns={columns} filters={filterOptions} trigger="onOpenTourType" />
       </div>
     </div>
   )

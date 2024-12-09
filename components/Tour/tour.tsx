@@ -35,25 +35,31 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-between mt-5">
                   <div className="shadow-lg p-5 border rounded-lg">
-                    <div className="grid items-center justify-items-center">
-                      <div className="bg-primary p-2 rounded-full">
-                        <BedSingle className=" text-white " />
-                      </div>
-                      <h4 className="mt-2  text-base sm:text-sm md:text-sm font-primary">الشخض في الغرفة المزدوجة</h4>
-                      <h2 className="text-xl font-bold">
-                        {isOman ? tour?.price_double : tour?.price_double_sa} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
-                      </h2>
-                    </div>
-                  </div>
-                  <div className="shadow-lg p-5 border rounded-lg">
-                    <div className="grid items-center justify-items-center ">
+                    <div className="grid items-center justify-items-center space-y-1">
                       <div className="bg-primary p-2 rounded-full">
                         <BedDouble className=" text-white " />
                       </div>
+                      <h4 className="mt-2  text-base sm:text-sm md:text-sm font-primary">الشخض في الغرفة المزدوجة</h4>
+
+                      <div className="text-primary">
+                        <span className="font-bold font-english text-xl"> {isOman ? tour?.price_double : tour?.price_double_sa}</span>
+                        {'  '}
+                        <span className="font-primary text-black text-xs">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="shadow-lg p-5 border rounded-lg">
+                    <div className="grid items-center justify-items-center space-y-1">
+                      <div className="bg-primary p-2 rounded-full">
+                        <BedSingle className=" text-white " />
+                      </div>
                       <h4 className="mt-2 text-base sm:text-sm md:text-sm font-primary">الشخض في الغرفة المفردة</h4>
-                      <h2 className="text-xl font-bold">
-                        {isOman ? tour?.price_single : tour?.price_single_sa} {'  '} {isOman ? 'ر.ع' : 'ر.س'}
-                      </h2>
+
+                      <div className="text-primary">
+                        <span className="font-bold font-english text-xl"> {isOman ? tour?.price_single : tour?.price_single_sa}</span>
+                        {'  '}
+                        <span className="font-primary text-black text-xs">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -42,6 +42,20 @@ export const columns: ColumnDef<TourType>[] = [
     },
   },
   {
+    accessorKey: 'show_on_europe',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Show on europe menu" />,
+    cell: ({ row }) => {
+      return (
+        <div className="w-32 flex items-center justify-between">
+          <Badge className="max-w-[6rem] truncate">{row.getValue('show_on_europe') ? 'Yes' : 'No'}</Badge>
+        </div>
+      )
+    },
+    filterFn: (row, id, value) => {
+      return row.original.name?.includes(value) || false
+    },
+  },
+  {
     accessorKey: 'created_at',
     header: ({ column }) => <DataTableColumnHeader column={column} title="CreatedAt" />,
     cell: ({ row }) => <div className="w-[100px] truncate">{format(new Date(row.getValue('created_at')), 'yyyy-MM-dd')}</div>,

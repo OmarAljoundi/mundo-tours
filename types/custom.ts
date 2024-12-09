@@ -97,6 +97,7 @@ export type TourType = {
   id?: number
   image?: string
   name?: string
+  show_on_europe: boolean
   order: number
 }
 

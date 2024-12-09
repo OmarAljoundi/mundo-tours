@@ -1,5 +1,5 @@
 'use client'
-import { Button, Input, ModalFooter } from '@nextui-org/react'
+import { Button, Input, ModalFooter, Switch } from '@nextui-org/react'
 import { Button as ShcdnButton } from '../ui/button'
 import { Modal } from '../shared/modal'
 import { TourType } from '@/types/custom'
@@ -58,6 +58,8 @@ export const TourTypeModal = () => {
     validateOnChange: true,
   })
 
+  console.log('data', data)
+
   const { handleChange, handleBlur, values, touched, errors, resetForm, handleSubmit, setFieldValue } = tourTypeFormik
 
   return (
@@ -109,6 +111,11 @@ export const TourTypeModal = () => {
               isClearable
               isInvalid={touched.name && !!errors.name}
             />
+
+            <div className="flex justify-start gap-x-2 border border-border rounded-lg shadow-md p-3">
+              <Switch name="show_on_europe" isSelected={values.show_on_europe} onValueChange={(e) => setFieldValue('show_on_europe', e)} size="sm" />
+              <h1>رحلات أوروبا</h1>
+            </div>
           </div>
         </div>
       </form>

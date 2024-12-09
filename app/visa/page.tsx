@@ -11,8 +11,8 @@ const VisaCard: React.FC<VisaCardProps> = ({ visa }) => {
 
   const convertCurrecny = useMemo(() => {
     const isOman = cookies.get('currency') == 'OMR'
-    if (isOman) return ' ر.ع '
-    else return ' ر.س '
+    if (isOman) return ' ريال عماني '
+    else return ' ريال سعودي '
   }, [cookies.get('currency')])
 
   return (
@@ -66,7 +66,7 @@ const VisaCard: React.FC<VisaCardProps> = ({ visa }) => {
         <h4 className="font-normal mt-3 text-xl">
           <span className="font-bold pe-3">سعر التأشيرة</span>
           <span className="english-font text-primary">{visa.price}</span>
-          <span className="text-primary">{convertCurrecny}</span>
+          <span className="text-black font-primary text-xs">{convertCurrecny}</span>
         </h4>
 
         {(visa.discountText || visa.discountedPrice) && (
@@ -76,7 +76,7 @@ const VisaCard: React.FC<VisaCardProps> = ({ visa }) => {
               {visa.discountedPrice && (
                 <>
                   <span className="text-primary english-font">{visa.discountedPrice}</span>
-                  <span className="text-primary"> {convertCurrecny} </span>
+                  <span className="text-black text-xs"> {convertCurrecny} </span>
                 </>
               )}
               {!visa.discountedPrice && <span className="text-primary"> مجانا </span>}

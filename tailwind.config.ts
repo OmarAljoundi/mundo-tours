@@ -25,13 +25,14 @@ const config: Config = {
       boxShadow: {
         card: 'var(--card-shadow)',
       },
+
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-
+        'light-blue': '#48aab6',
         scale: {
           100: 'var(--colors-gray1)',
           200: 'var(--colors-gray2)',
