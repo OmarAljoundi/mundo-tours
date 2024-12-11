@@ -78,7 +78,7 @@ const PriceDropdown: FC<{
             <Banknote />
             السعر
           </span>
-          <span className="absolute top-[-14px] bg-white rounded-2xl py-1 px-5 right-4 shadow text-primary text-xs">
+          <span className="absolute top-[-14px] bg-white rounded-2xl py-1 px-5 right-4 shadow text-primary text-[10px]">
             {isOman ? 'ريال عماني' : 'ريال سعودي'}
           </span>
           {/* <Slider

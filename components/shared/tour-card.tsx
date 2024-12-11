@@ -54,7 +54,7 @@ const TourCard: React.FC<{ tour: Tour }> = ({ tour }) => {
         <div className="flex flex-wrap justify-between items-center gap-5">
           <div className=" text-primary">
             <span className="font-bold font-english text-3xl"> {isOman ? tour?.price_double : tour?.price_double_sa}</span>{' '}
-            <span className="font-primary text-black text-xs">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
+            <span className="font-primary text-black text-[10px]">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
           </div>
 
           <Link href={`/tour/${tour.slug}`}>

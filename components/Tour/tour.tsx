@@ -44,7 +44,7 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                       <div className="text-primary">
                         <span className="font-bold font-english text-xl"> {isOman ? tour?.price_double : tour?.price_double_sa}</span>
                         {'  '}
-                        <span className="font-primary text-black text-xs">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
+                        <span className="font-primary text-black text-[10px]">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
                       </div>
                     </div>
                   </div>
@@ -58,7 +58,7 @@ const Tour: FC<{ tour: Tour }> = ({ tour }) => {
                       <div className="text-primary">
                         <span className="font-bold font-english text-xl"> {isOman ? tour?.price_single : tour?.price_single_sa}</span>
                         {'  '}
-                        <span className="font-primary text-black text-xs">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
+                        <span className="font-primary text-black text-[10px]">{isOman ? 'ريال عماني' : 'ريال سعودي'}</span>
                       </div>
                     </div>
                   </div>

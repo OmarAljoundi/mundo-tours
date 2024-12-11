@@ -66,7 +66,7 @@ const VisaCard: React.FC<VisaCardProps> = ({ visa }) => {
         <h4 className="font-normal mt-3 text-xl">
           <span className="font-bold pe-3">سعر التأشيرة</span>
           <span className="english-font text-primary">{visa.price}</span>
-          <span className="text-black font-primary text-xs">{convertCurrecny}</span>
+          <span className="text-black font-primary text-[10px]">{convertCurrecny}</span>
         </h4>
 
         {(visa.discountText || visa.discountedPrice) && (
@@ -76,7 +76,7 @@ const VisaCard: React.FC<VisaCardProps> = ({ visa }) => {
               {visa.discountedPrice && (
                 <>
                   <span className="text-primary english-font">{visa.discountedPrice}</span>
-                  <span className="text-black text-xs"> {convertCurrecny} </span>
+                  <span className="text-black text-[10px]"> {convertCurrecny} </span>
                 </>
               )}
               {!visa.discountedPrice && <span className="text-primary"> مجانا </span>}
