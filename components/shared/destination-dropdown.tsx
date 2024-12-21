@@ -40,18 +40,20 @@ const DestinationDropdown = ({ destinations }: { destinations: any[] }) => {
           <CommandList>
             <CommandEmpty>لاتوجد نتائج</CommandEmpty>
             <CommandGroup>
-              {destinations?.map((option) => {
-                return (
-                  <CommandItem
-                    key={option.id}
-                    onSelect={() => {
-                      router.push(getNextRoute(option))
-                    }}
-                  >
-                    <span>{option.name}</span>
-                  </CommandItem>
-                )
-              })}
+              {destinations
+                ?.filter((x) => x.is_active)
+                .map((option) => {
+                  return (
+                    <CommandItem
+                      key={option.id}
+                      onSelect={() => {
+                        router.push(getNextRoute(option))
+                      }}
+                    >
+                      <span>{option.name}</span>
+                    </CommandItem>
+                  )
+                })}
             </CommandGroup>
           </CommandList>
         </Command>

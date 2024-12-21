@@ -12,9 +12,10 @@ export async function generateMetadata({ params }: { params: { destination: stri
     }
   }
   const { description, tags, title } = response.seo || { title: '', description: '', tags: '' }
+  console.log('response', response)
   return {
-    title: title,
-    description: description,
+    title: title || response?.name,
+    description: description || response?.name,
     keywords: tags,
     creator: 'Mundo tours',
     publisher: 'Mundo tours Inc.',
@@ -35,8 +36,8 @@ export async function generateMetadata({ params }: { params: { destination: stri
       },
     },
     openGraph: {
-      title: title,
-      description: description,
+      title: title || response?.name,
+      description: description || response?.name,
       url: `https://mundo-tours.com/tour-listing/${decodeURIComponent(params.destination)}`,
       siteName: 'Mundo tours',
       images: [
