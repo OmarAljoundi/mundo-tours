@@ -13,11 +13,45 @@ export async function generateMetadata({ params }: { params: { destination: stri
     }
   }
 
-  const { description, tags, title } = attr.seo || { title: '', description: '', tags: '' }
+  const { description, tags, title } = response.seo || { title: '', description: '', tags: '' }
   return {
     title: title,
     description: description,
     keywords: tags,
+    creator: 'Mundo tours',
+    publisher: 'Mundo tours Inc.',
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    openGraph: {
+      title: title,
+      description: description,
+      url: `https://mundo-tours.com/tour-listing/${decodeURIComponent(params.destination)}`,
+      siteName: 'Mundo tours',
+      images: [
+        {
+          url: response?.image?.url,
+          width: 1000,
+          height: 1200,
+          alt: response?.image?.name,
+        },
+      ],
+      locale: 'ar_SA',
+      type: 'website',
+    },
   }
 }
 

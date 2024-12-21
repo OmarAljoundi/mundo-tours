@@ -9,13 +9,49 @@ import { Skeleton } from '@/components/ui/skeleton'
 import BestToursListLoading from '@/components/Loading/best-tours-list-loading'
 import DestinationHomeLoading from '@/components/Loading/destination-home-loading'
 import InstagramSection from '@/components/Home/instagram-section'
+import { Metadata } from 'next'
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   const data = await getContent()
   return {
     title: data?.home?.seo?.title,
     description: data?.home?.seo?.description,
     keywords: data?.home?.seo?.tags || '',
+    creator: 'Mundo tours',
+
+    publisher: 'Mundo tours Inc.',
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    openGraph: {
+      title: data?.home?.seo?.title || '',
+      description: data?.home?.seo?.description || '',
+      url: 'https://mundo-tours.com',
+      siteName: 'Mundo tours',
+      images: [
+        {
+          url: `https://www.mundo-tours.com/_next/image?url=/imgs/mundo_logo.png&w=384&q=100`,
+          width: 100,
+          height: 55,
+          alt: 'Mundo tours',
+        },
+      ],
+      locale: 'ar_SA',
+      type: 'website',
+    },
   }
 }
 

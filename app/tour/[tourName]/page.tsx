@@ -20,10 +20,46 @@ export async function generateMetadata({ params }: { params: { tourName: string 
   const response = await getTours()
   const tour = response?.find((x) => x.slug == decodeURIComponent(slug) && x.is_active)
   if (tour) {
+    console.log('tour', tour)
+
     return {
       title: tour?.seo?.title,
       description: tour?.seo?.description,
       keywords: tour.seo?.tags || '',
+      creator: 'Mundo tours',
+      publisher: 'Mundo tours Inc.',
+      formatDetection: {
+        email: false,
+        address: false,
+        telephone: false,
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-video-preview': -1,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
+      },
+      openGraph: {
+        title: tour?.seo?.title,
+        description: tour?.seo?.description,
+        url: `https://mundo-tours.com/tour/${decodeURIComponent(slug)}`,
+        siteName: 'Mundo tours',
+        images: tour?.images?.map((o: string) => {
+          return {
+            url: o,
+            width: 640,
+            height: 427,
+            alt: tour?.name,
+          }
+        }),
+        locale: 'ar_SA',
+        type: 'website',
+      },
     }
   }
   return {
