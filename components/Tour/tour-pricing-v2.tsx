@@ -22,7 +22,7 @@ export function TourPricingV2({ numberOfDays, tourPrices, start_day }: TourPrici
 
   const formatDateRange = (startDate: Date) => {
     const endDate = new Date(startDate)
-    endDate.setDate(endDate.getDate() + numberOfDays)
+    endDate.setDate(endDate.getDate() + numberOfDays - 1)
 
     return (
       <div className="flex flex-col gap-1 px-2 py-3 items-center">

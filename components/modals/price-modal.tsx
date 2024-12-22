@@ -48,7 +48,7 @@ export const PriceModal = () => {
       date: undefined,
       internal_price: undefined,
       one_price: undefined,
-      price: undefined,
+      price: 0,
       sea_view_price: undefined,
       include_all_month: false,
       ...PriceModal.data,
@@ -99,6 +99,7 @@ export const PriceModal = () => {
                 onClear={() => setFieldValue('balcony_price', undefined)}
                 name="balcony_price"
                 type="number"
+                className="hidden"
                 isClearable
                 isInvalid={touched.balcony_price && !!errors.balcony_price}
                 startContent={
@@ -182,16 +183,17 @@ export const PriceModal = () => {
             </div>
           ) : (
             <div className="grid gap-y-4">
-              <Input
+              {/* <Input
                 label="Price"
                 labelPlacement="outside"
                 placeholder="Enter price"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.price?.toString() || ''}
+                value={values.price?.toString() || '0'}
                 onClear={() => setFieldValue('price', undefined)}
                 name="price"
                 type="number"
+                className="hidden"
                 isClearable
                 isInvalid={touched.price && !!errors.price}
                 errorMessage={touched.price && !!errors.price && errors.price}
@@ -200,7 +202,7 @@ export const PriceModal = () => {
                     <span className="text-default-400 text-small">OMR</span>
                   </div>
                 }
-              />
+              /> */}
               <Popover>
                 <PopoverTrigger>
                   <Input
