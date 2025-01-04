@@ -14,8 +14,8 @@ export default function InstagramSection() {
         لرحلات التي تشمل الطيران ، زورو صفحتنا على الانستجرام
       </motion.h2>
       <div className="flex flex-col md:flex-row justify-center items-stretch gap-6 mx-auto max-w-5xl w-full">
-        <InstagramBlock title="السعودية" country={'KSA'} link="https://www.instagram.com/mundo.saudi/" index={2} />
-        <InstagramBlock title="سلطة عمان" country={'OMAN'} link="https://www.instagram.com/mundo.oman/" index={1} />
+        <InstagramBlock title="السعودية" country={'KSA'} link="https://www.instagram.com/mundo.ksa/profilecard" index={2} />
+        <InstagramBlock title="سلطة عمان" country={'OMAN'} link="https://www.instagram.com/mundo.oman/profilecard" index={1} />
       </div>
     </div>
   )

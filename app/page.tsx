@@ -81,17 +81,15 @@ export default function Home() {
         </Suspense>
       </SectionProvider>
 
-      <SectionProvider title="البرامج الاكثر مبيعاً">
-        <Suspense
-          fallback={
-            <div className="container">
-              <BestToursListLoading />
-            </div>
-          }
-        >
-          <BestToursList contactPromise={getContentDataCached()} toursPromise={getToursCached()} />
-        </Suspense>
-      </SectionProvider>
+      <Suspense
+        fallback={
+          <div className="container">
+            <BestToursListLoading />
+          </div>
+        }
+      >
+        <BestToursList contactPromise={getContentDataCached()} toursPromise={getToursCached()} />
+      </Suspense>
 
       <SectionProvider title="انواع البرامج">
         <Suspense fallback={<></>}>
