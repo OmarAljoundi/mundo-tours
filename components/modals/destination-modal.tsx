@@ -22,6 +22,8 @@ const DestinationModal = () => {
   const handleSubmitForm = async (formData: Location) => {
     if (!formData.slug) {
       formData.slug = formData.name?.trim().replaceAll(' ', '-')
+    } else {
+      formData.slug = formData.slug.replaceAll(' ', '')
     }
 
     if (data && data.id) {
@@ -183,7 +185,7 @@ const DestinationModal = () => {
                 label="Destination Slug"
                 labelPlacement="outside"
                 placeholder="Enter slug name"
-                onChange={(e) => handleChange(e.target.value.trim())}
+                onChange={handleChange}
                 onBlur={handleBlur}
                 onClear={() => setFieldValue('slug', '')}
                 value={values.slug || ''}

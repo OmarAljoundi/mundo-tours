@@ -16,12 +16,12 @@ const TourLinks: FunctionComponent<TourLinksProps> = ({ tour }) => {
       <div className="border border-dashed my-5"></div>
       <div className=" my-5">
         <div className="flex gap-6">
-          {/* <ContactForm tourId={tour.id!} /> */}
-          <Link href={WhatsappLink} target="_blank">
+          <ContactForm tourId={tour.id!} />
+          {/* <Link href={WhatsappLink} target="_blank">
             <Button size={'sm'} variant={'secondary'} className="font-primary">
               طريقة الحجز
             </Button>
-          </Link>
+          </Link> */}
           <Button className="font-primary" size={'sm'} variant={'secondary'} onClick={async () => await generate(tour)}>
             تنزيل البرنامج
           </Button>
