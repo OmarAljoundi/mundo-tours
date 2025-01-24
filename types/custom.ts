@@ -170,7 +170,7 @@ export type Response<T> = {
 
 export type Setting = {
   home?: Home
-  about?: Seo
+  about?: { seo: Seo }
   visa?: Visa
   faq?: Faq[]
   best_tours?: BestTours

@@ -102,6 +102,10 @@ export const MenuItems: MenuItemsProps[] = [
         label: 'Best Tours',
         href: '/admin/dashboard/setting/best-tours',
       },
+      {
+        label: 'About Mundo',
+        href: '/admin/dashboard/setting/about-us',
+      },
     ],
   },
 ]

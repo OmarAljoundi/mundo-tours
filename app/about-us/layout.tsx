@@ -4,9 +4,9 @@ import { getContent } from '@/lib/operations'
 export async function generateMetadata() {
   const data = await getContent()
   return {
-    title: data?.about?.title,
-    description: data?.about?.description,
-    keywords: data?.about?.tags || '',
+    title: data?.about?.seo?.title,
+    description: data?.about?.seo?.description,
+    keywords: data?.about?.seo?.tags || '',
   }
 }
 
@@ -17,7 +17,7 @@ export default function AboutLayout({ children }: { children: React.ReactNode })
         <div className="container">
           <BreadCrumb />
         </div>
-        <div className="mt-4 mb-16">{children}</div>
+        <div className="mb-16">{children}</div>
       </div>
     </section>
   )
