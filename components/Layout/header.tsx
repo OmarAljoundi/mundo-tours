@@ -27,7 +27,7 @@ export const MenuItems = [
     title: 'خدماتنا السياحية',
     link: '/',
     allowMobile: true,
-    subMenus: [{ name: 'إستخـراج تـأشيرات', url: '/visa' }],
+    subMenus: [], //{ name: 'إستخـراج تـأشيرات', url: '/visa' }
   },
   {
     title: 'عن موندو',
