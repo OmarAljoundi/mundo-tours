@@ -47,7 +47,7 @@ const MobileMenu = () => {
             ))}
           </ul>
         </nav>
-        <Separator className="my-4" />
+        {/* <Separator className="my-4" />
 
         <h1 className="font-primary text-center pb-4">تواصل معنا</h1>
         <div className="container">
@@ -73,7 +73,7 @@ const MobileMenu = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </SheetContent>
     </Sheet>
   )
