@@ -159,6 +159,7 @@ export async function updateOfficeStatus(status: boolean, id: number): Promise<R
     success: true,
   }
 }
+
 export async function getTourTypes(): Promise<Response<TourType>> {
   var _SQ: SearchQuery = {
     FilterByOptions: [],
@@ -170,6 +171,11 @@ export async function getTourTypes(): Promise<Response<TourType>> {
   }
 
   const response = await SearchData(REVALIDATE_TOUR_TYPE, 86400, _SQ)
+
+  if (!response?.results || response?.results.length == 0) {
+    console.warn(`Revalidating the result as it returns no data ${REVALIDATE_TOUR_TYPE}`, response)
+    revalidateTag(REVALIDATE_TOUR_TYPE)
+  }
 
   return response
 }
@@ -185,6 +191,11 @@ export async function getDestination() {
   }
 
   const response = await SearchData(REVALIDATE_LOCATION_LIST, 86400, _SQ)
+
+  if (!response?.results || response?.results.length == 0) {
+    console.warn(`Revalidating the result as it returns no data ${REVALIDATE_LOCATION_LIST}`, response)
+    revalidateTag(REVALIDATE_LOCATION_LIST)
+  }
   return response
 }
 
@@ -339,6 +350,7 @@ export async function updateOffice(office: Office) {
 
   return data
 }
+
 export async function getTours() {
   var _SQ: SearchQuery = {
     FilterByOptions: [],
@@ -350,8 +362,15 @@ export async function getTours() {
   }
 
   const response = await SearchData(REVALIDATE_TOUR_LIST, 86400, _SQ)
+
+  if (!response?.results || response?.results.length == 0) {
+    console.warn(`Revalidating the result as it returns no data ${REVALIDATE_TOUR_LIST}`, response)
+    revalidateTag(REVALIDATE_TOUR_LIST)
+  }
+
   return response.results
 }
+
 export async function getHotels() {
   var _SQ: SearchQuery = {
     FilterByOptions: [],
@@ -364,8 +383,13 @@ export async function getHotels() {
 
   const response = await SearchData(REVALIDATE_HOTEL_LIST, 86400, _SQ)
 
+  if (!response?.results || response?.results.length == 0) {
+    console.warn(`Revalidating the result as it returns no data ${REVALIDATE_HOTEL_LIST}`, response)
+    revalidateTag(REVALIDATE_HOTEL_LIST)
+  }
   return response.results
 }
+
 export async function deleteLocationAttr(location_id: number) {
   const { data, error } = await supabaseClient.from('location_attributes').delete().eq('location_id', location_id)
 
@@ -376,6 +400,7 @@ export async function deleteLocationAttr(location_id: number) {
   revalidateTag(REVALIDATE_LOCATION_LIST)
   await fetch(`https://imtour.travel/api/revalidate?tag=${REVALIDATE_LOCATION_LIST}`)
 }
+
 export async function createDestinationAttr(destinationAttr: LocationAttributes) {
   let id: number = 0
 
@@ -433,6 +458,7 @@ export async function createHotel(hotel: Hotel) {
 
   return data
 }
+
 export async function updateHotel(hotel: Hotel) {
   const { data, error } = await supabaseClient
     .from('hotel')
@@ -462,6 +488,8 @@ export const getContent = async () => {
   })
 
   if (!response.ok) {
+    console.warn(`Revalidating the result as it returns no data ${REVALIDATE_CONTENT_DATA}`, response)
+    revalidateTag(REVALIDATE_CONTENT_DATA)
     throw new Error(`Request failed with status: ${response.status}`)
   }
 
