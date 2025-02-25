@@ -10,6 +10,7 @@ import { ReactQueryProvider } from '@/provider/react-query-provider'
 import { ModalProvider } from '@/provider/modal-provider'
 import { Toaster } from 'sonner'
 import Scroll from '@/provider/scroll-provider'
+import { Analytics } from '@vercel/analytics/react'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -27,6 +28,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           ></iframe>
         </noscript>
         <ReactQueryProvider>
+          <Analytics />
+
           <Scroll />
           <ModalProvider />
           <Toaster position="top-right" expand={true} richColors />
