@@ -1,8 +1,9 @@
 'use client'
 import { ImageListType, ImageType } from 'react-images-uploading'
 import { supabaseClient } from './supabaseClient'
-import { ATTACHMENT_PATH, CONFIG_PATH, SETTING_PATH } from './keys'
+import { ATTACHMENT_PATH, CONFIG_PATH, REVALIDATE_CONTENT_DATA, SETTING_PATH } from './keys'
 import { v4 } from 'uuid'
+import { revalidateCustomTag } from './operations'
 
 export const UploadProductImages = async (
   files: ImageListType,
@@ -114,11 +115,12 @@ export const PushJsonFile = async (blob: Blob) => {
     cacheControl: '0',
     upsert: true,
   })
-
   if (error) {
     console.error('Error ', error)
     throw new Error('Error while saving the settings ' + error.message)
   }
+
+  revalidateCustomTag(REVALIDATE_CONTENT_DATA)
 
   return true
 }

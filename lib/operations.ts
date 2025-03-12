@@ -525,3 +525,7 @@ export async function submitForm(formData: Customer) {
     success: true,
   }
 }
+
+export async function revalidateCustomTag(tag: string) {
+  revalidateTag(tag)
+}
