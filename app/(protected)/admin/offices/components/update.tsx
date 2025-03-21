@@ -10,6 +10,7 @@ import { OfficeForm } from "./form";
 import { officeUpdate } from "@/server/office.server";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
+import { revalidateOffice } from "@/server/revalidation.server";
 
 export function UpdateOffice({ office }: { office: UpdateOfficeSchema }) {
   const { id } = useParams();
@@ -27,6 +28,8 @@ export function UpdateOffice({ office }: { office: UpdateOfficeSchema }) {
       where: { id: Number(id) },
     });
     if (result.id) {
+      revalidateOffice();
+
       toast.success("Office update successfully");
       route.replace(`/admin/offices`);
       route.refresh();

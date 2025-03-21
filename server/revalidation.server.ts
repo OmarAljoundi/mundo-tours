@@ -4,27 +4,25 @@ import { db } from "@/db.server";
 import { QueryLocationSchema } from "@/schema";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 
-export async function revalidateAll() {
+export async function revalidateImTour() {
   noStore();
-  revalidatePath("/", "layout");
-
-  // try {
-  //   fetch(process.env.IMTOUR_API!, { next: { revalidate: 0 } });
-  // } catch (ex) {
-  //   console.log("ex", ex);
-  //   return;
-  // }
+  try {
+    fetch(process.env.IMTOUR_API!, { cache: "no-store" });
+  } catch (ex) {
+    console.log("error whilte revalidating im tour: ", ex);
+    return;
+  }
 }
 
 export async function revalidateTour(slug: string) {
   noStore();
   const encodeSlug = encodeURIComponent(slug);
   revalidatePath(`/tour/${encodeSlug}`);
-
   fetch(`${process.env.NEXT_PUBLIC_APP_URL}/tour/${slug}`, {
     cache: "no-store",
   });
   revalidatePath("/(protected)", "layout");
+  revalidateImTour();
 }
 
 export async function revalidateStaticPages() {
@@ -45,6 +43,7 @@ export async function revalidateStaticPages() {
   });
 
   revalidatePath("/(protected)", "layout");
+  revalidateImTour();
 }
 
 export async function revalidateDestination(slug: string) {
@@ -55,6 +54,7 @@ export async function revalidateDestination(slug: string) {
     cache: "no-store",
   });
   revalidatePath("/(protected)", "layout");
+  revalidateImTour();
 }
 
 export async function revalidateDestinationAttribute(
@@ -93,9 +93,16 @@ export async function revalidateDestinationAttribute(
   }
 
   revalidatePath("/(protected)", "layout");
+  revalidateImTour();
 }
 
 export async function revalidateCustomer() {
   noStore();
   revalidatePath("/(protected)", "layout");
+}
+
+export async function revalidateOffice() {
+  noStore();
+  revalidatePath("/(protected)", "layout");
+  revalidateImTour();
 }

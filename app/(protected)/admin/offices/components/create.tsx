@@ -10,6 +10,7 @@ import { officeCreate } from "@/server/office.server";
 import { OfficeForm } from "./form";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
+import { revalidateOffice } from "@/server/revalidation.server";
 
 export function CreateOffice({ office }: { office?: CreateOfficeSchema }) {
   const form = useForm<CreateOfficeSchema>({
@@ -24,6 +25,7 @@ export function CreateOffice({ office }: { office?: CreateOfficeSchema }) {
       data: { ...body, bestTours: body.bestTours.map((o) => o.id) },
     });
     if (result.id) {
+      revalidateOffice();
       toast.success("Office created successfully");
       route.replace(`/admin/offices`);
       route.refresh();

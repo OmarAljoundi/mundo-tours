@@ -4,6 +4,7 @@ import { QueryOfficeSchema } from "@/schema";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
+import { revalidateOffice } from "@/server/revalidation.server";
 
 export function UpdateOfficeStatus({ row }: { row: QueryOfficeSchema }) {
   const route = useRouter();
@@ -21,8 +22,10 @@ export function UpdateOfficeStatus({ row }: { row: QueryOfficeSchema }) {
           return error;
         },
         loading: "Updating office status in progress ..",
-        success(data) {
+        async success(data) {
           route.refresh();
+          revalidateOffice();
+
           return `Office ${data.name} status has been updated successfully`;
         },
       }
