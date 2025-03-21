@@ -1,6 +1,31 @@
+import {
+  Mona_Sans,
+  Noto_Kufi_Arabic,
+  Noto_Sans_Arabic,
+} from "next/font/google";
 import localFont from "next/font/local";
 
-export const alfont = localFont({
+const notoSans = Noto_Sans_Arabic({
+  subsets: ["arabic"],
+  display: "swap",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-arabic-body",
+});
+
+const notoKufiArabic = Noto_Kufi_Arabic({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-arabic-header",
+});
+
+const monaSans = Mona_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-english",
+});
+const alfont = localFont({
   src: [
     {
       path: "./font/alfont_com_AlFont_com_Swissra-Bold.otf",
@@ -22,12 +47,27 @@ export const alfont = localFont({
   variable: "--font-primary",
 });
 
-export const englishFont = localFont({
+const saudiRiyal = localFont({
+  src: "./font/saudi_riyal.ttf",
+  variable: "--font-saudi-riyal",
+});
+
+const englishFont = localFont({
   src: "./font/Montserrat-SemiBold.ttf",
   variable: "--font-english",
 });
 
-export const shekari = localFont({
+const shekari = localFont({
   src: "./font/shekari.ttf",
   variable: "--font-secondary",
 });
+
+export {
+  notoSans,
+  notoKufiArabic,
+  alfont,
+  englishFont,
+  shekari,
+  monaSans,
+  saudiRiyal,
+};
