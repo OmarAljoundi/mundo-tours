@@ -10,8 +10,8 @@ export function ConfigurationMenu({ children }: { children: ReactNode }) {
       orientation="vertical"
       className="flex w-full gap-6 items-start relative"
     >
-      <div className="sticky top-0 w-72 mt-[60px]">
-        <TabsList className="flex-col gap-1 px-1 py-0 text-foreground flex-grow-0 w-full bg-sidebar rounded-lg h-full p-6 ">
+      <div className="sticky top-0 w-72 mt-[65px]">
+        <TabsList className="flex-col gap-1 px-1 py-0 text-foreground flex-grow-0 w-full bg-card border border-border rounded-lg h-full p-6 ">
           {Object.entries(seoMenuItems).map(([key, o]) => (
             <TabsTrigger
               key={key}

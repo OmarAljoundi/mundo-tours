@@ -46,7 +46,7 @@ import { AirplaneIcon } from "../icons/airplane-icon";
 const data = {
   user: {
     name: "admin",
-    email: "admin@rafanasiri.com",
+    email: "admin@admin.com",
   },
   navMain: [
     {

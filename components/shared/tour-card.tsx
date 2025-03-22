@@ -6,9 +6,10 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { QueryTourSchema } from "@/schema";
 import dynamic from "next/dynamic";
+import { TourPriceLoading } from "./tour-price-loading";
 
 const TourPrice = dynamic(() => import("./tour-price"), {
-  loading: () => <p>Loading...</p>,
+  loading: () => <TourPriceLoading />,
   ssr: false,
 });
 
@@ -16,7 +17,7 @@ const TourCard: React.FC<{ tour: QueryTourSchema }> = ({ tour }) => {
   return (
     <div className="bg-white shadow-xl rounded-2xl p-2 ">
       <div className="rounded-2xl relative group">
-        <div className="property-card__img relative">
+        <div className="relative">
           <Link href={`/tour/${tour.slug}`}>
             <BlurImage
               priority={false}

@@ -90,8 +90,11 @@ export function SeoFormInputs({ prefiex = "" }: { prefiex?: string }) {
                 tags={(field.value as Tag[]) ?? []}
                 activeTagIndex={activeTagIndex}
                 setActiveTagIndex={setActiveTagIndex}
+                showCount={true}
                 styleClasses={{
-                  inlineTagsContainer: "bg-input",
+                  inlineTagsContainer: "bg-input font-arabic-body",
+                  tag: { body: "font-arabic-body" },
+                  input: "font-arabic-body",
                 }}
                 placeholder={`Enter a meta Keywords`}
               />

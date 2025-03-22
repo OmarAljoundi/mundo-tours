@@ -8,7 +8,7 @@ export function NavigationsLoading() {
          backdrop-saturate-150 bg-background/70"
     >
       <header className={cn("bg-white py-2")}>
-        <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-1 lg:gap-8 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-1 lg:gap-8 px-2 sm:px-6 lg:px-8">
           <Skeleton className="h-10 w-[80px] lg:w-[100px] rounded-md" />
 
           <div className="flex flex-1 items-center justify-end md:justify-between">

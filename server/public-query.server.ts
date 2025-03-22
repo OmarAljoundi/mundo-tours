@@ -98,13 +98,16 @@ export async function getBestTours() {
   const tours = await db.tour.findMany({
     where: {
       id: { in: settingsParsed.home.bestTours.map((o) => o.id) },
+      isActive: true,
     },
     include: {
       tourType: true,
     },
   });
 
-  return tours.map((o) => queryTourSchema.parse(o));
+  if (tours) return tours.map((o) => queryTourSchema.parse(o));
+
+  return [];
 }
 
 export async function getDestinations(isOffice: boolean = false) {
@@ -174,11 +177,20 @@ export async function getToursByAttributes(
 ) {
   const destination = await db.location.findFirst({
     orderBy: { order: "asc" },
-    where: { slug, isActive: true, isOffice },
+    where: {
+      slug,
+      isActive: true,
+      isOffice,
+    },
     include: {
       attributes: {
         include: {
           locationTours: {
+            where: {
+              tour: {
+                isActive: true,
+              },
+            },
             include: {
               locationAttr: true,
               location: true,
@@ -197,7 +209,6 @@ export async function getToursByAttributes(
                   slug: true,
                   startDay: true,
                   tourCountries: true,
-
                   tourType: {
                     select: {
                       id: true,
@@ -259,7 +270,6 @@ export async function getTours() {
       slug: true,
       startDay: true,
       tourCountries: true,
-
       tourType: {
         select: {
           id: true,
@@ -277,7 +287,10 @@ export async function getTours() {
 
 export async function getTourDetails(slug: string) {
   const tour = await db.tour.findFirst({
-    where: { isActive: true, slug },
+    where: {
+      isActive: true,
+      slug,
+    },
     include: {
       tourType: true,
     },
