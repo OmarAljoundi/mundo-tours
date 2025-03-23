@@ -12,19 +12,10 @@ import {
 import { SettingSchema, settingSchema } from "@/schema/setting-schema";
 import { formatDistance, subDays } from "date-fns";
 import { unstable_noStore as noStore } from "next/cache";
-import { notFound } from "next/navigation";
 import { getSettingBySectionAsync } from "./settings.server";
 import { auth } from "@/auth";
 import { NextRequest } from "next/server";
 import { revalidateCustomer } from "./revalidation.server";
-
-const wait = (ms: number = 2000): Promise<void> => {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
-  });
-};
 
 export async function submitForm(params: CreateCustomerSchema) {
   noStore();
@@ -494,5 +485,5 @@ export async function getTourOfficeDetails(
 
   if (tour) return queryTourSchema.parse(tour);
 
-  return notFound();
+  return undefined;
 }

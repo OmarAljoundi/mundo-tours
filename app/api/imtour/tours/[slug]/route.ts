@@ -7,7 +7,8 @@ export async function GET(
 ) {
   try {
     const { slug } = await context.params;
-    const result = await getTourOfficeDetails(slug);
+    const currency = request.nextUrl.searchParams.get("currency") ?? "SAR";
+    const result = await getTourOfficeDetails(slug, currency as "SAR" | "OMR");
     return NextResponse.json({
       success: true,
       result,

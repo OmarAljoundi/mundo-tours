@@ -7,7 +7,13 @@ export async function GET(
 ) {
   try {
     const { slug } = await context.params;
-    const result = await getToursByAttributes(slug, undefined, true);
+    const currency = request.nextUrl.searchParams.get("currency") ?? "SAR";
+    const result = await getToursByAttributes(
+      slug,
+      undefined,
+      true,
+      currency as "SAR" | "OMR"
+    );
     return NextResponse.json({
       success: true,
       result,
