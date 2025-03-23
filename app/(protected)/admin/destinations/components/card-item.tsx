@@ -37,7 +37,7 @@ import { locationDelete } from "@/server/location.server";
 import { SortableDragHandle } from "@/components/ui/sortable";
 import { LocationAttributesForm } from "./assign-tours/index";
 import { SeoDialogForm } from "./seo-dialog-form";
-import { revalidateDestinationAttribute } from "@/server/revalidation.server";
+import { revalidateDestination } from "@/server/revalidation.server";
 
 // eslint-disable-next-line react/display-name
 const LocationBadge = memo(({ isActive }: { isActive: boolean }) =>
@@ -417,7 +417,7 @@ function CardItemComponent(location: QueryLocationSchema) {
         deleteFunction={() => locationDelete({ where: { id: location.id } })}
         mutationOptions={{
           mutationKey: ["Delete-Location", location.id],
-          onSuccess: async () => await revalidateDestinationAttribute(location),
+          onSuccess: async () => await revalidateDestination(location.slug),
         }}
       />
     </React.Fragment>

@@ -3,6 +3,7 @@
 import { db } from "@/db.server";
 import { Prisma } from "@prisma/client";
 import { unstable_noStore } from "next/cache";
+import { cookies } from "next/headers";
 
 export type TourFilters = {
   country?: string;
@@ -78,8 +79,15 @@ export async function tourSearch({
   limit = 10,
   filters = {},
 }: TourSearchParams) {
+  const localCookies = await cookies();
+  const currency =
+    (localCookies.get("currency")?.value as "SAR" | "OMR") || "SAR";
+
   const where: Prisma.TourWhereInput = {
     isActive: true,
+    ...(currency === "SAR"
+      ? { OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }] }
+      : { OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }] }),
   };
 
   if (filters.type) {
@@ -150,9 +158,8 @@ export async function tourSearch({
         },
       },
     },
-    orderBy: {
-      id: "asc",
-    },
+    orderBy:
+      currency === "SAR" ? { priceDoubleSa: "asc" } : { priceDouble: "asc" },
   });
 
   const hasMore = tours.length > limit;

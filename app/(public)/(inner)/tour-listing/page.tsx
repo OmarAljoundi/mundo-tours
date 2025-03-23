@@ -10,11 +10,29 @@ import { SettingSchema } from "@/schema/setting-schema";
 import { generatePageSeo } from "@/lib/generate-seo";
 import { FilterLoading } from "@/components/shared/filter-loading";
 import { CardsLoading } from "@/components/cards-loading";
+import { unstable_cache } from "next/cache";
+
+const getDestinationsCached = unstable_cache(
+  async () => getDestinations(),
+  ["destinations"],
+  { revalidate: 86400 }
+);
+
+const getTourTypesCached = unstable_cache(
+  async () => getTourTypes(),
+  ["tour-types"],
+  { revalidate: 86400 }
+);
+
+const getSettingBySectionAsyncCached = unstable_cache(
+  async () => getSettingBySectionAsync("CMS"),
+  ["setting-by-section-cms"],
+  { revalidate: 86400 }
+);
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { seoStaticPagesAllTours } = (await getSettingBySectionAsync(
-    "CMS"
-  )) as SettingSchema;
+  const { seoStaticPagesAllTours } =
+    (await getSettingBySectionAsyncCached()) as SettingSchema;
   const dictionary = generatePageSeo(seoStaticPagesAllTours.seo, "/");
   return dictionary;
 }
@@ -35,8 +53,8 @@ export default async function Page() {
         <Filter
           onChange={true}
           enableTabs={true}
-          destinationPromise={getDestinations()}
-          tourTypesPromise={getTourTypes()}
+          destinationPromise={getDestinationsCached()}
+          tourTypesPromise={getTourTypesCached()}
         />
       </div>
       <ToursList />

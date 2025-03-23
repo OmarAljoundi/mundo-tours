@@ -18,6 +18,14 @@ import { auth } from "@/auth";
 import { NextRequest } from "next/server";
 import { revalidateCustomer } from "./revalidation.server";
 
+const wait = (ms: number = 2000): Promise<void> => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+};
+
 export async function submitForm(params: CreateCustomerSchema) {
   noStore();
   const result = await db.customer.create({
@@ -173,7 +181,8 @@ export async function getAttributesBySlug(
 export async function getToursByAttributes(
   slug: string,
   attributeSlug?: string,
-  isOffice: boolean = false
+  isOffice: boolean = false,
+  currency: "SAR" | "OMR" = "SAR"
 ) {
   const destination = await db.location.findFirst({
     orderBy: { order: "asc" },
@@ -189,7 +198,26 @@ export async function getToursByAttributes(
             where: {
               tour: {
                 isActive: true,
+                ...(currency === "SAR"
+                  ? {
+                      OR: [
+                        { priceSingleSa: { gt: 0 } },
+                        { priceDoubleSa: { gt: 0 } },
+                      ],
+                    }
+                  : {
+                      OR: [
+                        { priceSingle: { gt: 0 } },
+                        { priceDouble: { gt: 0 } },
+                      ],
+                    }),
               },
+            },
+            orderBy: {
+              tour:
+                currency === "SAR"
+                  ? { priceDoubleSa: "asc" }
+                  : { priceDouble: "asc" },
             },
             include: {
               locationAttr: true,
@@ -240,8 +268,6 @@ export async function getToursByAttributes(
   }
 
   if (!attributeSlug) {
-    console.log("attributeSlug --- :", attributeSlug);
-    console.log("slug --- :", slug);
     throw new Error("Attribute slug must be provided");
   }
 
@@ -285,11 +311,17 @@ export async function getTours() {
   return [];
 }
 
-export async function getTourDetails(slug: string) {
+export async function getTourDetails(
+  slug: string,
+  currency: "SAR" | "OMR" = "SAR"
+) {
   const tour = await db.tour.findFirst({
     where: {
       isActive: true,
       slug,
+      ...(currency === "SAR"
+        ? { OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }] }
+        : { OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }] }),
     },
     include: {
       tourType: true,
@@ -318,7 +350,12 @@ export async function getOfficeDetails(slug: string) {
       where: {
         isActive: true,
         id: { in: office.bestTours },
+        ...(currency === "SAR"
+          ? { OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }] }
+          : { OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }] }),
       },
+      orderBy:
+        currency === "SAR" ? { priceDoubleSa: "asc" } : { priceDouble: "asc" },
       select: {
         name: true,
         numberOfDays: true,
@@ -396,6 +433,9 @@ export async function getOfficeTours(currency: "SAR" | "OMR") {
 
   const results = await db.tour.findMany({
     where: {
+      ...(currency === "SAR"
+        ? { OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }] }
+        : { OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }] }),
       locationTours: {
         some: {
           location: {
@@ -434,11 +474,17 @@ export async function getOfficeTours(currency: "SAR" | "OMR") {
   return parsedResult;
 }
 
-export async function getTourOfficeDetails(slug: string) {
+export async function getTourOfficeDetails(
+  slug: string,
+  currency: "SAR" | "OMR" = "SAR"
+) {
   const tour = await db.tour.findFirst({
     where: {
       isActive: true,
       slug,
+      ...(currency === "SAR"
+        ? { OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }] }
+        : { OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }] }),
       locationTours: { some: { location: { isOffice: true } } },
     },
     include: {

@@ -40,7 +40,10 @@ export default function CategoryList({
         className="flex flex-col space-y-4"
       >
         {results?.map((item) => (
-          <Link href={`/tour-listing?type=${item.name}`} key={item.id}>
+          <Link
+            href={`/tour-listing?type=${item.name.replace(" ", "+")}`}
+            key={item.id}
+          >
             <motion.div
               variants={{
                 hidden: { x: 50, opacity: 0 },

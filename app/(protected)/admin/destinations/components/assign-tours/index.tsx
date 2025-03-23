@@ -29,7 +29,7 @@ import { formSchema, FormValues } from "./lib";
 import { AttributesList } from "./attributes-list";
 import { AttributeDetails } from "./attribute-details";
 import { Skeleton } from "@/components/ui/skeleton";
-import { revalidateDestinationAttribute } from "@/server/revalidation.server";
+import { revalidateDestination } from "@/server/revalidation.server";
 import { useTransitionStore } from "@/hooks/use-global-transition";
 
 interface LocationAttributesFormProps {
@@ -105,7 +105,7 @@ function InternalForm({
   const updateMutation = useMutation({
     mutationFn: async (data: any) => {
       await locationUpdate(data);
-      await revalidateDestinationAttribute(location);
+      await revalidateDestination(location.slug);
     },
     onSuccess: () => {
       toast.success("Location attributes updated successfully.");

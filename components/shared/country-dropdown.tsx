@@ -30,7 +30,7 @@ const CountryDropdown = () => {
       .withOptions({
         clearOnDefault: true,
         scroll: false,
-        throttleMs: 1000,
+        throttleMs: 0,
         history: "push",
       })
   );

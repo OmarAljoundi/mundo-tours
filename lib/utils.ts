@@ -1,5 +1,6 @@
 import { QueryLocationSchema } from "@/schema";
 import { clsx, type ClassValue } from "clsx";
+import { createHash } from "crypto";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -66,7 +67,7 @@ export function getDestinationNextRoute(destination: QueryLocationSchema) {
   if (destination.attributes && destination.attributes?.length >= 2) {
     const locationTabSlug =
       destination.attributes[0].title?.replaceAll(" ", "-") ?? "";
-    baseUrl += `/${locationTabSlug}`;
+    baseUrl += `?attribute=${locationTabSlug}`;
   }
 
   return baseUrl;
@@ -92,4 +93,16 @@ export function setCookie(name: string, value: string, days = 365): void {
     value
   )};expires=${expirationDate.toUTCString()};path=/`;
   document.cookie = cookieValue;
+}
+
+export function hashString(str: string): string {
+  return createHash("sha256").update(str).digest("hex").substring(0, 32);
+}
+
+export function replaceNumbersWithSpans(text: string): string {
+  const numberRegex = /\d+(\.\d+)?/g;
+
+  return text.replace(numberRegex, (match) => {
+    return `<span class="font-english text-primary">${match}</span>`;
+  });
 }

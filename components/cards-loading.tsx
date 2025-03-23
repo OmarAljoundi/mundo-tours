@@ -2,11 +2,11 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function CardsLoading() {
+export function CardsLoading({ cards = 3 }: { cards?: number }) {
   return (
     <div className="my-8 container">
       <div className="grid grid-cols-12 gap-4 lg:gap-6 px-3 xl:px-0">
-        {Array.from(new Array(3)).map((i, index) => (
+        {Array.from(new Array(cards)).map((i, index) => (
           <Skeleton className={"col-span-12 lg:col-span-4"} key={index}>
             <div className="relative rounded-2xl group">
               <div className="listing-card__img aspect-[4/3]">

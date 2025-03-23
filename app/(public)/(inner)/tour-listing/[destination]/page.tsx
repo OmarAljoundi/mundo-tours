@@ -1,6 +1,4 @@
-export const dynamicParams = true;
-
-import React from "react";
+import React, { Suspense } from "react";
 import { DestinationToursList } from "../components/destination-tours-list";
 import {
   getAttributesBySlug,
@@ -9,41 +7,35 @@ import {
 import { Metadata } from "next";
 import { seoSchema } from "@/schema/seo-schema";
 import { generatePageSeo } from "@/lib/generate-seo";
-import { db } from "@/db.server";
-
-export async function generateStaticParams() {
-  if (process.env.NEXT_PUBLIC_BUILD_DEVICE == "local") return [];
-
-  const destinations = await db.location.findMany({
-    where: { isActive: true, isOffice: false },
-    select: {
-      slug: true,
-      attributes: {
-        select: { id: true },
-      },
-    },
-  });
-
-  const destinationsFiltered = destinations.filter(
-    (o) => o.attributes.length == 1
-  );
-
-  return destinationsFiltered.map((destination) => ({
-    destination: destination.slug,
-  }));
-}
+import { CardsLoading } from "@/components/cards-loading";
+import { AttributeTabs } from "../components/attribute-tabs";
+import { unstable_cache } from "next/cache";
+import { AttributeTabsLoading } from "../components/attribute-tabs-loading";
+import { hashString } from "@/lib/utils";
+import { cookies } from "next/headers";
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ destination: string }>;
+  searchParams: Promise<{ attribute?: string }>;
 }): Promise<Metadata> {
   const { destination } = await params;
+  const { attribute } = await searchParams;
   const slug = decodeURIComponent(destination);
 
-  const url = `/tour-listing/${slug}`;
+  let url = `/tour-listing/${slug}`;
 
-  const result = await getAttributesBySlug(slug);
+  if (attribute) url += `?attribute=${attribute}`;
+
+  const getAttributesBySlugCached = unstable_cache(
+    async () => getAttributesBySlug(slug),
+    ["attributes", hashString(slug)],
+    { revalidate: 86400, tags: ["attributes", hashString(slug)] }
+  );
+
+  const result = await getAttributesBySlugCached();
   const parsedSeo = seoSchema.parse(result?.seo ?? {});
   const dictionary = generatePageSeo(
     parsedSeo,
@@ -55,17 +47,60 @@ export async function generateMetadata({
 
 export default async function DestinationPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ destination: string }>;
+  searchParams: Promise<{ attribute?: string }>;
 }) {
   const { destination } = await params;
-  const slug = decodeURIComponent(destination);
+  const { attribute } = await searchParams;
+  const localCookies = await cookies();
 
-  const data = await getToursByAttributes(slug);
+  const currency =
+    (localCookies.get("currency")?.value as "SAR" | "OMR") || "SAR";
+  const slug = decodeURIComponent(destination);
+  const attributeSlug = decodeURIComponent(attribute as string);
+
+  const getAttributesBySlugCached = unstable_cache(
+    async () => getAttributesBySlug(slug),
+    ["attributes", hashString(slug)],
+    { revalidate: 86400, tags: ["attributes", hashString(slug)] }
+  );
+
+  const getToursByAttributesCached = unstable_cache(
+    async () => getToursByAttributes(slug, attributeSlug, false, currency),
+    ["attributes-tours", hashString(slug), hashString(attributeSlug), currency],
+    {
+      revalidate: 86400,
+      tags: [
+        "attributes-tours",
+        hashString(slug),
+        hashString(attributeSlug),
+        currency,
+      ],
+    }
+  );
 
   return (
     <React.Fragment>
-      <DestinationToursList data={data} />
+      {attribute && (
+        <Suspense
+          fallback={<AttributeTabsLoading />}
+          key={destination ? hashString(destination) : "all"}
+        >
+          <AttributeTabs
+            dataPromise={getAttributesBySlugCached()}
+            attribute={attribute}
+          />
+        </Suspense>
+      )}
+
+      <Suspense
+        fallback={<CardsLoading cards={9} />}
+        key={hashString(attribute ?? destination)}
+      >
+        <DestinationToursList dataPromise={getToursByAttributesCached()} />
+      </Suspense>
     </React.Fragment>
   );
 }

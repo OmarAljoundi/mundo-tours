@@ -1,3 +1,4 @@
+import { replaceNumbersWithSpans } from "@/lib/utils";
 import { QueryTourSchema } from "@/schema";
 import { Check, Dot, X } from "lucide-react";
 import { FC } from "react";
@@ -25,7 +26,12 @@ const TourBenfits: FC<{ tour: QueryTourSchema }> = ({ tour }) => {
                         <div>
                           <Dot className="text-green-900 w-6 h-6" />
                         </div>
-                        <div className="font-primary">{i}</div>
+                        <div
+                          className="font-primary"
+                          dangerouslySetInnerHTML={{
+                            __html: replaceNumbersWithSpans(i),
+                          }}
+                        />
                       </div>
                     ))}
                   </div>
@@ -46,7 +52,12 @@ const TourBenfits: FC<{ tour: QueryTourSchema }> = ({ tour }) => {
               <div className="w-6 h-6 grid place-content-center rounded-full shrink-0 bg-red-500/80">
                 <X className="p-1 text-white" />
               </div>
-              <span className="inline-block font-primary">{description}</span>
+              <div
+                className="inline-block font-primary"
+                dangerouslySetInnerHTML={{
+                  __html: replaceNumbersWithSpans(description),
+                }}
+              />
             </div>
           </li>
         ))}

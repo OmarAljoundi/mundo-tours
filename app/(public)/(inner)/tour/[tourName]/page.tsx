@@ -6,19 +6,10 @@ import HowWorks from "../components/how-works";
 import { Metadata } from "next";
 import { generatePageSeo } from "@/lib/generate-seo";
 import { seoSchema } from "@/schema/seo-schema";
-import { db } from "@/db.server";
-
-export async function generateStaticParams() {
-  if (process.env.NEXT_PUBLIC_BUILD_DEVICE == "local") return [];
-  const tours = await db.tour.findMany({
-    select: { slug: true },
-    where: { isActive: true },
-  });
-
-  return tours.map((tour) => ({
-    tourName: tour.slug,
-  }));
-}
+import { hashString } from "@/lib/utils";
+import { unstable_cache } from "next/cache";
+import { Suspense } from "react";
+import ImLoading from "@/components/svg/ImLoading";
 
 export async function generateMetadata({
   params,
@@ -28,7 +19,16 @@ export async function generateMetadata({
   const { tourName } = await params;
   const slug = decodeURIComponent(tourName);
 
-  const tour = await getTourDetails(slug);
+  const getTourDetailsCached = unstable_cache(
+    async () => getTourDetails(slug),
+    ["tour-details", hashString(slug)],
+    {
+      revalidate: 86400,
+      tags: ["tour-details", hashString(slug)],
+    }
+  );
+
+  const tour = await getTourDetailsCached();
 
   const parsedSeo = seoSchema.parse(tour?.seo ?? {});
   const dictionary = generatePageSeo(
@@ -49,14 +49,27 @@ export default async function TourPage({
   const { tourName } = await params;
   const slug = decodeURIComponent(tourName);
 
-  const tour = await getTourDetails(slug);
+  const getTourDetailsCached = unstable_cache(
+    async () => getTourDetails(slug),
+    ["tour-details", hashString(slug)],
+    {
+      revalidate: 86400,
+      tags: ["tour-details", hashString(slug)],
+    }
+  );
 
   return (
-    <section>
-      <div className="mt-4 mb-16">
-        <TourDetails tour={tour} />
+    <section className="mt-4 mb-16">
+      <Suspense
+        fallback={
+          <div className="h-[500px]">
+            <ImLoading />
+          </div>
+        }
+      >
+        <TourDetails dataPromise={getTourDetailsCached()} />
         <HowWorks />
-      </div>
+      </Suspense>
     </section>
   );
 }

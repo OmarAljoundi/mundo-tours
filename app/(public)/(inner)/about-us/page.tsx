@@ -6,11 +6,17 @@ import { getSettingBySectionAsync } from "@/server/settings.server";
 import { Metadata } from "next";
 import { SettingSchema } from "@/schema/setting-schema";
 import { generatePageSeo } from "@/lib/generate-seo";
+import { unstable_cache } from "next/cache";
+
+const getSettingBySectionAsyncCached = unstable_cache(
+  async () => getSettingBySectionAsync("CMS"),
+  ["setting-by-section-cms"],
+  { revalidate: 86400 }
+);
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { seoStaticPagesAboutUs } = (await getSettingBySectionAsync(
-    "CMS"
-  )) as SettingSchema;
+  const { seoStaticPagesAboutUs } =
+    (await getSettingBySectionAsyncCached()) as SettingSchema;
   const dictionary = generatePageSeo(seoStaticPagesAboutUs.seo, "/");
   return dictionary;
 }

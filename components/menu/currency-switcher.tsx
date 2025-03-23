@@ -37,6 +37,7 @@ export default function CurrencySwitcher() {
     setCookie("currency", value);
     setCurrency(value);
     router.refresh();
+    location.reload();
   };
 
   return (

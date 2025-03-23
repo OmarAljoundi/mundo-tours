@@ -4,7 +4,7 @@ import TourHotels from "./tour-hotels";
 import { CalendarDays, Clock7, MapPin, Type, Barcode } from "lucide-react";
 import { TourInformation } from "./tour-information";
 import TourLinks from "./tour-links";
-import React, { useMemo } from "react";
+import React, { use, useMemo } from "react";
 import { TourPricing } from "./tour-pricing";
 import { TourStory } from "./tour-story";
 import BlurImage from "@/components/shared/blur-image";
@@ -12,14 +12,19 @@ import { useAddBreadcrumb } from "@/store/bread-crumb-store";
 import dynamic from "next/dynamic";
 import { TourPricingRenderLoading } from "./tour-pricing-render-loading";
 import { notFound } from "next/navigation";
-import { QueryTourSchema } from "@/schema";
+import { getTourDetails } from "@/server/public-query.server";
 
 const TourPriceRender = dynamic(() => import("./tour-pricing-render"), {
   loading: () => <TourPricingRenderLoading />,
   ssr: false,
 });
 
-export function TourDetails({ tour }: { tour: QueryTourSchema | undefined }) {
+export function TourDetails({
+  dataPromise,
+}: {
+  dataPromise: ReturnType<typeof getTourDetails>;
+}) {
+  const tour = use(dataPromise);
   useAddBreadcrumb({ label: tour?.name ?? "لا يوجد عنوان للرحلة", href: "#" });
 
   const prices = useMemo(

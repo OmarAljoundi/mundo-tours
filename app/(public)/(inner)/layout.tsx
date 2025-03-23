@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { InnerBreadcrumb } from "./components/inner-breadcrumb";
 
 export default async function Layout({
@@ -7,11 +6,9 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <Suspense>
-      <section>
-        <InnerBreadcrumb />
-        {children}
-      </section>
-    </Suspense>
+    <section>
+      <InnerBreadcrumb />
+      {children}
+    </section>
   );
 }

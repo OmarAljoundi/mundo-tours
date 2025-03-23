@@ -1,17 +1,19 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
 import { Tabs as TabUi, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useParams, useRouter } from "next/navigation";
-import React from "react";
-import { QueryLocationSchema } from "@/schema";
+import { useRouter } from "next/navigation";
+import React, { use } from "react";
+import { getAttributesBySlug } from "@/server/public-query.server";
 
 export function AttributeTabs({
-  destinationItem,
+  dataPromise,
+  attribute,
 }: {
-  destinationItem: QueryLocationSchema | undefined;
+  dataPromise: ReturnType<typeof getAttributesBySlug>;
+  attribute?: string;
 }) {
+  const destinationItem = use(dataPromise);
   const route = useRouter();
-  const { attribute } = useParams();
 
   if (destinationItem && destinationItem.attributes.length > 1) {
     return (
@@ -31,7 +33,7 @@ export function AttributeTabs({
             route.push(
               `/tour-listing/${decodeURIComponent(
                 destinationItem.slug as string
-              )}/${e.replaceAll(" ", "-")}`
+              )}?attribute=${e.replaceAll(" ", "-")}`
             )
           }
         >
