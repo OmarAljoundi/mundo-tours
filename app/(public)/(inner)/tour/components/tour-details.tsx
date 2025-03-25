@@ -47,84 +47,104 @@ export function TourDetails({
   } = tour;
 
   return (
-    <div>
-      <div className="bg-secondary/5 p-4">
+    <main aria-label="Tour Details Page">
+      <section className="bg-secondary/5 p-4" aria-labelledby="tour-overview">
         <div className="container">
-          <div className="flex flex-col-reverse lg:grid  lg:grid-cols-3 lg:gap-x-16 justify-center lg:justify-between  items-start ">
-            <div className="flex flex-col-reverse lg:flex-col px-3 sm:px-4 lg:px-6 py-6 col-span-2  bg-white rounded-2xl border border-neutral-40 mb-6 shadow-card w-full">
+          <div className="flex flex-col-reverse lg:grid lg:grid-cols-3 lg:gap-x-16 justify-center lg:justify-between items-start">
+            <article className="flex flex-col-reverse lg:flex-col px-3 sm:px-4 lg:px-6 py-6 col-span-2 bg-white rounded-2xl border border-neutral-40 mb-6 shadow-card w-full">
               <div className="border-t border-dashed lg:border-none">
-                <div className="flex justify-between items-center  pt-4 lg:pt-0">
-                  <h1 className="text-3xl text-center font-primary">الأسعار</h1>
-                </div>
+                <header className="flex justify-between items-center pt-4 lg:pt-0">
+                  <h2
+                    id="tour-pricing"
+                    className="text-3xl text-center font-primary"
+                  >
+                    الأسعار
+                  </h2>
+                </header>
                 <TourPriceRender tour={tour} />
               </div>
-              <div className="grid  grid-cols-1 xl:grid-cols-2 xl:gap-x-8  lg:border-t lg:border-dashed mt-4  gap-md-0 divide-y divide-dashed font-primary">
+              <dl className="grid grid-cols-1 xl:grid-cols-2 xl:gap-x-8 lg:border-t lg:border-dashed mt-4 gap-md-0 divide-y divide-dashed font-primary">
                 <div className="py-2 col-span-2">
-                  <div className="flex items-center gap-4 ">
-                    <div className="bg-primary p-2 rounded-full">
-                      <Barcode className=" text-white " />
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="bg-primary p-2 rounded-full"
+                      aria-hidden="true"
+                    >
+                      <Barcode className="text-white" />
                     </div>
-                    <div className="grid items-center ">
-                      <span className="font-primary">رمز الرحلة</span>
-                      <span className="text-primary font-english">{code}</span>
+                    <div className="grid items-center">
+                      <dt className="font-primary">رمز الرحلة</dt>
+                      <dd className="text-primary font-english">{code}</dd>
                     </div>
                   </div>
                 </div>
                 <div className="py-2 col-span-2">
-                  <div className="flex items-center gap-4 ">
-                    <div className="bg-primary p-2 rounded-full">
-                      <MapPin className=" text-white " />
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="bg-primary p-2 rounded-full"
+                      aria-hidden="true"
+                    >
+                      <MapPin className="text-white" />
                     </div>
-                    <div className="grid items-center ">
-                      <span className="font-primary">الدول</span>
-                      <span className="text-primary font-primary">
+                    <div className="grid items-center">
+                      <dt className="font-primary">الدول</dt>
+                      <dd className="text-primary font-primary">
                         {tourCountries?.map((i) => i)?.join(" - ")}
-                      </span>
+                      </dd>
                     </div>
                   </div>
                 </div>
 
                 <div className="py-2 col-span-2">
-                  <div className="flex items-center gap-4 ">
-                    <div className="bg-primary p-2 rounded-full">
-                      <Clock7 className=" text-white " />
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="bg-primary p-2 rounded-full"
+                      aria-hidden="true"
+                    >
+                      <Clock7 className="text-white" />
                     </div>
                     <div className="grid items-center w-fit">
-                      <span className="font-primary">مدة الرحلة</span>
-                      <span>
+                      <dt className="font-primary">مدة الرحلة</dt>
+                      <dd>
                         <span className="text-primary">
                           {numberOfDays}{" "}
                           <span className="font-primary">أيام</span> -{" "}
                           {(numberOfDays ?? 1) - 1}{" "}
                           <span className="font-primary">ليالي</span>
                         </span>
-                      </span>
+                      </dd>
                     </div>
                   </div>
                 </div>
 
                 <div className="py-2 col-span-2">
-                  <div className="flex items-center gap-4 ">
-                    <div className="bg-primary p-2 rounded-full">
-                      <Type className=" text-white " />
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="bg-primary p-2 rounded-full"
+                      aria-hidden="true"
+                    >
+                      <Type className="text-white" />
                     </div>
-                    <div className="grid items-center ">
-                      <span className="font-primary">نوع الرحلة </span>
-                      <span>
+                    <div className="grid items-center">
+                      <dt className="font-primary">نوع الرحلة</dt>
+                      <dd>
                         <span className="text-primary font-primary">
                           {tourType?.name}
                         </span>
-                      </span>
+                      </dd>
                     </div>
                   </div>
                 </div>
                 <div className="py-2 col-span-2">
                   <div className="flex justify-between items-end">
-                    <div className="flex items-center gap-4 ">
-                      <div className="bg-primary p-2 rounded-full">
-                        <CalendarDays className=" text-white " />
+                    <div className="flex items-center gap-4">
+                      <div
+                        className="bg-primary p-2 rounded-full"
+                        aria-hidden="true"
+                      >
+                        <CalendarDays className="text-white" />
                       </div>
-                      <div className="grid items-center ">
+                      <div className="grid items-center">
                         {prices.length > 0 ? (
                           <TourPricing
                             start_day={startDay ?? []}
@@ -133,46 +153,52 @@ export function TourDetails({
                           />
                         ) : (
                           <React.Fragment>
-                            <span className="font-primary">تاريخ الرحلة</span>
+                            <dt className="font-primary">تاريخ الرحلة</dt>
 
-                            <div className="flex justify-between items-center gap-4">
+                            <dd className="flex justify-between items-center gap-4">
                               <span className="text-primary font-primary">
                                 طوال أيام الأسبوع
                               </span>
-                            </div>
+                            </dd>
                           </React.Fragment>
                         )}
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="px-3 sm:px-4 lg:px-6 py-6 bg-white rounded-2xl border border-neutral-40 mb-6 shadow-card grid justify-items-center">
-              <h1 className="text-3xl text-center font-primary mb-5 ">
+              </dl>
+            </article>
+            <aside className="px-3 sm:px-4 lg:px-6 py-6 bg-white rounded-2xl border border-neutral-40 mb-6 shadow-card grid justify-items-center">
+              <h1
+                id="tour-overview"
+                className="text-3xl text-center font-primary mb-5"
+              >
                 {name}
               </h1>
-              <BlurImage
-                className="rounded-md"
-                src={images && images.length > 0 ? images[0] : ""}
-                alt={name}
-                priority={true}
-                loading={"eager"}
-                quality={100}
-                width={640}
-                height={427}
-              />
+              <figure>
+                <BlurImage
+                  className="rounded-md"
+                  src={images && images.length > 0 ? images[0] : ""}
+                  alt={`صورة لرحلة ${name}`}
+                  priority={true}
+                  loading={"eager"}
+                  quality={100}
+                  width={640}
+                  height={427}
+                />
+                <figcaption className="sr-only">صورة توضيحية للرحلة</figcaption>
+              </figure>
               <TourInformation info={additionalInfo} />
-            </div>
+            </aside>
           </div>
         </div>
-      </div>
-      <div className="container mt-12">
+      </section>
+      <section className="container mt-12">
         <TourStory tour={tour} />
         <TourLinks tour={tour} />
         <TourBenfits tour={tour} />
         {tourHotels && <TourHotels tour={tour} />}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

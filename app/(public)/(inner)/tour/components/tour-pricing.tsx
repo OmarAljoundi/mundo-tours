@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -35,7 +36,10 @@ export function TourPricing({
     endDate.setDate(endDate.getDate() + numberOfDays - 1);
 
     return (
-      <div className="flex flex-col gap-1 px-2 py-3 items-center">
+      <time
+        dateTime={startDate.toISOString()}
+        className="flex flex-col gap-1 px-2 py-3 items-center"
+      >
         <div className="flex gap-x-1 font-bold">
           <span className="font-english">
             {format(startDate, "d", { locale: ar })}
@@ -58,16 +62,22 @@ export function TourPricing({
             {format(endDate, "yyyy", { locale: ar })}
           </span>
         </div>
-      </div>
+      </time>
     );
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div
+      className="flex flex-col gap-2"
+      role="region"
+      aria-label="تواريخ الرحلة"
+    >
       <Button
         onClick={() => setOpen(true)}
         className="max-w-fit font-primary"
         size="sm"
+        aria-haspopup="dialog"
+        aria-expanded={open}
       >
         اضغط لعرض التواريخ
       </Button>
@@ -78,9 +88,10 @@ export function TourPricing({
             <DialogTitle className="text-center font-secondary text-5xl">
               اختار تاريخ رحلتك
             </DialogTitle>
+            <DialogDescription />
           </DialogHeader>
 
-          <div className="px-2">
+          <section className="px-2" aria-labelledby="dates-dialog-title">
             <AnimatePresence mode="wait">
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
@@ -92,10 +103,10 @@ export function TourPricing({
                 }}
                 className="overflow-hidden"
               >
-                <h1 className="text-2xl my-2 font-primary">
+                <h2 className="text-2xl my-2 font-primary" id="weekly-schedule">
                   أيام {start_day} أسبوعياً
-                </h1>
-                <Separator className="mb-3" />
+                </h2>
+                <Separator className="mb-3" role="presentation" />
 
                 {sortedPrices.length > 0 ? (
                   <motion.div
@@ -103,10 +114,12 @@ export function TourPricing({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.3, delay: 0.1 }}
+                    role="list"
+                    aria-label="قائمة تواريخ الرحلات المتاحة"
                   >
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2">
                       {sortedPrices.map((price, index) => (
-                        <motion.div
+                        <motion.article
                           key={price.uuid}
                           initial={{ opacity: 0, scale: 0.9 }}
                           animate={{ opacity: 1, scale: 1 }}
@@ -116,6 +129,12 @@ export function TourPricing({
                             "rounded-lg shadow-lg overflow-hidden",
                             index % 2 !== 0 ? "bg-primary" : "bg-light-blue"
                           )}
+                          role="listitem"
+                          aria-label={`تاريخ رحلة ${format(
+                            new Date(price.date!),
+                            "yyyy/MM/dd",
+                            { locale: ar }
+                          )}`}
                         >
                           <motion.div
                             className="h-full flex flex-col justify-between"
@@ -132,7 +151,7 @@ export function TourPricing({
                               </span>
                             </div>
                           </motion.div>
-                        </motion.div>
+                        </motion.article>
                       ))}
                     </div>
                   </motion.div>
@@ -141,7 +160,7 @@ export function TourPricing({
                 )}
               </motion.div>
             </AnimatePresence>
-          </div>
+          </section>
         </DialogContent>
       </Dialog>
     </div>
@@ -155,8 +174,10 @@ const NoTripsMessage = () => (
     exit={{ opacity: 0, y: -20 }}
     transition={{ duration: 0.5 }}
     className="flex flex-col items-center justify-center p-8 text-center"
+    role="alert"
+    aria-live="polite"
   >
-    <Calendar className="w-16 h-16 text-[#ff2b00] mb-4" />
+    <Calendar className="w-16 h-16 text-[#ff2b00] mb-4" aria-hidden="true" />
     <h3 className="text-2xl font-bold text-[#ff2b00] mb-2">
       لا توجد رحلات في هذا الشهر
     </h3>

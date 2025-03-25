@@ -20,9 +20,10 @@ import {
   QueryLocationSchema,
 } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useTransitionStore } from "@/hooks/use-global-transition";
+import { revalidateDestination } from "@/server/revalidation.server";
 
 export function SeoDialogForm({
   defaultValues,
@@ -35,22 +36,24 @@ export function SeoDialogForm({
 }) {
   const form = useForm<QueryLocationSchema>({
     resolver: zodResolver(queryLocationSchema.pick({ seo: true })),
-    defaultValues,
+    defaultValues: {
+      seo: defaultValues.seo,
+    },
   });
 
-  const route = useRouter();
+  const route = useTransitionStore();
 
   async function onSubmit(body: QueryLocationSchema) {
     const parsedBody = createLocationSchema.pick({ seo: true }).parse(body);
     await locationUpdate({
-      data: { seo: parsedBody },
-      where: { id: body.id },
+      data: { seo: parsedBody.seo },
+      where: { id: defaultValues.id },
     });
+    await revalidateDestination(defaultValues.slug!);
 
-    form.reset({});
-    route.refresh();
-    toast.success("Destination saved successfully");
+    toast.success("Destination SEO saved successfully");
     onOpenChange(false);
+    route.refresh();
   }
 
   return (

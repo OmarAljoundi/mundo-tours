@@ -53,10 +53,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     };
 
-    if (n.attributes && n.attributes.length > 0) {
+    if (n.attributes && n.attributes.length > 1) {
       const attributeEntries = n.attributes.map((m) => ({
         url: encodeXmlSpecialChars(
-          `${url}/tour-listing/${n.slug}/${m.title!.replace(/ /g, "-")}`
+          `${url}/tour-listing/${n.slug}?attribute=${m.title!.replace(
+            / /g,
+            "-"
+          )}`
         ),
         lastModified: n.createdAt,
         changeFrequency: "monthly",
