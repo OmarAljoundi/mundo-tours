@@ -10,6 +10,7 @@ import { hashString } from "@/lib/utils";
 import { unstable_cache } from "next/cache";
 import { Suspense } from "react";
 import ImLoading from "@/components/svg/ImLoading";
+import { cookies } from "next/headers";
 
 export async function generateMetadata({
   params,
@@ -17,14 +18,19 @@ export async function generateMetadata({
   params: Promise<{ tourName: string }>;
 }): Promise<Metadata> {
   const { tourName } = await params;
+  const localCookies = await cookies();
+
+  const currency =
+    (localCookies.get("currency")?.value as "SAR" | "OMR") || "SAR";
+
   const slug = decodeURIComponent(tourName);
 
   const getTourDetailsCached = unstable_cache(
-    async () => getTourDetails(slug),
-    ["tour-details", hashString(slug)],
+    async () => getTourDetails(slug, currency),
+    ["tour-details", hashString(slug), currency],
     {
       revalidate: 86400,
-      tags: ["tour-details", hashString(slug)],
+      tags: ["tour-details", hashString(slug), currency],
     }
   );
 
@@ -47,14 +53,19 @@ export default async function TourPage({
   params: Promise<{ tourName: string }>;
 }) {
   const { tourName } = await params;
+
+  const localCookies = await cookies();
+
+  const currency =
+    (localCookies.get("currency")?.value as "SAR" | "OMR") || "SAR";
   const slug = decodeURIComponent(tourName);
 
   const getTourDetailsCached = unstable_cache(
-    async () => getTourDetails(slug),
-    ["tour-details", hashString(slug)],
+    async () => getTourDetails(slug, currency),
+    ["tour-details", hashString(slug), currency],
     {
       revalidate: 86400,
-      tags: ["tour-details", hashString(slug)],
+      tags: ["tour-details", hashString(slug), currency],
     }
   );
 
