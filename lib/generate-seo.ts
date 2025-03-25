@@ -36,6 +36,10 @@ export const generatePageSeo = (
     title: title ?? "",
     description: description ?? "",
     keywords: keywords?.map((x) => x.text) ?? [],
+    alternates: {
+      canonical: url.replaceAll("www.", ""),
+    },
+    category: "Travel",
     openGraph: {
       title: title ?? "",
       description: description ?? "",
@@ -44,6 +48,13 @@ export const generatePageSeo = (
       images: ogImages,
       locale: "ar_SA",
       type: "website",
+      countryName: "Saudi Arabia",
+    },
+    twitter: {
+      card: "summary_large_image",
+      description: description ?? "",
+      images: ogImages,
+      title: title ?? "",
     },
     robots: {
       index: true,
