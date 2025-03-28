@@ -31,7 +31,11 @@ const DestinationList = ({
       <div className="container">
         <div className="grid grid-cols-12 gap-4 px-4 lg:gap-4 mt-8">
           {response.map((location) => (
-            <DestinationCard key={location.id} {...location} />
+            <DestinationCard
+              key={location.id}
+              location={location}
+              isPriority={false}
+            />
           ))}
         </div>
       </div>
@@ -39,7 +43,13 @@ const DestinationList = ({
   );
 };
 
-const DestinationCard = (location: QueryLocationSchema) => {
+const DestinationCard = ({
+  location,
+  isPriority,
+}: {
+  location: QueryLocationSchema;
+  isPriority: boolean;
+}) => {
   const controls = useAnimation();
 
   useEffect(() => {
@@ -62,15 +72,15 @@ const DestinationCard = (location: QueryLocationSchema) => {
         variants={variants}
       >
         <BlurImage
-          priority={true}
-          loading="eager"
+          priority={isPriority}
+          loading={isPriority ? "eager" : "lazy"}
           src={location.image?.url || ""}
-          alt={location.name ?? ""}
+          alt={location.image?.alt ?? location.name ?? ""}
           className=" object-cover"
           width={384}
           height={460}
           quality={80}
-          sizes="(max-width: 640px) 256px, 384px"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
         />
 
         <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-black/60 to-transparent" />

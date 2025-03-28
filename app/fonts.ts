@@ -10,6 +10,7 @@ const notoSans = Noto_Sans_Arabic({
   display: "swap",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-arabic-body",
+  preload: false,
 });
 
 const notoKufiArabic = Noto_Kufi_Arabic({
@@ -17,6 +18,7 @@ const notoKufiArabic = Noto_Kufi_Arabic({
   display: "swap",
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-arabic-header",
+  preload: false,
 });
 
 const monaSans = Mona_Sans({
@@ -24,6 +26,7 @@ const monaSans = Mona_Sans({
   display: "swap",
   weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-english",
+  preload: false,
 });
 const alfont = localFont({
   src: [
@@ -45,21 +48,25 @@ const alfont = localFont({
     },
   ],
   variable: "--font-primary",
+  preload: false,
 });
 
 const saudiRiyal = localFont({
   src: "./font/saudi_riyal.ttf",
   variable: "--font-saudi-riyal",
+  preload: false,
 });
 
 const englishFont = localFont({
   src: "./font/Montserrat-SemiBold.ttf",
   variable: "--font-english",
+  preload: false,
 });
 
 const shekari = localFont({
   src: "./font/shekari.ttf",
   variable: "--font-secondary",
+  preload: false,
 });
 
 export {
