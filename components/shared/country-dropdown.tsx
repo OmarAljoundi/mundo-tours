@@ -28,7 +28,7 @@ const CountryDropdown = () => {
     parseAsArrayOf(parseAsString)
       .withDefault(selected.map((x) => x.label) ?? [])
       .withOptions({
-        clearOnDefault: true,
+        clearOnDefault: false,
         scroll: false,
         throttleMs: 0,
         history: "push",

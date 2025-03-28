@@ -4,18 +4,17 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { use } from "react";
 import { getBestTours } from "@/server/public-query.server";
 import SectionProvider from "./section-provider";
 import TourCard from "@/components/shared/tour-card";
 
 const BestToursList = ({
-  toursPromise,
+  data,
+  currency,
 }: {
-  toursPromise: ReturnType<typeof getBestTours>;
+  data: Awaited<ReturnType<typeof getBestTours>>;
+  currency: "SAR" | "OMR";
 }) => {
-  const data = use(toursPromise);
-
   if (data?.length == 0) return null;
 
   return (
@@ -49,7 +48,7 @@ const BestToursList = ({
               {data?.map((item) => (
                 <SwiperSlide className="px-3 my-5" key={item.id}>
                   <article className="col-span-12 sm:col-span-6 xl:col-span-4 px-3 xl:px-0">
-                    <TourCard tour={item} />
+                    <TourCard tour={item} currency={currency} />
                   </article>
                 </SwiperSlide>
               ))}

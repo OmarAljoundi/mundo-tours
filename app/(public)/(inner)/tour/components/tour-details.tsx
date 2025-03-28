@@ -9,20 +9,16 @@ import { TourPricing } from "./tour-pricing";
 import { TourStory } from "./tour-story";
 import BlurImage from "@/components/shared/blur-image";
 import { useAddBreadcrumb } from "@/store/bread-crumb-store";
-import dynamic from "next/dynamic";
-import { TourPricingRenderLoading } from "./tour-pricing-render-loading";
 import { notFound } from "next/navigation";
 import { getTourDetails } from "@/server/public-query.server";
-
-const TourPriceRender = dynamic(() => import("./tour-pricing-render"), {
-  loading: () => <TourPricingRenderLoading />,
-  ssr: false,
-});
+import { TourPricingRender } from "./tour-pricing-render";
 
 export function TourDetails({
   dataPromise,
+  isOman,
 }: {
   dataPromise: ReturnType<typeof getTourDetails>;
+  isOman: boolean;
 }) {
   const tour = use(dataPromise);
   useAddBreadcrumb({ label: tour?.name ?? "لا يوجد عنوان للرحلة", href: "#" });
@@ -61,7 +57,7 @@ export function TourDetails({
                     الأسعار
                   </h2>
                 </header>
-                <TourPriceRender tour={tour} />
+                <TourPricingRender tour={tour} isOman={isOman} />
               </div>
               <dl className="grid grid-cols-1 xl:grid-cols-2 xl:gap-x-8 lg:border-t lg:border-dashed mt-4 gap-md-0 divide-y divide-dashed font-primary">
                 <div className="py-2 col-span-2">

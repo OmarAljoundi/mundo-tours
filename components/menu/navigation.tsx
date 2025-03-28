@@ -5,27 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import DesktopMenu from "./desktop-menu";
 import { PhoneAction, WhatsappAction } from "./call-to-actions";
-import { use } from "react";
 import { getDestinations, getTourTypes } from "@/server/public-query.server";
 import { useMenu } from "./use-menu";
 import { MobileMenu } from "./mobile-menu";
-import dynamic from "next/dynamic";
-import { CurrencySwitcherLoading } from "./currency-switcher-loading";
-const CurrencySwitcher = dynamic(() => import("./currency-switcher"), {
-  loading: () => <CurrencySwitcherLoading />,
-  ssr: false,
-});
+import { CurrencySwitcher } from "./currency-switcher";
 
 export function Navigation({
-  dataPromiseLocations,
-  dataPromiseTourTypes,
+  locations,
+  tourTypes,
+  currency,
 }: {
-  dataPromiseLocations: ReturnType<typeof getDestinations>;
-  dataPromiseTourTypes: ReturnType<typeof getTourTypes>;
+  locations: Awaited<ReturnType<typeof getDestinations>>;
+  tourTypes: Awaited<ReturnType<typeof getTourTypes>>;
+  currency: "SAR" | "OMR";
 }) {
-  const locations = use(dataPromiseLocations);
-  const tourTypes = use(dataPromiseTourTypes);
-
   const items = useMenu({ locations, tourTypes });
   return (
     <nav
@@ -50,7 +43,7 @@ export function Navigation({
             <DesktopMenu items={items} />
 
             <div className="flex items-center gap-1">
-              <CurrencySwitcher />
+              <CurrencySwitcher defaultCurrency={currency} />
               <PhoneAction />
               <WhatsappAction />
               <MobileMenu items={items} />

@@ -11,6 +11,8 @@ import { unstable_cache } from "next/cache";
 import { Suspense } from "react";
 import ImLoading from "@/components/svg/ImLoading";
 import { cookies } from "next/headers";
+import LoadJsonLdScript from "@/providers/load-jsonLd-script";
+import { generateTourDetailsLDJson } from "@/lib/ld-json-schema";
 
 export async function generateMetadata({
   params,
@@ -39,7 +41,7 @@ export async function generateMetadata({
   const parsedSeo = seoSchema.parse(tour?.seo ?? {});
   const dictionary = generatePageSeo(
     parsedSeo,
-    `/tour/${slug}`,
+    `/tour/${tourName}`,
     tour?.images?.map((url) => {
       return { url, alt: tour?.name };
     })
@@ -78,7 +80,11 @@ export default async function TourPage({
           </div>
         }
       >
-        <TourDetails dataPromise={getTourDetailsCached()} />
+        <LoadJsonLdScript dataPromise={generateTourDetailsLDJson({ params })} />
+        <TourDetails
+          dataPromise={getTourDetailsCached()}
+          isOman={currency == "OMR"}
+        />
         <HowWorks />
       </Suspense>
     </section>

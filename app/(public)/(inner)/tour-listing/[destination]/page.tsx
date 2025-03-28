@@ -13,6 +13,8 @@ import { unstable_cache } from "next/cache";
 import { AttributeTabsLoading } from "../components/attribute-tabs-loading";
 import { hashString } from "@/lib/utils";
 import { cookies } from "next/headers";
+import LoadJsonLdScript from "@/providers/load-jsonLd-script";
+import { generateFilteredTourListingLDJson } from "@/lib/ld-json-schema";
 
 export async function generateMetadata({
   params,
@@ -83,6 +85,14 @@ export default async function DestinationPage({
 
   return (
     <React.Fragment>
+      <Suspense>
+        <LoadJsonLdScript
+          dataPromise={generateFilteredTourListingLDJson({
+            params,
+            searchParams,
+          })}
+        />
+      </Suspense>
       {attribute && (
         <Suspense
           fallback={<AttributeTabsLoading />}
@@ -99,7 +109,10 @@ export default async function DestinationPage({
         fallback={<CardsLoading cards={9} />}
         key={hashString(attribute ?? destination)}
       >
-        <DestinationToursList dataPromise={getToursByAttributesCached()} />
+        <DestinationToursList
+          dataPromise={getToursByAttributesCached()}
+          currency={currency}
+        />
       </Suspense>
     </React.Fragment>
   );

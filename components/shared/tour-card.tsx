@@ -5,15 +5,12 @@ import BlurImage from "./blur-image";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { QueryTourSchema } from "@/schema";
-import dynamic from "next/dynamic";
-import { TourPriceLoading } from "./tour-price-loading";
+import TourPrice from "./tour-price";
 
-const TourPrice = dynamic(() => import("./tour-price"), {
-  loading: () => <TourPriceLoading />,
-  ssr: false,
-});
-
-const TourCard: React.FC<{ tour: QueryTourSchema }> = ({ tour }) => {
+const TourCard: React.FC<{
+  tour: QueryTourSchema;
+  currency: "SAR" | "OMR";
+}> = ({ tour, currency }) => {
   return (
     <div className="bg-white shadow-xl rounded-2xl p-2 ">
       <div className="rounded-2xl relative group">
@@ -65,7 +62,7 @@ const TourCard: React.FC<{ tour: QueryTourSchema }> = ({ tour }) => {
       </div>
       <div className="px-2 sm:px-5 pb-5 pt-3">
         <div className="flex flex-wrap justify-between items-center gap-5">
-          <TourPrice tour={tour} />
+          <TourPrice tour={tour} currency={currency} />
 
           <Link href={`/tour/${tour.slug}`}>
             <Button variant={"default"} size={"sm"} className="font-primary">

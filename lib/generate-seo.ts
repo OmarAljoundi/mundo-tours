@@ -37,14 +37,14 @@ export const generatePageSeo = (
     description: description ?? "",
     keywords: keywords?.map((x) => x.text) ?? [],
     alternates: {
-      canonical: url.replaceAll("www.", ""),
+      canonical: url,
     },
     category: "Travel",
     openGraph: {
       title: title ?? "",
       description: description ?? "",
       url,
-      siteName: "موندو تورز",
+      siteName: "Mundo Tours",
       images: ogImages,
       locale: "ar_SA",
       type: "website",

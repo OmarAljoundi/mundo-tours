@@ -86,7 +86,7 @@ export async function getSession(request: NextRequest) {
   });
 }
 
-export async function getBestTours() {
+export async function getBestTours(currency: "SAR" | "OMR") {
   const settings = await db.setting.findFirst({
     where: { section: "CMS" },
   });
@@ -98,6 +98,9 @@ export async function getBestTours() {
     where: {
       id: { in: settingsParsed.home.bestTours.map((o) => o.id) },
       isActive: true,
+      ...(currency === "SAR"
+        ? { OR: [{ priceSingleSa: { gt: 0 } }, { priceDoubleSa: { gt: 0 } }] }
+        : { OR: [{ priceSingle: { gt: 0 } }, { priceDouble: { gt: 0 } }] }),
     },
     include: {
       tourType: true,

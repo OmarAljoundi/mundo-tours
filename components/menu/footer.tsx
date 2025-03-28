@@ -19,7 +19,7 @@ const dammamLines = [
   "الطابق الرابع مكتب 402",
 ];
 const dammamPhone = "920031910";
-const dammamMapUrl = "https://maps.app.goo.gl/rHjqMPCcoSSbCoUh6?g_st=ic";
+const dammamMapUrl = "https://maps.app.goo.gl/rFguX6KNWyrrSLQK7";
 
 const muscatTitle = "عنوان فرع مسقط";
 const muscatLines = [
@@ -27,7 +27,7 @@ const muscatLines = [
   "بناية بيت الموسيقي",
   "الطابق الرابع مكتب 402",
 ];
-const muscatMapUrl = "https://g.co/kgs/NqucyEZ";
+const muscatMapUrl = "https://maps.app.goo.gl/HP5ty2j5WA56G3oq6";
 const muscatPhone = "79667679";
 
 const Footer = () => {

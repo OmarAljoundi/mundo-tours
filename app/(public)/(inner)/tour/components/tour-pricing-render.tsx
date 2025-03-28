@@ -1,19 +1,14 @@
-import { getCookie } from "@/lib/utils";
 import { QueryTourSchema } from "@/schema";
 import { BedDouble, BedSingle } from "lucide-react";
-import React, { useMemo } from "react";
+import React from "react";
 
-export default function TourPricingRender({ tour }: { tour: QueryTourSchema }) {
-  if (typeof window == "undefined") return;
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const isOman = useMemo(
-    () => getCookie("currency") == "OMR",
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [document?.cookie]
-  );
-
+export function TourPricingRender({
+  tour,
+  isOman,
+}: {
+  tour: QueryTourSchema;
+  isOman: boolean;
+}) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-between mt-5">
       <div className="shadow-lg p-5 border rounded-lg">

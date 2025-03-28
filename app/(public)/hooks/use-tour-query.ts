@@ -1,13 +1,17 @@
 import { TourFilters, tourSearch } from "@/server/tours.server";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-export function useTourQuery(filters: TourFilters = {}) {
+export function useTourQuery(
+  filters: TourFilters = {},
+  currency: "SAR" | "OMR"
+) {
   return useInfiniteQuery({
-    queryKey: ["tours", filters],
+    queryKey: ["tours", filters.country, filters.days, filters.type],
     queryFn: async ({ pageParam }) => {
       return tourSearch({
         cursor: pageParam,
         filters,
+        currency,
       });
     },
     getNextPageParam: (lastPage) => {

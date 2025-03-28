@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -11,11 +11,15 @@ import {
 import Image from "next/image";
 
 import { useRouter } from "next/navigation";
-import { getCookie, setCookie } from "@/lib/utils";
+import { setCookie } from "@/lib/utils";
 
-export default function CurrencySwitcher() {
+export function CurrencySwitcher({
+  defaultCurrency,
+}: {
+  defaultCurrency: "SAR" | "OMR";
+}) {
   const router = useRouter();
-  const [currency, setCurrency] = useState<string>("SAR");
+  const [currency, setCurrency] = useState<string>(defaultCurrency);
 
   const currencies: Record<string, { name: string; flag: string }> = {
     SAR: {
@@ -27,11 +31,6 @@ export default function CurrencySwitcher() {
       flag: "/images/oman.png",
     },
   };
-
-  useEffect(() => {
-    const savedCurrency = getCookie("currency") || "SAR";
-    setCurrency(savedCurrency);
-  }, []);
 
   const onValueChange = (value: string) => {
     setCookie("currency", value);

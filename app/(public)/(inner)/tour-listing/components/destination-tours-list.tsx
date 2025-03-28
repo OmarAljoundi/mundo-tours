@@ -9,8 +9,10 @@ import { Illustration, NotFound } from "@/components/not-found";
 
 export function DestinationToursList({
   dataPromise,
+  currency,
 }: {
   dataPromise: ReturnType<typeof getToursByAttributes>;
+  currency: "SAR" | "OMR";
 }) {
   const { tours, destinationName } = use(dataPromise);
 
@@ -54,7 +56,7 @@ export function DestinationToursList({
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
               >
-                <TourCard tour={tour} />
+                <TourCard tour={tour} currency={currency} />
               </motion.article>
             );
           })}

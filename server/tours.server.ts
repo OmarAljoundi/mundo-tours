@@ -3,20 +3,18 @@
 import { db } from "@/db.server";
 import { Prisma } from "@prisma/client";
 import { unstable_noStore } from "next/cache";
-import { cookies } from "next/headers";
 
 export type TourFilters = {
-  country?: string;
-  days?: string;
-  type?: string;
-  maxprice?: number;
-  isActive?: boolean;
+  country?: string | null;
+  days?: string | null;
+  type?: string | null;
 };
 
 type TourSearchParams = {
   cursor?: number;
   limit?: number;
   filters?: TourFilters;
+  currency?: "SAR" | "OMR";
 };
 
 /**
@@ -76,13 +74,10 @@ export async function tourCreate<T extends Prisma.TourCreateArgs>(
 
 export async function tourSearch({
   cursor,
-  limit = 10,
+  limit = 30,
   filters = {},
+  currency = "SAR",
 }: TourSearchParams) {
-  const localCookies = await cookies();
-  const currency =
-    (localCookies.get("currency")?.value as "SAR" | "OMR") || "SAR";
-
   const where: Prisma.TourWhereInput = {
     isActive: true,
     ...(currency === "SAR"
@@ -101,12 +96,6 @@ export async function tourSearch({
     };
   }
 
-  if (filters.maxprice) {
-    where.priceDouble = {
-      lte: filters.maxprice,
-    };
-  }
-
   if (filters.country) {
     const countries = filters.country.split(",").map((c) => c.trim());
     where.tourCountries = {
@@ -114,7 +103,6 @@ export async function tourSearch({
     };
   }
 
-  // Add days filter if provided
   if (filters.days) {
     const days = filters.days.split(",").map((d) => d.trim());
     where.startDay = {
@@ -149,7 +137,7 @@ export async function tourSearch({
       slug: true,
       startDay: true,
       tourCountries: true,
-
+      seo: true,
       tourType: {
         select: {
           id: true,
@@ -159,7 +147,9 @@ export async function tourSearch({
       },
     },
     orderBy:
-      currency === "SAR" ? { priceDoubleSa: "asc" } : { priceDouble: "asc" },
+      currency === "SAR"
+        ? [{ priceDoubleSa: "asc" }, { id: "asc" }]
+        : [{ priceDouble: "asc" }, { id: "asc" }],
   });
 
   const hasMore = tours.length > limit;

@@ -1,10 +1,9 @@
+export const experimental_ppr = true;
 import Scroll from "@/providers/scroll";
 import React, { ReactNode, Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import LoadGMScript from "@/providers/load-gm-script";
-import { Navigation } from "@/components/menu/navigation";
 import Footer from "@/components/menu/footer";
-import { getDestinations, getTourTypes } from "@/server/public-query.server";
 import { Viewport } from "next";
 import {
   alfont,
@@ -20,6 +19,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "@/providers/react-query-provider";
 import { TooltipProvider } from "@/providers/tooltip-provider";
 import { NavigationsLoading } from "@/components/menu/navigations-loading";
+import NavigationServer from "@/components/menu/navigation.server";
 
 export const viewport: Viewport = {
   themeColor: "#ff2b00",
@@ -51,10 +51,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
               <Scroll />
               <div className="flex flex-col ">
                 <Suspense fallback={<NavigationsLoading />}>
-                  <Navigation
-                    dataPromiseTourTypes={getTourTypes()}
-                    dataPromiseLocations={getDestinations()}
-                  />
+                  <NavigationServer />
                 </Suspense>
                 {children}
                 <Footer />

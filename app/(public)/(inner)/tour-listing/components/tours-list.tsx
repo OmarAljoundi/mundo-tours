@@ -10,7 +10,7 @@ import { TourFilters } from "@/server/tours.server";
 import { useTourQuery } from "../../../hooks/use-tour-query";
 import { CardsLoading } from "@/components/cards-loading";
 
-export function ToursList() {
+export function ToursList({ currency }: { currency: "SAR" | "OMR" }) {
   const searchParams = useSearchParams();
   const { ref, inView } = useInView();
 
@@ -33,7 +33,7 @@ export function ToursList() {
     isLoading,
     isError,
     error,
-  } = useTourQuery(filters);
+  } = useTourQuery(filters, currency);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -77,7 +77,8 @@ export function ToursList() {
                 <TourContent
                   ref={isLastItem ? ref : null}
                   key={tour.id}
-                  {...(tour as unknown as QueryTourSchema)}
+                  tour={tour as unknown as QueryTourSchema}
+                  currency={currency}
                 />
               );
             })}
@@ -95,32 +96,33 @@ export function ToursList() {
 }
 
 // eslint-disable-next-line react/display-name
-const TourContent = React.forwardRef<HTMLElement, QueryTourSchema>(
-  (tour, ref) => {
-    const content = ref ? (
-      <motion.article
-        className="col-span-12 sm:col-span-6 xl:col-span-4 px-3 xl:px-0"
-        key={tour.id}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.5 }}
-        ref={ref}
-      >
-        <TourCard tour={tour} />
-      </motion.article>
-    ) : (
-      <motion.article
-        className="col-span-12 sm:col-span-6 xl:col-span-4 px-3 xl:px-0"
-        key={tour.id}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.5 }}
-      >
-        <TourCard tour={tour} />
-      </motion.article>
-    );
-    return content;
-  }
-);
+const TourContent = React.forwardRef<
+  HTMLElement,
+  { tour: QueryTourSchema; currency: "SAR" | "OMR" }
+>(({ currency, tour }, ref) => {
+  const content = ref ? (
+    <motion.article
+      className="col-span-12 sm:col-span-6 xl:col-span-4 px-3 xl:px-0"
+      key={tour.id}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+      ref={ref}
+    >
+      <TourCard tour={tour} currency={currency} />
+    </motion.article>
+  ) : (
+    <motion.article
+      className="col-span-12 sm:col-span-6 xl:col-span-4 px-3 xl:px-0"
+      key={tour.id}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+    >
+      <TourCard tour={tour} currency={currency} />
+    </motion.article>
+  );
+  return content;
+});
