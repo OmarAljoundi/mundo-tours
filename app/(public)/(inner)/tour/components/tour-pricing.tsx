@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { Calendar } from "lucide-react";
@@ -27,10 +27,22 @@ export function TourPricing({
 }: TourPricingProps) {
   const [open, setOpen] = useState(false);
 
-  const sortedPrices = [...tourPrices].sort(
-    (a, b) => new Date(a.date!).getTime() - new Date(b.date!).getTime()
-  );
+  const sortedFilteredPrices = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
+    const sortedPrices = [...tourPrices]
+      .filter((price) => {
+        const tourDate = new Date(price.date!);
+        tourDate.setHours(0, 0, 0, 0);
+        return tourDate >= today;
+      })
+      .sort(
+        (a, b) => new Date(a.date!).getTime() - new Date(b.date!).getTime()
+      );
+
+    return sortedPrices;
+  }, [tourPrices]);
   const formatDateRange = (startDate: Date) => {
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + numberOfDays - 1);
@@ -108,7 +120,7 @@ export function TourPricing({
                 </h2>
                 <Separator className="mb-3" role="presentation" />
 
-                {sortedPrices.length > 0 ? (
+                {sortedFilteredPrices.length > 0 ? (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -118,7 +130,7 @@ export function TourPricing({
                     aria-label="قائمة تواريخ الرحلات المتاحة"
                   >
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2">
-                      {sortedPrices.map((price, index) => (
+                      {sortedFilteredPrices.map((price, index) => (
                         <motion.article
                           key={price.uuid}
                           initial={{ opacity: 0, scale: 0.9 }}
