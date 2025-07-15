@@ -138,8 +138,7 @@ export function TourPricing({
                           exit={{ opacity: 0, scale: 0.9 }}
                           transition={{ duration: 0.5, delay: index * 0.1 }}
                           className={cn(
-                            "rounded-lg shadow-lg overflow-hidden",
-                            index % 2 !== 0 ? "bg-primary" : "bg-light-blue"
+                            "rounded-lg shadow-lg overflow-hidden bg-light-blue"
                           )}
                           role="listitem"
                           aria-label={`تاريخ رحلة ${format(
