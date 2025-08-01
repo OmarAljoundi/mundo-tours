@@ -105,6 +105,8 @@ export const tourSchema = z.object({
   priceDouble: z.number().optional().nullable(),
   priceSingleSa: z.number().optional().nullable(),
   priceDoubleSa: z.number().optional().nullable(),
+  priceSingleJo: z.number().optional().nullable(),
+  priceDoubleJo: z.number().optional().nullable(),
   tourPrices: z
     .array(
       z.object({

@@ -6,6 +6,7 @@ export async function revalidateImTour() {
   noStore();
   try {
     fetch(process.env.IMTOUR_API!, { cache: "no-store" });
+    fetch(process.env.ADVISER_API!, { cache: "no-store" });
   } catch (ex) {
     console.log("error whilte revalidating im tour: ", ex);
     return;

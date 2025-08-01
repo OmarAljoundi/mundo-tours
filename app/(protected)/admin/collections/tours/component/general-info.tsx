@@ -252,6 +252,57 @@ export function GeneralInfo() {
                   />
                 </div>
 
+                <div className="flex justify-between gap-x-2">
+                  <FormField
+                    control={control}
+                    name="priceSingleJo"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl ltr>
+                          <CurrencyNumber
+                            formatOptions={{
+                              style: "currency",
+                              currency: "JOR",
+                              currencySign: "accounting",
+                            }}
+                            label="Single price in JOR"
+                            defaultValue={0}
+                            {...field}
+                            value={field.value ?? undefined}
+                            onChange={field.onChange}
+                            minValue={0}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={control}
+                    name="priceDoubleJo"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl ltr>
+                          <CurrencyNumber
+                            defaultValue={0}
+                            formatOptions={{
+                              style: "currency",
+                              currency: "JOR",
+                              currencySign: "accounting",
+                            }}
+                            minValue={0}
+                            label="Double price in JOR"
+                            {...field}
+                            value={field.value ?? undefined}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={control}
                   name={`slug`}

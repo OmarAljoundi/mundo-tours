@@ -105,6 +105,8 @@ model Tour {
   priceDouble       Float?         @map("price_double")
   priceSingleSa     Float?         @map("price_single_sa")
   priceDoubleSa     Float?         @map("price_double_sa")
+  priceSingleJo     Float?         @map("price_single_jo")
+  priceDoubleJo     Float?         @map("price_double_jo")
   tourPrices        Json[]         @map("tour_prices")
   tourCountries     String[]       @map("tour_countries") @default([])
   tourHotels        String[]       @map("tour_hotels") @default([])
