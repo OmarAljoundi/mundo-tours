@@ -109,7 +109,7 @@ const DestinationCard = ({
         </div>
 
         <div className="absolute bottom-2 left-2 right-4">
-          <h2 className="text-white text-lg lg:text-2xl font-bold truncate font-primary">
+          <h2 className="text-white text-sm sm:text-xl lg:text-2xl font-bold line-clamp-2 font-primary">
             {location.name}
           </h2>
         </div>

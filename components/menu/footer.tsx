@@ -28,7 +28,7 @@ const muscatLines = [
   "الطابق الرابع مكتب 402",
 ];
 const muscatMapUrl = "https://maps.app.goo.gl/HP5ty2j5WA56G3oq6";
-const muscatPhone = "79667679";
+const muscatPhone = "95929265";
 
 const Footer = () => {
   const [currentYear, setCurrentYear] = useState(0);

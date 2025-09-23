@@ -1,4 +1,6 @@
-import React, { useMemo, useState } from "react";
+"use client";
+
+import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 import { Calendar } from "lucide-react";
@@ -43,38 +45,20 @@ export function TourPricing({
 
     return sortedPrices;
   }, [tourPrices]);
-  const formatDateRange = (startDate: Date) => {
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + numberOfDays - 1);
 
+  const formatDate = (date: Date) => {
     return (
-      <time
-        dateTime={startDate.toISOString()}
-        className="flex flex-col gap-1 px-2 py-3 items-center"
-      >
-        <div className="flex gap-x-1 font-bold">
-          <span className="font-english">
-            {format(startDate, "d", { locale: ar })}
-          </span>
-          <span className="font-primary">
-            {format(startDate, "MMMM", { locale: ar })}
-          </span>
-          <span className="font-english">
-            {format(startDate, "yyyy", { locale: ar })}
-          </span>
-        </div>
-        <div className="flex gap-x-1 font-bold">
-          <span className="font-english">
-            {format(endDate, "d", { locale: ar })}
-          </span>
-          <span className="font-primary">
-            {format(endDate, "MMMM", { locale: ar })}
-          </span>
-          <span className="font-english">
-            {format(endDate, "yyyy", { locale: ar })}
-          </span>
-        </div>
-      </time>
+      <span className="flex gap-1 justify-center">
+        <span className="font-english">
+          {format(date, "dd", { locale: ar })}
+        </span>
+        <span className="font-primary">
+          {format(date, "MMMM", { locale: ar })}
+        </span>
+        <span className="font-english">
+          {format(date, "yyyy", { locale: ar })}
+        </span>
+      </span>
     );
   };
 
@@ -95,83 +79,80 @@ export function TourPricing({
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[90vw] md:max-w-[85vw] lg:max-w-4xl">
-          <DialogHeader>
+        <DialogContent className="sm:max-w-[90vw] md:max-w-[85vw] lg:max-w-4xl flex flex-col max-h-[80vh]">
+          <DialogHeader className="bg-background pb-4 flex-shrink-0">
             <DialogTitle className="text-center font-secondary text-5xl">
               اختار تاريخ رحلتك
             </DialogTitle>
             <DialogDescription />
           </DialogHeader>
 
-          <section className="px-2" aria-labelledby="dates-dialog-title">
-            <AnimatePresence mode="wait">
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{
-                  opacity: { duration: 0.3 },
-                  height: { duration: 0.4, ease: "easeInOut" },
-                }}
-                className="overflow-hidden"
-              >
-                <h2 className="text-2xl my-2 font-primary" id="weekly-schedule">
-                  أيام {start_day} أسبوعياً
-                </h2>
-                <Separator className="mb-3" role="presentation" />
+          <div className="flex-1 overflow-y-auto px-2">
+            <section aria-labelledby="dates-dialog-title">
+              {sortedFilteredPrices.length > 0 ? (
+                <div role="table" aria-label="قائمة تواريخ الرحلات المتاحة">
+                  <div className="sticky top-0 z-10 bg-background pt-2">
+                    <h2
+                      className="text-2xl font-primary"
+                      id="weekly-schedule"
+                      dir="rtl"
+                    >
+                      أيام {start_day} أسبوعياً
+                    </h2>
+                    <Separator className="my-3" role="presentation" />
+                    <div className="grid grid-cols-2 bg-gray-100 border-b border-gray-300">
+                      <div className="p-3 text-center font-bold text-gray-700 font-primary">
+                        بداية الرحلة
+                      </div>
+                      <div className="p-3 text-center font-bold text-gray-700 font-primary">
+                        نهاية الرحلة
+                      </div>
+                    </div>
+                  </div>
 
-                {sortedFilteredPrices.length > 0 ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                    role="list"
-                    aria-label="قائمة تواريخ الرحلات المتاحة"
-                  >
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2">
-                      {sortedFilteredPrices.map((price, index) => (
-                        <motion.article
+                  <AnimatePresence>
+                    {sortedFilteredPrices.map((price, index) => {
+                      const startDate = new Date(price.date!);
+                      const endDate = new Date(startDate);
+                      endDate.setDate(endDate.getDate() + numberOfDays - 1);
+
+                      return (
+                        <motion.div
                           key={price.uuid}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{
+                            duration: 0.5,
+                            delay: index * 0.05,
+                          }}
                           className={cn(
-                            "rounded-lg shadow-lg overflow-hidden bg-light-blue"
+                            "grid grid-cols-2 border-b border-gray-200",
+                            index % 2 === 0 ? "bg-gray-50" : "bg-white"
                           )}
-                          role="listitem"
+                          role="row"
                           aria-label={`تاريخ رحلة ${format(
-                            new Date(price.date!),
+                            startDate,
                             "yyyy/MM/dd",
                             { locale: ar }
                           )}`}
                         >
-                          <motion.div
-                            className="h-full flex flex-col justify-between"
-                            initial={{ y: 20 }}
-                            animate={{ y: 0 }}
-                            transition={{
-                              duration: 0.3,
-                              delay: index * 0.1 + 0.2,
-                            }}
-                          >
-                            <div className="flex flex-col items-end space-y-2 rtl">
-                              <span className="text-white text-right font-primary text-[13px] lg:text-sm w-full">
-                                {formatDateRange(new Date(price.date!))}
-                              </span>
-                            </div>
-                          </motion.div>
-                        </motion.article>
-                      ))}
-                    </div>
-                  </motion.div>
-                ) : (
-                  <NoTripsMessage />
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </section>
+                          <div className="p-3 text-center text-gray-800">
+                            {formatDate(startDate)}
+                          </div>
+                          <div className="p-3 text-center text-gray-800">
+                            {formatDate(endDate)}
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <NoTripsMessage />
+              )}
+            </section>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

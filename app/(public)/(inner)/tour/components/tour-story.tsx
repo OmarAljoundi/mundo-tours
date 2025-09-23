@@ -5,7 +5,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { DAYS } from "@/lib/constants";
 import { QueryTourSchema } from "@/schema";
 
 function getArabicDayLabel(dayNumber: number): string {
@@ -111,11 +110,9 @@ export function TourStory({ tour }: { tour: QueryTourSchema }) {
         </time>
       );
     } else {
-      const startIndex = DAYS.indexOf(currentDay);
-      const dayName = DAYS[(startIndex + index) % 7];
       return (
         <time className="text-sm font-primary" dateTime={`P${index + 1}D`}>
-          {`${getArabicDayLabel(index + 1)}: يوم ${dayName}`}
+          {`${getArabicDayLabel(index + 1)}`}
         </time>
       );
     }

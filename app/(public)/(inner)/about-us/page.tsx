@@ -1,6 +1,4 @@
 import AboutMundo from "./components/about-mundo";
-import Slogan from "./components/slogan";
-import Goal from "./components/goal";
 import WhyMundo from "./components/why-mundo";
 import { getSettingBySectionAsync } from "@/server/settings.server";
 import { Metadata } from "next";
@@ -10,6 +8,7 @@ import { unstable_cache } from "next/cache";
 import { Suspense } from "react";
 import LoadJsonLdScript from "@/providers/load-jsonLd-script";
 import { generateAboutUsLDJson } from "@/lib/ld-json-schema";
+import ServicesSection from "./components/service-section";
 
 const getSettingBySectionAsyncCached = unstable_cache(
   async () => getSettingBySectionAsync("CMS"),
@@ -31,8 +30,7 @@ export default async function Page() {
         <LoadJsonLdScript dataPromise={generateAboutUsLDJson()} />
       </Suspense>
       <AboutMundo />
-      <Slogan />
-      <Goal />
+      <ServicesSection />
       <WhyMundo />
     </main>
   );

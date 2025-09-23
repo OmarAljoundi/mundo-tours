@@ -1,19 +1,6 @@
-import { getDestinationNextRoute } from "@/lib/utils";
 import { QueryLocationSchema, QueryTourTypeSchema } from "@/schema";
 import { useMemo } from "react";
 import { MenuItem } from "./lib";
-
-const getDestinationSubMenus = (data: QueryLocationSchema[]) => {
-  return data
-    .filter((x) => x.showOnEurope)
-    .map((z) => {
-      const url = getDestinationNextRoute(z);
-      return {
-        name: z.name!,
-        url,
-      };
-    });
-};
 
 const getTypesSubMenus = (data: QueryTourTypeSchema[]) => {
   return data
@@ -26,32 +13,14 @@ const getTypesSubMenus = (data: QueryTourTypeSchema[]) => {
     });
 };
 
-const getDestinationSubMenusForTourism = (data: QueryLocationSchema[]) => {
-  return data
-    .filter((x) => x.showOnService)
-    .map((z) => {
-      return {
-        name: z.name!,
-        url: `/tour-listing/${z.slug}`,
-      };
-    });
-};
-
 export function useMenu({
-  locations,
   tourTypes,
 }: {
   locations: QueryLocationSchema[];
   tourTypes: QueryTourTypeSchema[];
 }) {
   const items = useMemo(() => {
-    const europMenu = [
-      ...getDestinationSubMenus(locations ?? []),
-      ...getTypesSubMenus(tourTypes ?? []),
-    ];
-    const travelServices = [
-      ...getDestinationSubMenusForTourism(locations ?? []),
-    ];
+    const europMenu = [...getTypesSubMenus(tourTypes ?? [])];
 
     return [
       {
@@ -59,26 +28,15 @@ export function useMenu({
         url: "/",
       },
       {
-        name: "سافر أوروبا",
+        name: "انت اختار",
         subMenu: europMenu,
       },
       {
-        name: "خدماتنا السياحية",
-        subMenu: travelServices,
-      },
-      {
-        name: "عن موندو",
-        subMenu: [
-          { name: "من نحن", url: "/about-us" },
-          {
-            name: "آراء العملاء",
-            url: "https://www.instagram.com/p/B2Gr4omDs0y/",
-            external: true,
-          },
-        ],
+        name: "من نحن",
+        url: "/about-us",
       },
     ];
-  }, [locations, tourTypes]);
+  }, [tourTypes]);
 
   return items as MenuItem[];
 }

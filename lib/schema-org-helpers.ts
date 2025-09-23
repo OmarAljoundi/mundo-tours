@@ -40,7 +40,7 @@ export const getOrganizationSchema = unstable_cache(
             addressLocality: "Muscat",
             addressCountry: "OM",
           } as PostalAddress,
-          telephone: "+96879667679",
+          telephone: "+96895929265",
           hasMap: "https://maps.app.goo.gl/HP5ty2j5WA56G3oq6",
           geo: {
             "@type": "GeoCoordinates",

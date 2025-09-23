@@ -16,7 +16,7 @@ export default function WhyMondo() {
   }, [isInView]);
 
   return (
-    <Section className="bg-primary/10 text-primary-foreground">
+    <Section className="bg-muted/50 text-primary-foreground">
       <motion.h2
         className="text-3xl font-bold mb-8 text-center text-primary animate-pulse-scale font-primary"
         initial={{ opacity: 0, y: 20 }}
@@ -24,13 +24,13 @@ export default function WhyMondo() {
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        {content.whyMundo.title}
+        {content.advantages.title}
       </motion.h2>
       <div
         ref={ref}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in-up font-primary"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in-up font-primary "
       >
-        {content.whyMundo.features.map((feature, index) => (
+        {content.advantages.features.map((feature, index) => (
           <FeatureCard
             key={index}
             icon={<feature.icon className="w-8 h-8 animate-float" />}

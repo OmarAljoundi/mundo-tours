@@ -15,8 +15,8 @@ const offices = [
   },
   {
     title: "سلطنة عمان",
-    link: "https://api.whatsapp.com/send/?phone=%2B96895929251&text&type=phone_number&app_absent=0",
-    phoneNumber: "79667679",
+    link: "https://api.whatsapp.com/send/?phone=%2B96895929253&text&type=phone_number&app_absent=0",
+    phoneNumber: "95929265",
   },
 ];
 
