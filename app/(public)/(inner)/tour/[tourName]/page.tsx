@@ -2,7 +2,6 @@ export const dynamicParams = true;
 
 import { TourDetails } from "../components/tour-details";
 import { getTourDetails } from "@/server/public-query.server";
-import HowWorks from "../components/how-works";
 import { Metadata } from "next";
 import { generatePageSeo } from "@/lib/generate-seo";
 import { seoSchema } from "@/schema/seo-schema";
@@ -53,9 +52,9 @@ export default async function TourPage({
   params,
 }: {
   params: Promise<{ tourName: string }>;
+  searchParams: Promise<{ from?: string }>;
 }) {
   const { tourName } = await params;
-
   const localCookies = await cookies();
 
   const currency =
@@ -85,7 +84,6 @@ export default async function TourPage({
           dataPromise={getTourDetailsCached()}
           isOman={currency == "OMR"}
         />
-        <HowWorks />
       </Suspense>
     </section>
   );

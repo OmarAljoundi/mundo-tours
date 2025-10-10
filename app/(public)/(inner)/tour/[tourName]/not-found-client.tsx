@@ -1,7 +1,7 @@
+"use client";
 import { Illustration, NotFound } from "@/components/not-found";
-import React from "react";
 
-export default function NotFoundPage() {
+export function NotFoundClient() {
   return (
     <div className="relative flex flex-col w-full justify-center  bg-background p-6 md:p-10">
       <div className="relative max-w-5xl mx-auto w-full">
