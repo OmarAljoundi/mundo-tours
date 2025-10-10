@@ -21,10 +21,7 @@ export function Navigation({
 }) {
   const items = useMenu({ locations, tourTypes });
   return (
-    <nav
-      className="z-40 w-full h-auto  data-[menu-open=true]:border-none border-border border-b sticky top-0 inset-x-0 backdrop-blur-lg
-         data-[menu-open=true]:backdrop-blur-xl backdrop-saturate-150 bg-background/70"
-    >
+    <nav className="z-40 w-full h-auto  data-[menu-open=true]:border-none border-border border-b sticky top-0 inset-x-0 backdrop-blur-lg data-[menu-open=true]:backdrop-blur-xl backdrop-saturate-150 bg-background/70">
       <header className={cn("bg-white py-2")}>
         <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-1 lg:gap-8 px-2 sm:px-6 lg:px-8">
           <Link className="block text-teal-600 w-[80px] lg:w-[100px]" href="/">

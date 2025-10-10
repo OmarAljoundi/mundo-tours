@@ -15,6 +15,7 @@ import { hashString } from "@/lib/utils";
 import { cookies } from "next/headers";
 import LoadJsonLdScript from "@/providers/load-jsonLd-script";
 import { generateFilteredTourListingLDJson } from "@/lib/ld-json-schema";
+import { FromCountryAirport } from "../components/from-country-airport";
 
 export async function generateMetadata({
   params,
@@ -52,10 +53,10 @@ export default async function DestinationPage({
   searchParams,
 }: {
   params: Promise<{ destination: string }>;
-  searchParams: Promise<{ attribute?: string }>;
+  searchParams: Promise<{ attribute?: string; from?: string }>;
 }) {
   const { destination } = await params;
-  const { attribute } = await searchParams;
+  const { attribute, from } = await searchParams;
   const localCookies = await cookies();
 
   const currency =
@@ -83,6 +84,9 @@ export default async function DestinationPage({
     }
   );
 
+  const isTourWithAir = slug == "عروض-تشمل-الطيران";
+  const showContent = (isTourWithAir && from) || !isTourWithAir;
+
   return (
     <React.Fragment>
       <Suspense>
@@ -93,27 +97,33 @@ export default async function DestinationPage({
           })}
         />
       </Suspense>
-      {attribute && (
+
+      <FromCountryAirport slug={slug} />
+      {showContent && attribute && (
         <Suspense
           fallback={<AttributeTabsLoading />}
           key={destination ? hashString(destination) : "all"}
         >
           <AttributeTabs
+            slug={slug}
             dataPromise={getAttributesBySlugCached()}
             attribute={attribute}
           />
         </Suspense>
       )}
 
-      <Suspense
-        fallback={<CardsLoading cards={9} />}
-        key={hashString(attribute ?? destination)}
-      >
-        <DestinationToursList
-          dataPromise={getToursByAttributesCached()}
-          currency={currency}
-        />
-      </Suspense>
+      {showContent && (
+        <Suspense
+          fallback={<CardsLoading cards={9} />}
+          key={hashString(attribute ?? destination)}
+        >
+          <DestinationToursList
+            dataPromise={getToursByAttributesCached()}
+            currency={currency}
+            slug={slug}
+          />
+        </Suspense>
+      )}
     </React.Fragment>
   );
 }

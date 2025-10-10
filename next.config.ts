@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
+  reactCompiler: true,
+  turbopack: {
+    root: path.join(__dirname, ".."),
+  },
+
   images: {
     remotePatterns: [
       {
@@ -15,6 +21,7 @@ const nextConfig: NextConfig = {
     ],
     deviceSizes: [256, 384, 750, 1080, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128],
+    qualities: [25, 50, 70, 80, 100],
 
     dangerouslyAllowSVG: true,
   },
@@ -22,12 +29,12 @@ const nextConfig: NextConfig = {
     fetches: { fullUrl: true, hmrRefreshes: true },
     incomingRequests: true,
   },
+
   experimental: {
+    turbopackFileSystemCacheForDev: true,
     serverActions: {
       bodySizeLimit: "10mb",
     },
-    ppr: "incremental",
-    nodeMiddleware: true,
   },
 };
 

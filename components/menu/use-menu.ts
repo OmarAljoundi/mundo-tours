@@ -35,6 +35,10 @@ export function useMenu({
         name: "من نحن",
         url: "/about-us",
       },
+      {
+        name: "اتصل بنا",
+        url: "/call-us",
+      },
     ];
   }, [tourTypes]);
 

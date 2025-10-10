@@ -1,9 +1,9 @@
-import { Home, Info, Map, LucideIcon } from "lucide-react";
+import { Home, Info, Map, Phone, LucideIcon } from "lucide-react";
 import { IconType } from "react-icons/lib";
 import { SettingSchema } from "@/schema/setting-schema";
 
 export const seoMenuItems: Record<
-  "HomeSeo" | "AboutUs" | "AllTours",
+  "HomeSeo" | "AboutUs" | "AllTours" | "ContactUs",
   {
     icon: LucideIcon | IconType;
     value: string;
@@ -37,5 +37,14 @@ export const seoMenuItems: Record<
     title: "Tours Listing SEO Configuration",
     description:
       "Maximize the discoverability of your tour offerings with optimized metadata that highlights your unique experiences and attracts targeted traffic.",
+  },
+
+  ContactUs: {
+    icon: Phone,
+    value: "Contact Us SEO",
+    schemaKey: "seoStaticPagesContactUs",
+    title: "Contact Us Page SEO Configuration",
+    description:
+      "Improve your contact page’s visibility so customers can easily find ways to reach you, boosting engagement and conversions through well-optimized meta data.",
   },
 };

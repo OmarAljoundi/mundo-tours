@@ -4,18 +4,25 @@ import { Tabs as TabUi, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "next/navigation";
 import React, { use } from "react";
 import { getAttributesBySlug } from "@/server/public-query.server";
+import { useQueryState } from "nuqs";
 
 export function AttributeTabs({
   dataPromise,
   attribute,
+  slug,
 }: {
   dataPromise: ReturnType<typeof getAttributesBySlug>;
   attribute?: string;
+  slug: string;
 }) {
   const destinationItem = use(dataPromise);
   const route = useRouter();
+  const [from] = useQueryState("from");
 
-  if (destinationItem && destinationItem.attributes.length > 1) {
+  const isTourWithAir = slug == "عروض-تشمل-الطيران";
+  const showContent = (isTourWithAir && from) || !isTourWithAir;
+
+  if (destinationItem && destinationItem.attributes.length > 1 && showContent) {
     return (
       <React.Fragment>
         <Separator className="my-2" />
@@ -33,7 +40,7 @@ export function AttributeTabs({
             route.push(
               `/tour-listing/${decodeURIComponent(
                 destinationItem.slug as string
-              )}?attribute=${e.replaceAll(" ", "-")}`
+              )}?attribute=${e.replaceAll(" ", "-")}&from=${from}`
             )
           }
         >

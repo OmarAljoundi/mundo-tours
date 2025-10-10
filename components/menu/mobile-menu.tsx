@@ -25,7 +25,7 @@ export function MobileMenu({ items }: { items: MenuItem[] }) {
       <div className="border-b" key={`${item.name}-${item.url}`}>
         <Link
           onClick={() => setOpen(false)}
-          href="/"
+          href={item.url ?? "/"}
           target={item.external ? "_blank" : "_self"}
           className=" hover:text-gray-300 text-base font-primary flex flex-1 items-center justify-between py-2  font-medium transition-all hover:underline"
         >

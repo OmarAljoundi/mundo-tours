@@ -28,7 +28,16 @@ const muscatLines = [
   "الطابق الرابع مكتب 402",
 ];
 const muscatMapUrl = "https://maps.app.goo.gl/HP5ty2j5WA56G3oq6";
-const muscatPhone = "95929265";
+const muscatPhone = "95929267";
+
+const jeddahTitle = "عنوان فرع جدة";
+const jeddahLines = [
+  "حي السلامة - شارع صاري",
+  "برج مريم",
+  "الطابق الثالث مكتب 6",
+];
+const jeddahMapUrl = "https://maps.app.goo.gl/y4zmnHuAQCENFYS69";
+const jeddahPhone = "920031910";
 
 const Footer = () => {
   const [currentYear, setCurrentYear] = useState(0);
@@ -45,7 +54,7 @@ const Footer = () => {
       className="bg-gray-100 pt-8 pb-6 font-primary"
     >
       <div className="mx-auto flex container flex-col gap-8 px-4 sm:px-6 md:flex-row lg:px-8 ">
-        <div className="w-full md:w-1/2 flex flex-col items-start">
+        <div className="w-full md:w-1/3 flex flex-col items-start">
           <motion.div
             className="mb-4"
             whileHover={{ scale: 1.02 }}
@@ -66,7 +75,13 @@ const Footer = () => {
           </p>
         </div>
 
-        <div className="flex w-full flex-col  gap-6 md:w-1/2 lg:flex-row">
+        <div className="flex w-full flex-col  gap-6 md:w-2/3 lg:flex-row">
+          <LocationCard
+            address={jeddahLines}
+            name={jeddahTitle}
+            phone={jeddahPhone}
+            url={jeddahMapUrl}
+          />
           <LocationCard
             address={dammamLines}
             name={dammamTitle}

@@ -1,4 +1,3 @@
-export const experimental_ppr = true;
 import React, { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Hero from "./components/hero";

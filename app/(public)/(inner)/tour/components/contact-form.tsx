@@ -230,13 +230,6 @@ export function ContactForm({ tourId }: { tourId: number }) {
             </Button>
           </form>
         </Form>
-        <span className="font-primary">
-          {" "}
-          او يمكنكم التواصل مباشره على هذا الرقم{" "}
-          <a className="bold underline font-english" href="tel:95929210">
-            95929210
-          </a>{" "}
-        </span>
       </DialogContent>
     </Dialog>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -10,15 +10,14 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 
-import { useRouter } from "next/navigation";
-import { setCookie } from "@/lib/utils";
+import { useQueryState } from "nuqs";
 
 export function CurrencySwitcher({
   defaultCurrency,
 }: {
   defaultCurrency: "SAR" | "OMR";
 }) {
-  const router = useRouter();
+  const [from, setFrom] = useQueryState("from", { shallow: false });
   const [currency, setCurrency] = useState<string>(defaultCurrency);
 
   const currencies: Record<string, { name: string; flag: string }> = {
@@ -33,11 +32,13 @@ export function CurrencySwitcher({
   };
 
   const onValueChange = (value: string) => {
-    setCookie("currency", value);
+    setFrom(value);
     setCurrency(value);
-    router.refresh();
-    location.reload();
   };
+
+  useEffect(() => {
+    if (from) setCurrency(from);
+  }, [from]);
 
   return (
     <Select value={currency} onValueChange={onValueChange}>

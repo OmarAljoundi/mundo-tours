@@ -45,6 +45,9 @@ export function BaseSettingForm({
       seoStaticPagesAllTours: defaultValues?.seoStaticPagesAllTours ?? {
         seo: { metaDescription: "", metaKeywords: [], metaTitle: "" },
       },
+      seoStaticPagesContactUs: defaultValues?.seoStaticPagesContactUs ?? {
+        seo: { metaDescription: "", metaKeywords: [], metaTitle: "" },
+      },
     },
   });
 

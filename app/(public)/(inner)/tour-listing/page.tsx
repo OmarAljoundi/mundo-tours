@@ -1,5 +1,3 @@
-export const experimental_ppr = true;
-
 import Filter from "@/components/shared/filter";
 import { Suspense } from "react";
 import React from "react";

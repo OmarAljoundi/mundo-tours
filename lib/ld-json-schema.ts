@@ -11,6 +11,7 @@ import type {
   Place,
   Duration,
   AboutPage,
+  ContactPage,
   CollectionPage,
 } from "schema-dts";
 import {
@@ -450,6 +451,59 @@ export async function generateFilteredTourListingLDJson({
   };
 
   const finalGraph = [...baseGraph, collectionPage];
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": finalGraph,
+  });
+}
+
+export async function generateContactUsLDJson(): Promise<string> {
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_APP_URL || "https://www.mundo-tours.com";
+  const ABOUT_US_PATH = "/call-us";
+  const aboutUsUrl = `${BASE_URL}${ABOUT_US_PATH}`;
+
+  const getCallUsSettingsCached = unstable_cache(
+    async () => getSettingBySectionAsync("CMS"),
+    ["settings-cms-call-us"],
+    { revalidate: 86400 }
+  );
+  const settings = (await getCallUsSettingsCached()) as SettingSchema | null;
+
+  const contactUsTitle = settings?.seoStaticPagesContactUs?.seo?.title ?? "";
+  const contactUsDescription =
+    settings?.seoStaticPagesContactUs?.seo?.description ?? "";
+
+  const baseGraph = await getBaseSchemaGraph();
+
+  const organization = baseGraph.find(
+    (item): item is TravelAgency => (item as any)["@type"] === "TravelAgency"
+  );
+  const website = baseGraph.find(
+    (item): item is WebSite => (item as any)["@type"] === "WebSite"
+  );
+
+  if (!organization || !website) {
+    console.error(
+      "Base Organization or WebSite schema not found for About Us page."
+    );
+    return JSON.stringify({ "@context": "https://schema.org" });
+  }
+
+  const contactPage: ContactPage = {
+    "@type": "ContactPage",
+    "@id": aboutUsUrl,
+    url: aboutUsUrl,
+    name: contactUsTitle,
+    description: contactUsDescription,
+    isPartOf: website["@id"],
+    publisher: (organization as any)["@id"],
+    inLanguage: website.inLanguage || ["ar"],
+    mainEntity: (organization as any)["@id"],
+  };
+
+  const finalGraph = [...baseGraph, contactPage];
 
   return JSON.stringify({
     "@context": "https://schema.org",

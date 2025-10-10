@@ -44,6 +44,7 @@ export const settingSchema = z.object({
 
   seoStaticPagesHome: z.object({ seo: seoSchema }),
   seoStaticPagesAboutUs: z.object({ seo: seoSchema }),
+  seoStaticPagesContactUs: z.object({ seo: seoSchema }),
   seoStaticPagesAllTours: z.object({ seo: seoSchema }),
 });
 

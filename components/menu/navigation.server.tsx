@@ -1,6 +1,5 @@
 import { getDestinations, getTourTypes } from "@/server/public-query.server";
 import { unstable_cache } from "next/cache";
-import React from "react";
 import { Navigation } from "./navigation";
 import { cookies } from "next/headers";
 

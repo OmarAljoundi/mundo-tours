@@ -1,4 +1,3 @@
-export const experimental_ppr = true;
 import Scroll from "@/providers/scroll";
 import React, { ReactNode, Suspense } from "react";
 import { Analytics } from "@vercel/analytics/react";

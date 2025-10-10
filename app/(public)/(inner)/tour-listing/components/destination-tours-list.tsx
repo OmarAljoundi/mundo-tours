@@ -5,34 +5,40 @@ import TourCard from "@/components/shared/tour-card";
 import { useAddBreadcrumb } from "@/store/bread-crumb-store";
 import { useParams } from "next/navigation";
 import { getToursByAttributes } from "@/server/public-query.server";
-import { Illustration, NotFound } from "@/components/not-found";
+import { useQueryState } from "nuqs";
+import { NoTours } from "@/components/no-tours";
 
 export function DestinationToursList({
   dataPromise,
   currency,
+  slug,
 }: {
   dataPromise: ReturnType<typeof getToursByAttributes>;
   currency: "SAR" | "OMR";
+  slug: string;
 }) {
   const { tours, destinationName } = use(dataPromise);
+  const [from] = useQueryState("from");
 
   const { destination } = useParams();
+
+  const isTourWithAir = slug == "عروض-تشمل-الطيران";
+  const showContent = (isTourWithAir && from) || !isTourWithAir;
 
   useAddBreadcrumb({
     href: `/tour-listing/${destination}`,
     label: destinationName ?? "",
   });
 
+  if (!showContent) return null;
+
   if (tours.length == 0)
     return (
-      <div className="relative flex flex-col w-full justify-center  bg-background p-6 md:p-10">
-        <div className="relative max-w-5xl mx-auto w-full">
-          <Illustration className="absolute inset-0 w-full h-[50vh] opacity-[0.04]  text-foreground" />
-          <NotFound
-            title="الصفحة غير موجودة"
-            description="نأسف، لم نتمكن من العثور على الوجهة السياحية التي تبحث عنها. يمكنك استكشاف وجهاتنا السياحية الأخرى من الصفحة الرئيسية."
-          />
-        </div>
+      <div className="relative flex flex-col w-full bg-background p-6 md:p-10">
+        <NoTours
+          title="لا توجد جولات متاحة حالياً"
+          description="نعمل على إضافة جولات سياحية جديدة ومثيرة. يرجى العودة قريباً لاستكشاف وجهات سياحية رائعة."
+        />
       </div>
     );
 
