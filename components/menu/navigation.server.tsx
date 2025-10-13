@@ -21,12 +21,13 @@ export default async function NavigationServer() {
 
   const localCookies = await cookies();
 
-  const currency =
-    (localCookies.get("currency")?.value as "SAR" | "OMR") || "SAR";
+  const currency = localCookies.get("currency")?.value as "SAR" | "OMR";
 
   return (
     <Navigation
-      currency={currency}
+      currency={
+        currency && (currency == "SAR" || currency == "OMR") ? currency : "SAR"
+      }
       locations={locations}
       tourTypes={tourTypes}
     />

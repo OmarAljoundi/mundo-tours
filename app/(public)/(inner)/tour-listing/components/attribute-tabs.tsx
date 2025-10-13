@@ -36,13 +36,16 @@ export function AttributeTabs({
             " "
           )}
           className="w-full mb-8 "
-          onValueChange={(e) =>
-            route.push(
-              `/tour-listing/${decodeURIComponent(
-                destinationItem.slug as string
-              )}?attribute=${e.replaceAll(" ", "-")}&from=${from}`
-            )
-          }
+          onValueChange={(e) => {
+            const baseUrl = `/tour-listing/${decodeURIComponent(
+              destinationItem.slug as string
+            )}?attribute=${e.replaceAll(" ", "-")}`;
+
+            const fromQuery =
+              from && (from === "OMR" || from === "SAR") ? `&from=${from}` : "";
+
+            route.push(`${baseUrl}${fromQuery}`);
+          }}
         >
           <TabsList
             className="w-full shadow-xl bg-white gap-4 grid grid-cols-2 lg:grid-cols-4 h-full "

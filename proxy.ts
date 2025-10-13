@@ -24,11 +24,20 @@ export function proxy(request: NextRequest) {
 
   const currancyFromSearch = request.nextUrl.searchParams.get("from");
 
-  if (currancyFromSearch) return setCookies(currancyFromSearch, response);
+  if (
+    currancyFromSearch &&
+    (currancyFromSearch == "SAR" || currancyFromSearch == "OMR")
+  ) {
+    return setCookies(currancyFromSearch, response);
+  }
 
   const currentCurrancy = request.cookies.get("currency");
 
-  if (currentCurrancy) return response;
+  if (
+    currentCurrancy &&
+    (currentCurrancy.value == "SAR" || currentCurrancy.value == "OMR")
+  )
+    return response;
 
   const { country } = geolocation(request);
   const userCountry = country ?? "SA";

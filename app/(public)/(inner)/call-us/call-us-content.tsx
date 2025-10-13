@@ -24,8 +24,8 @@ const branches: Branch[] = [
     nameAr: "فرع مسقط",
     address:
       "العذيبة - شارع 18 نوفمبر - مبنى بيت الموسيقى رقم 393 - الطابق الرابع مكتب 402",
-    phone: "95929276",
-    whatsapp: "95929276",
+    phone: "95929267",
+    whatsapp: "95929267",
     copyUrl: "https://maps.app.goo.gl/jGNWfapL7z517jGMA",
     mapUrl:
       "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d593.8893791326115!2d39.1754!3d21.5093!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e8e01dc526316a5%3A0xe8acf9b4eea6c8ce!2zTXVuZG8gVG91cnMg2YXZiNmG2K_ZiCDZhNmE2LPZitin2K3YqQ!5e1!3m2!1sen!2sjo!4v1760117992535!5m2!1sen!2sjo",

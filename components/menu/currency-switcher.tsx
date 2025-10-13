@@ -37,7 +37,7 @@ export function CurrencySwitcher({
   };
 
   useEffect(() => {
-    if (from) setCurrency(from);
+    if (from && (from == "SAR" || from == "OMR")) setCurrency(from);
   }, [from]);
 
   return (
