@@ -3,8 +3,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Button } from "../ui/button";
-import { IoDocumentsSharp } from "react-icons/io5";
+import { IoDocumentsSharp, IoShieldCheckmarkSharp } from "react-icons/io5";
 
 const companyName = "موندو للسياحة";
 const mainParagraph = `
@@ -39,11 +38,22 @@ const jeddahLines = [
 const jeddahMapUrl = "https://maps.app.goo.gl/y4zmnHuAQCENFYS69";
 const jeddahPhone = "920031910";
 
+const legalData = {
+  title: "بيانات الترخيص الرسمية",
+  items: [
+    { label: "اسم الشركة:", value: "عالم الاكتشاف للسفر والسياحة" },
+    { label: "رقم الترخيص:", value: "73105452", isNum: true },
+    { label: "السجل التجاري:", value: "2050201795", isNum: true },
+    { label: "فئة الترخيص:", value: "وكالة السفر والسياحة" },
+  ],
+};
+
 const Footer = () => {
   const [currentYear, setCurrentYear] = useState(0);
   useLayoutEffect(() => {
     setCurrentYear(new Date().getFullYear());
   }, []);
+
   return (
     <motion.footer
       whileInView={{ opacity: 1, y: 0 }}
@@ -51,31 +61,37 @@ const Footer = () => {
       transition={{ duration: 0.6 }}
       viewport={{ once: true, amount: 0.2 }}
       dir="rtl"
-      className="bg-gray-100 pt-8 pb-6 font-primary"
+      className="bg-gray-100 pt-10 pb-6 font-primary"
     >
-      <div className="mx-auto flex container flex-col gap-8 px-4 sm:px-6 md:flex-row lg:px-8 ">
-        <div className="w-full md:w-1/3 flex flex-col items-start">
-          <motion.div
-            className="mb-4"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Image
-              src="/images/mundo_logo.png"
-              alt={companyName}
-              width={200}
-              height={50}
-              sizes="(max-width: 640px) 256px, 256px"
-              className="h-[110px] w-[200px]"
-            />
-          </motion.div>
+      <div className="mx-auto flex container flex-col items-start gap-8 px-4 sm:px-6 md:flex-row lg:px-8">
+        {/* Sidebar: Logo, Text, Legal Box */}
+        <div className="w-full md:w-1/3 flex flex-col gap-6">
+          <div className="flex flex-col items-start">
+            <motion.div
+              className="mb-4"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Reverted Image to original props to fix disappearance */}
+              <Image
+                src="/images/mundo_logo.png"
+                alt={companyName}
+                width={200}
+                height={50}
+                sizes="(max-width: 640px) 256px, 256px"
+                className="h-[110px] w-[200px]"
+              />
+            </motion.div>
+            <p className="text-right text-gray-600 leading-relaxed text-sm md:text-base font-primary">
+              {mainParagraph}
+            </p>
+          </div>
 
-          <p className="text-right text-gray-600 leading-relaxed font-primary">
-            {mainParagraph}
-          </p>
+          <LegalComplianceBox />
         </div>
 
-        <div className="flex w-full flex-col  gap-6 md:w-2/3 lg:flex-row">
+        {/* Location Cards Wrapper */}
+        <div className="flex w-full flex-col gap-5 md:w-2/3 lg:flex-row lg:items-start">
           <LocationCard
             address={jeddahLines}
             name={jeddahTitle}
@@ -98,13 +114,11 @@ const Footer = () => {
       </div>
 
       {/* Footer Bottom */}
-      <div className="container lg:px-8 px-4 sm:px-6 flex flex-col-reverse gap-y-4 sm:flex-row sm:justify-between mt-8 border-t border-gray-200 pt-4">
-        <div>
-          <p className="text-sm text-gray-500 font-primary">
-            © <span className="font-english">{currentYear}</span> {companyName}.
-            جميع الحقوق محفوظة.
-          </p>
-        </div>
+      <div className="container lg:px-8 px-4 sm:px-6 flex flex-col-reverse gap-y-4 sm:flex-row sm:justify-between mt-12 border-t border-gray-200 pt-6">
+        <p className="text-sm text-gray-500 font-primary">
+          © <span className="font-english">{currentYear}</span> {companyName}.
+          جميع الحقوق محفوظة.
+        </p>
         <CommercialRegisterButton />
       </div>
     </motion.footer>
@@ -112,6 +126,38 @@ const Footer = () => {
 };
 
 export default Footer;
+
+function LegalComplianceBox() {
+  return (
+    <div className="w-full rounded-xl bg-white p-5 shadow-sm border border-gray-100">
+      <div className="flex items-center gap-2 mb-4">
+        <IoShieldCheckmarkSharp className="text-blue-600 text-xl" />
+        <h3 className="text-base font-bold text-gray-900 font-primary">
+          {legalData.title}
+        </h3>
+      </div>
+      <div className="flex flex-col gap-3">
+        {legalData.items.map((item, idx) => (
+          <div
+            key={idx}
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-gray-50 pb-2 last:border-0 last:pb-0"
+          >
+            <span className="font-bold text-gray-700 text-sm font-primary">
+              {item.label}
+            </span>
+            <span
+              className={`text-gray-900 text-sm mt-1 sm:mt-0 ${
+                item.isNum ? "font-english font-semibold" : "font-primary"
+              }`}
+            >
+              {item.value}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function LocationCard({
   name,
@@ -126,36 +172,43 @@ function LocationCard({
 }) {
   return (
     <motion.div
+      whileHover={{ y: -5 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col h-full w-full flex-1 rounded-md bg-white p-4 shadow-sm border border-gray-200"
+      // Removed h-full to prevent forced stretching, added h-full only if equal height is strictly needed but with no internal spacing
+      className="flex flex-col w-full flex-1 rounded-xl bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)] border border-gray-100"
     >
-      <h2 className="mb-2 text-lg font-bold text-gray-800 font-primary">
+      <h2 className="mb-4 text-lg font-bold text-gray-900 font-primary">
         {name}
       </h2>
-      {address.map((line, idx) => (
-        <p key={idx} className="text-gray-700 text-sm leading-6 font-primary">
-          {line}
+
+      {/* Removed flex-grow to prevent big gaps */}
+      <div className="space-y-1 mb-6">
+        {address.map((line, idx) => (
+          <p key={idx} className="text-gray-600 text-sm leading-6 font-primary">
+            {line}
+          </p>
+        ))}
+        <p className="text-gray-600 text-sm leading-6 font-primary pt-2">
+          هاتف:{" "}
+          <a
+            href={`tel:${phone}`}
+            className="text-gray-800 hover:text-blue-600 transition-colors font-english font-medium"
+            dir="ltr"
+          >
+            {phone}
+          </a>
         </p>
-      ))}
+      </div>
 
-      <p className="text-gray-700 text-sm leading-6 font-primary">
-        هاتف:{" "}
+      <div className="mt-auto text-right">
         <a
-          href={`tel:${phone}`}
-          className="text-blue-600 underline font-english"
-        >
-          {phone}
-        </a>
-      </p>
-
-      <div className="mt-auto pt-1.5">
-        <Button
-          variant="link"
-          onClick={() => window.open(url, "_blank")}
-          className="px-0 py-2 text-sm font-semibold font-primary"
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block text-[#ff4d00] font-bold text-sm hover:opacity-80 transition-opacity font-primary"
         >
           عرض الموقع
-        </Button>
+        </a>
       </div>
     </motion.div>
   );
@@ -168,20 +221,16 @@ function CommercialRegisterButton() {
 
   const handleDownload = () => {
     const link = document.createElement("a");
-
     link.href = filePath;
     link.download = fileName;
-
     document.body.appendChild(link);
-
     link.click();
-
-    // Clean up
     document.body.removeChild(link);
   };
+
   return (
     <div
-      className="flex gap-x-2 items-center cursor-pointer group hover:text-primary hover:underline underline-offset-4 transition-all duration-300"
+      className="flex gap-x-2 items-center cursor-pointer group hover:opacity-80 transition-all duration-300"
       onClick={handleDownload}
       role="button"
       tabIndex={0}
@@ -190,10 +239,9 @@ function CommercialRegisterButton() {
           handleDownload();
         }
       }}
-      aria-label={`Download ${fileName}`}
     >
-      <IoDocumentsSharp />
-      <p className="text-sm text-gray-500 group-hover:text-primary transition-all duration-300 font-primary">
+      <IoDocumentsSharp className="text-gray-500 group-hover:text-primary transition-colors" />
+      <p className="text-sm text-gray-500 group-hover:text-primary font-primary">
         {displayText}
       </p>
     </div>
