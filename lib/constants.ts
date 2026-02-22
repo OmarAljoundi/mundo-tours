@@ -76,6 +76,7 @@ export const COUNTRIES = [
   { label: "ألبانيا", countryCode: "AL" },
   { label: "سلوفينيا", countryCode: "SI" },
   { label: "فيتنام", countryCode: "VN" },
+  { label: "كازاخستان ", countryCode: "KZ" },
 ];
 
 export const COUNTRIESASOPTIONS = COUNTRIES.map(({ label }) => {
@@ -224,4 +225,5 @@ export const europeanCountries = [
   { label: "كازخستان ", countryCode: "KZ" },
   { label: "كوسوفو", countryCode: "XK" },
   { label: "فيتنام", countryCode: "VN" },
+  { label: "كازاخستان ", countryCode: "KZ" },
 ];
