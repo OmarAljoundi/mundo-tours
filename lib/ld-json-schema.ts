@@ -13,7 +13,9 @@ import type {
   AboutPage,
   ContactPage,
   CollectionPage,
+  Article,
 } from "schema-dts";
+import type { ArticleMeta } from "./articles";
 import {
   getBaseSchemaGraph,
   getOrganizationSchema,
@@ -504,6 +506,103 @@ export async function generateContactUsLDJson(): Promise<string> {
   };
 
   const finalGraph = [...baseGraph, contactPage];
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": finalGraph,
+  });
+}
+
+export async function generateArticleLDJson(
+  articleMeta: ArticleMeta
+): Promise<string> {
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_APP_URL || "https://www.mundo-tours.com";
+  const articleUrl = `${BASE_URL}/articles/${articleMeta.slug}`;
+
+  const organization = await getOrganizationSchema();
+
+  const article: Article = {
+    "@type": "Article",
+    "@id": articleUrl,
+    url: articleUrl,
+    headline: articleMeta.title,
+    description: articleMeta.description,
+    datePublished: articleMeta.date,
+    dateModified: articleMeta.date,
+    author: {
+      "@type": "Organization",
+      name: "Mundo Tours",
+      url: BASE_URL,
+    },
+    publisher: (organization as any)["@id"],
+    image: {
+      "@type": "ImageObject",
+      url: `${BASE_URL}${articleMeta.image}`,
+      width: "1200",
+      height: "630",
+    },
+    inLanguage: "ar",
+    keywords: articleMeta.keywords.join(", "),
+  };
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [organization, article],
+  });
+}
+
+export async function generateArticleListingLDJson(): Promise<string> {
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_APP_URL || "https://www.mundo-tours.com";
+  const listingUrl = `${BASE_URL}/articles`;
+
+  const baseGraph = await getBaseSchemaGraph();
+  const organization = baseGraph.find(
+    (item): item is TravelAgency => (item as any)["@type"] === "TravelAgency"
+  );
+  const website = baseGraph.find(
+    (item): item is WebSite => (item as any)["@type"] === "WebSite"
+  );
+
+  if (!organization || !website) {
+    return JSON.stringify({ "@context": "https://schema.org" });
+  }
+
+  const { getAllArticles } = await import("./articles");
+  const articles = getAllArticles();
+
+  const itemList: ItemList = {
+    "@type": "ItemList",
+    itemListElement: articles.map((article, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Article",
+        "@id": `${BASE_URL}/articles/${article.slug}`,
+        url: `${BASE_URL}/articles/${article.slug}`,
+        headline: article.title,
+        description: article.description,
+        datePublished: article.date,
+        image: `${BASE_URL}${article.image}`,
+      },
+    })) as ListItem[],
+  };
+
+  const collectionPage: CollectionPage = {
+    "@type": "CollectionPage",
+    "@id": listingUrl,
+    url: listingUrl,
+    name: "مقالات السفر والسياحة | موندو تورز",
+    description:
+      "اكتشف أحدث مقالات السفر والسياحة من موندو تورز",
+    isPartOf: website["@id"],
+    publisher: (organization as any)["@id"],
+    inLanguage: website.inLanguage || ["ar"],
+    mainEntity: itemList,
+  };
+
+  const finalGraph = [...baseGraph, collectionPage];
 
   return JSON.stringify({
     "@context": "https://schema.org",

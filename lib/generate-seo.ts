@@ -4,7 +4,8 @@ import { Metadata } from "next";
 export const generatePageSeo = (
   seo: SeoSchema,
   pathname: string = "/",
-  images?: Array<{ url: string; width?: number; height?: number; alt?: string }>
+  images?: Array<{ url: string; width?: number; height?: number; alt?: string }>,
+  ogType?: "website" | "article"
 ): Metadata => {
   const { keywords, description, title, media } = seo;
 
@@ -47,7 +48,7 @@ export const generatePageSeo = (
       siteName: "Mundo Tours",
       images: ogImages,
       locale: "ar_SA",
-      type: "website",
+      type: ogType ?? "website",
       countryName: "Saudi Arabia",
     },
     twitter: {

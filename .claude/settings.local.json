@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(plan-eng-review)",
+      "Skill(plan-eng-review:*)",
+      "Bash(ls *.xlsx)",
+      "Bash(pip list:*)",
+      "Bash(bun --version)",
+      "Bash(pip install:*)",
+      "Bash(xargs find:*)",
+      "Bash(ls -la '/c/Users/OmarAlJundi/Desktop/Freelance/mundo-tours/app/\\(protected\\)/admin/')",
+      "Bash(ls -la '/c/Users/OmarAlJundi/Desktop/Freelance/mundo-tours/app/\\(protected\\)/')",
+      "Bash(ls -la '/c/Users/OmarAlJundi/Desktop/Freelance/mundo-tours/app/\\(authentication\\)/')",
+      "Bash(bun add:*)",
+      "Skill(browse)",
+      "Skill(browse:*)",
+      "WebFetch(domain:www.mundo-tours.com)",
+      "WebSearch",
+      "WebFetch(domain:unsplash.com)",
+      "Bash(DIR=\"c:/Users/OmarAlJundi/Desktop/Freelance/mundo-tours/public/images/articles\")",
+      "Read(//c/Users/OmarAlJundi/Desktop/Freelance/mundo-tours/**)",
+      "Read(//c/Users/OmarAlJundi/Desktop/Freelance/mundo-tours/$DIR/**)",
+      "Bash(file public/images/articles/*.webp)",
+      "Bash(for f:*)",
+      "Bash(do sed:*)",
+      "Bash(grep \"image:\" content/articles/*.mdx)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\OmarAlJundi\\Desktop\\Freelance\\mundo-tours\\app\\(public)\\(inner)\\articles",
+      "C:\\Users\\OmarAlJundi\\Desktop\\Freelance\\mundo-tours\\public\\images\\articles"
+    ]
+  }
+}

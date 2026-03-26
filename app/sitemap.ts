@@ -1,4 +1,5 @@
 import { getDestinations, getTours } from "@/server/public-query.server";
+import { getAllArticles } from "@/lib/articles";
 import type { MetadataRoute } from "next";
 
 function encodeXmlSpecialChars(url: string): string {
@@ -72,5 +73,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return [mainEntry];
   }) as MetadataRoute.Sitemap;
 
-  return [...staticSiteMap, ...destinationsSiteMap, ...toursSiteMap];
+  const articles = getAllArticles();
+  const articlesSiteMap = [
+    {
+      url: encodeXmlSpecialChars(`${url}/articles`),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    ...articles.map((article) => ({
+      url: encodeXmlSpecialChars(`${url}/articles/${article.slug}`),
+      lastModified: new Date(article.date),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    })),
+  ] as MetadataRoute.Sitemap;
+
+  return [
+    ...staticSiteMap,
+    ...destinationsSiteMap,
+    ...toursSiteMap,
+    ...articlesSiteMap,
+  ];
 }

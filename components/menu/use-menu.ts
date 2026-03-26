@@ -32,6 +32,10 @@ export function useMenu({
         subMenu: europMenu,
       },
       {
+        name: "المقالات",
+        url: "/articles",
+      },
+      {
         name: "من نحن",
         url: "/about-us",
       },

@@ -23,7 +23,7 @@ const TourCard: React.FC<{
               height={400}
               quality={70}
               src={tour.images && tour.images.length > 0 ? tour.images[0] : ""}
-              alt="image"
+              alt={tour.name}
               className="rounded-2xl w-full h-[200px] lg:h-[260px]"
               sizes="(max-width: 768px) 100vw, 640px"
             />
