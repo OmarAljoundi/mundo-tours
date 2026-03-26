@@ -6,7 +6,7 @@ import Link from "next/link";
 export function InnerBreadcrumb() {
   const { breadcrumbs } = useBreadcrumbStore();
   return (
-    <nav aria-label="Breadcrumb" className="flex container">
+    <nav aria-label="Breadcrumb" className="flex container px-2 sm:px-0">
       <ol className="flex overflow-hidden rounded-lg border border-gray-200 text-gray-600 mt-8 ">
         {breadcrumbs.slice(0, -1).map((breadcrumb, index) => (
           <li className="flex items-center" key={breadcrumb.href ?? index}>
@@ -43,9 +43,11 @@ export function InnerBreadcrumb() {
 
           <Link
             href="#"
-            className="flex h-10 items-center bg-white pe-4 ps-8 text-xs font-medium transition hover:text-gray-900 font-primary"
+            className="flex h-10 items-center bg-white pe-4 ps-8 text-xs font-medium transition hover:text-gray-900 font-primary "
           >
-            {breadcrumbs[breadcrumbs.length - 1]?.label}
+            <span className="line-clamp-1 font-primary">
+              {breadcrumbs[breadcrumbs.length - 1]?.label}
+            </span>
           </Link>
         </li>
       </ol>

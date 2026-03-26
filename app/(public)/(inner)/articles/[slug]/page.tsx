@@ -10,8 +10,10 @@ import ArticleCard from "@/components/articles/article-card";
 import { Suspense } from "react";
 import LoadJsonLdScript from "@/providers/load-jsonLd-script";
 import { generateArticleLDJson } from "@/lib/ld-json-schema";
-import RegisterBreadcrumbClient from "@/store/register-breadcrumb-client";
 import remarkGfm from "remark-gfm";
+import RegisterBreadcrumbClient from "@/store/register-breadcrumb-client";
+
+export const dynamic = "force-static";
 
 export function generateStaticParams() {
   const articles = getAllArticles();
@@ -85,9 +87,9 @@ export default async function ArticlePage({
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           <div className="absolute bottom-0 right-0 left-0 p-6 lg:p-10">
             <div className="flex items-center gap-3 text-white/80 text-sm font-primary mb-3">
-              <time dateTime={article.meta.date}>{formattedDate}</time>
-              <span>•</span>
-              <span>{article.meta.readingTime} دقائق قراءة</span>
+              <time dateTime={article.meta.date} className="font-primary">{formattedDate}</time>
+              <span className="font-primary">•</span>
+              <span className="font-primary">{article.meta.readingTime} دقائق قراءة</span>
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold font-primary text-white leading-tight">
               {article.meta.title}

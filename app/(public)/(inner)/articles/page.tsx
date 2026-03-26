@@ -6,6 +6,8 @@ import { Suspense } from "react";
 import LoadJsonLdScript from "@/providers/load-jsonLd-script";
 import { generateArticleListingLDJson } from "@/lib/ld-json-schema";
 
+export const dynamic = "force-static";
+
 export const metadata: Metadata = generatePageSeo(
   {
     title: "مقالات السفر والسياحة | موندو تورز",

@@ -23,7 +23,8 @@
       "Bash(file public/images/articles/*.webp)",
       "Bash(for f:*)",
       "Bash(do sed:*)",
-      "Bash(grep \"image:\" content/articles/*.mdx)"
+      "Bash(grep \"image:\" content/articles/*.mdx)",
+      "Bash(bun run:*)"
     ],
     "additionalDirectories": [
       "C:\\Users\\OmarAlJundi\\Desktop\\Freelance\\mundo-tours\\app\\(public)\\(inner)\\articles",
